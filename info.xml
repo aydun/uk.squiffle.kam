@@ -1,0 +1,27 @@
+<?xml version="1.0"?>
+<extension key="uk.squiffle.smartmenu" type="module">
+  <file>smartmenu</file>
+  <name>SmartMenu Accessible Admin Menu</name>
+  <description>This module replaces the default admin menu with an accessible, responsive one</description>
+  <license>AGPL-3.0</license>
+  <maintainer>
+    <author>Aidan Saunders</author>
+    <email>aidan.saunders@squiffle.uk</email>
+  </maintainer>
+  <urls>
+    <url desc="Main Extension Page">http://FIXME</url>
+    <url desc="Documentation">http://FIXME</url>
+    <url desc="Support">http://FIXME</url>
+    <url desc="Licensing">http://www.gnu.org/licenses/agpl-3.0.html</url>
+  </urls>
+  <releaseDate>2017-10-09</releaseDate>
+  <version>1.0</version>
+  <develStage>alpha</develStage>
+  <compatibility>
+    <ver>4.7</ver>
+  </compatibility>
+  <comments>This is a new, undeveloped module and not yet functional</comments>
+  <civix>
+    <namespace>CRM/Smartmenu</namespace>
+  </civix>
+</extension>
