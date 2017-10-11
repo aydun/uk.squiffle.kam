@@ -124,7 +124,7 @@ function smartmenu_civicrm_coreResourceList(&$list, $region) {
         ->addScriptFile('uk.squiffle.smartmenu', $path . 'addons/keyboard/jquery.smartmenus.keyboard.js', 1, 'html-header')
         ->addStyleFile('uk.squiffle.smartmenu', $path . 'css/sm-core-css.css', 10)
         ->addStyleFile('uk.squiffle.smartmenu', $path . 'css/sm-blue/sm-blue.css', 11)
-        ->addStyleFile('uk.squiffle.smartmenu', 'css/civismartmenu.css', 12);
+        ->addStyleFile('uk.squiffle.smartmenu', 'css/sm-civicrm.css', 12);
 
       // These params force the browser to refresh the js file when switching user, domain, or language
       if (is_callable(array('CRM_Core_I18n', 'getLocale'))) {

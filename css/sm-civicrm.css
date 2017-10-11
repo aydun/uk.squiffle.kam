@@ -1,0 +1,33 @@
+/* Your rules to style the menu in mobile view (collapsible mode) here... */
+
+
+@media (min-width: 768px) {
+
+  /* Switch to desktop layout
+  -----------------------------------------------
+     These transform the menu tree from
+     collapsible to desktop (navbar + dropdowns)
+  -----------------------------------------------*/
+  /* start... (it's not recommended editing these rules) */
+  .sm-civicrm ul{position:absolute;width:12em;}
+  .sm-civicrm li{float:left;}
+  .sm-civicrm.sm-rtl li{float:right;}
+  .sm-civicrm ul li,.sm-civicrm.sm-rtl ul li,.sm-civicrm.sm-vertical li{float:none;}
+  .sm-civicrm a{white-space:nowrap;}
+  .sm-civicrm ul a,.sm-civicrm.sm-vertical a{white-space:normal;}
+  .sm-civicrm .sm-nowrap > li > a,.sm-civicrm .sm-nowrap > li > :not(ul) a{white-space:nowrap;}
+  /* ...end */
+
+
+  /* Your rules to style the menu in desktop view here... */
+  .sm-civicrm li{padding:3px 10px;}
+  
+  #civicrm-menu-nav {
+    line-height: 0;
+    text-align: left;
+  }
+  #civicrm-menu {
+    display: inline-block;
+  }
+
+}

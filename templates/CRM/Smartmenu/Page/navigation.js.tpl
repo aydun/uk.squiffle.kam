@@ -25,7 +25,7 @@
 *}// http://civicrm.org/licensing
 {capture assign=menuMarkup}{strip}
 <nav id="civicrm-menu-nav">
-  <ul id="civicrm-menu" class="sm sm-blue">
+  <ul id="civicrm-menu" class="sm sm-civicrm">
       <li id="crm-qsearch" class="menumain">
         <form action="{crmURL p='civicrm/contact/search/advanced' h=0 }" name="search_block" id="id_search_block" method="post">
           <div id="quickSearch">
