@@ -58,27 +58,20 @@
 (function($) {
   var menuMarkup = {/literal}{$menuMarkup|@json_encode};
 {if $config->userFramework neq 'Joomla'}{literal}
-  // $('body').append(menuMarkup);
-  // 
-  // $('#civicrm-menu').css({position: "fixed", top: "0px"});
-  // 
-  // //Track Scrolling
-  // $(window).scroll(function () {
-  //   $('div.sticky-header').css({top: "23px", position: "fixed"});
-  // });
-  // 
-  // if ($('#edit-shortcuts').length > 0) {
-  //   $('#civicrm-menu').css({'width': '97%'});
-  // }
-
   $("#wrapper").before(menuMarkup);
-  // $('body').append(menuMarkup);
-  // alert('added to body');
+  //
+  $('#civicrm-menu').css({position: "fixed", top: "0px"});
 
-  $("#civicrm-menu").smartmenus({  
-    subMenusSubOffsetX: 1,
-    subMenusSubOffsetY: -8
+  //Track Scrolling
+  $(window).scroll(function () {
+    $('div.sticky-header').css({top: "23px", position: "fixed"});
   });
+
+  if ($('#edit-shortcuts').length > 0) {
+    $('#civicrm-menu').css({'width': '97%'});
+  }
+
+  $("#civicrm-menu").smartmenus();
 
 {/literal}{else}{* Special menu hacks for Joomla *}{literal}
   // below div is present in older version of joomla 2.5.x
@@ -101,71 +94,71 @@
 //     $(this).attr("tabIndex",i+2);
 //   });
 
-  // $('#sort_name_navigation')
-  //   .autocomplete({
-  //     source: function(request, response) {
-  //       //start spinning the civi logo
-  //       $('.crm-logo-sm').addClass('crm-i fa-spin');
-  //       var
-  //         option = $('input[name=quickSearchField]:checked'),
-  //         params = {
-  //           name: request.term,
-  //           field_name: option.val(),
-  //           table_name: option.attr("data-tablename")
-  //         };
-  //       CRM.api3('contact', 'getquick', params).done(function(result) {
-  //         var ret = [];
-  //         if (result.values.length > 0) {
-  //           $('#sort_name_navigation').autocomplete('widget').menu('option', 'disabled', false);
-  //           $.each(result.values, function(k, v) {
-  //             ret.push({value: v.id, label: v.data});
-  //           });
-  //         } else {
-  //           $('#sort_name_navigation').autocomplete('widget').menu('option', 'disabled', true);
-  //           var label = option.closest('label').text();
-  //           var msg = ts('{/literal}{ts escape='js' 1='%1'}%1 not found.{/ts}'{literal}, {1: label});
-  //           // Remind user they are not searching by contact name (unless they enter a number)
-  //           if (params.field_name && !(/[\d].*/.test(params.name))) {
-  //             msg += {/literal}' {ts escape='js'}Did you mean to search by Name/Email instead?{/ts}'{literal};
-  //           }
-  //           ret.push({value: '0', label: msg});
-  //         }
-  //         response(ret);
-  //         //stop spinning the civi logo
-  //         $('.crm-logo-sm').removeClass('crm-i fa-spin');
-  //       })
-  //     },
-  //     focus: function (event, ui) {
-  //       return false;
-  //     },
-  //     select: function (event, ui) {
-  //       if (ui.item.value > 0) {
-  //         document.location = CRM.url('civicrm/contact/view', {reset: 1, cid: ui.item.value});
-  //       }
-  //       return false;
-  //     },
-  //     create: function() {
-  //       // Place menu in front
-  //       $(this).autocomplete('widget')
-  //         .addClass('crm-quickSearch-results')
-  //         .css('z-index', $('#civicrm-menu').css('z-index'));
-  //     }
-  //   })
-  //   .keydown(function() {
-  //     $.Menu.closeAll();
-  //   })
-  //   .on('focus', function() {
-  //     setQuickSearchValue();
-  //     if ($(this).attr('style').indexOf('14em') < 0) {
-  //       $(this).animate({width: '14em'});
-  //     }
-  //   })
-  //   .on('blur', function() {
-  //     // Shrink if no input and menu is not open
-  //     if (!$(this).val().length && $(this).attr('style').indexOf('6em') < 0 && !$('.crm-quickSearchField:visible', '#root-menu-div').length) {
-  //       $(this).animate({width: '6em'});
-  //     }
-  //   });
+  $('#sort_name_navigation')
+    .autocomplete({
+      source: function(request, response) {
+        //start spinning the civi logo
+        $('.crm-logo-sm').addClass('crm-i fa-spin');
+        var
+          option = $('input[name=quickSearchField]:checked'),
+          params = {
+            name: request.term,
+            field_name: option.val(),
+            table_name: option.attr("data-tablename")
+          };
+        CRM.api3('contact', 'getquick', params).done(function(result) {
+          var ret = [];
+          if (result.values.length > 0) {
+            $('#sort_name_navigation').autocomplete('widget').menu('option', 'disabled', false);
+            $.each(result.values, function(k, v) {
+              ret.push({value: v.id, label: v.data});
+            });
+          } else {
+            $('#sort_name_navigation').autocomplete('widget').menu('option', 'disabled', true);
+            var label = option.closest('label').text();
+            var msg = ts('{/literal}{ts escape='js' 1='%1'}%1 not found.{/ts}'{literal}, {1: label});
+            // Remind user they are not searching by contact name (unless they enter a number)
+            if (params.field_name && !(/[\d].*/.test(params.name))) {
+              msg += {/literal}' {ts escape='js'}Did you mean to search by Name/Email instead?{/ts}'{literal};
+            }
+            ret.push({value: '0', label: msg});
+          }
+          response(ret);
+          //stop spinning the civi logo
+          $('.crm-logo-sm').removeClass('crm-i fa-spin');
+        })
+      },
+      focus: function (event, ui) {
+        return false;
+      },
+      select: function (event, ui) {
+        if (ui.item.value > 0) {
+          document.location = CRM.url('civicrm/contact/view', {reset: 1, cid: ui.item.value});
+        }
+        return false;
+      },
+      create: function() {
+        // Place menu in front
+        $(this).autocomplete('widget')
+          .addClass('crm-quickSearch-results')
+          .css('z-index', $('#civicrm-menu').css('z-index'));
+      }
+    })
+    .keydown(function() {
+      $.Menu.closeAll();
+    })
+    .on('focus', function() {
+      setQuickSearchValue();
+      if ($(this).attr('style').indexOf('14em') < 0) {
+        $(this).animate({width: '14em'});
+      }
+    })
+    .on('blur', function() {
+      // Shrink if no input and menu is not open
+      if (!$(this).val().length && $(this).attr('style').indexOf('6em') < 0 && !$('.crm-quickSearchField:visible', '#root-menu-div').length) {
+        $(this).animate({width: '6em'});
+      }
+    });
   // $('.crm-hidemenu').click(function(e) {
   //   $('#civicrm-menu').slideUp();
   //   if ($('#crm-notification-container').length) {
@@ -182,40 +175,40 @@
   //   }
   //   e.preventDefault();
   // });
-  // function setQuickSearchValue() {
-  //   var $selection = $('.crm-quickSearchField input:checked'),
-  //     label = $selection.parent().text(),
-  //     value = $selection.val();
-  //   // These fields are not supported by advanced search
-  //   if (!value || value === 'first_name' || value === 'last_name') {
-  //     value = 'sort_name';
-  //   }
-  //   $('#sort_name_navigation').attr({name: value, placeholder: label});
-  // }
-  // $('.crm-quickSearchField').click(function() {
-  //   setQuickSearchValue();
-  //   $('#sort_name_navigation').focus();
-  // });
-  // // Set & retrieve default value
-  // if (window.localStorage) {
-  //   $('.crm-quickSearchField').click(function() {
-  //     localStorage.quickSearchField = $('input', this).val();
-  //   });
-  //   if (localStorage.quickSearchField) {
-  //     $('.crm-quickSearchField input[value=' + localStorage.quickSearchField + ']').prop('checked', true);
-  //   }
-  // }
-  // // redirect to view page if there is only one contact
-  // $('#id_search_block').on('submit', function() {
-  //   var $menu = $('#sort_name_navigation').autocomplete('widget');
-  //   if ($('li.ui-menu-item', $menu).length === 1) {
-  //     var cid = $('li.ui-menu-item', $menu).data('ui-autocomplete-item').value;
-  //     if (cid > 0) {
-  //       document.location = CRM.url('civicrm/contact/view', {reset: 1, cid: cid});
-  //       return false;
-  //     }
-  //   }
-  // });
+  function setQuickSearchValue() {
+    var $selection = $('.crm-quickSearchField input:checked'),
+      label = $selection.parent().text(),
+      value = $selection.val();
+    // These fields are not supported by advanced search
+    if (!value || value === 'first_name' || value === 'last_name') {
+      value = 'sort_name';
+    }
+    $('#sort_name_navigation').attr({name: value, placeholder: label});
+  }
+  $('.crm-quickSearchField').click(function() {
+    setQuickSearchValue();
+    $('#sort_name_navigation').focus();
+  });
+  // Set & retrieve default value
+  if (window.localStorage) {
+    $('.crm-quickSearchField').click(function() {
+      localStorage.quickSearchField = $('input', this).val();
+    });
+    if (localStorage.quickSearchField) {
+      $('.crm-quickSearchField input[value=' + localStorage.quickSearchField + ']').prop('checked', true);
+    }
+  }
+  // redirect to view page if there is only one contact
+  $('#id_search_block').on('submit', function() {
+    var $menu = $('#sort_name_navigation').autocomplete('widget');
+    if ($('li.ui-menu-item', $menu).length === 1) {
+      var cid = $('li.ui-menu-item', $menu).data('ui-autocomplete-item').value;
+      if (cid > 0) {
+        document.location = CRM.url('civicrm/contact/view', {reset: 1, cid: cid});
+        return false;
+      }
+    }
+  });
   // // Close menu after selecting an item
   // $('#root-menu-div').on('click', 'a', $.Menu.closeAll);
 // });
