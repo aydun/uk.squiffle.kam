@@ -20,14 +20,76 @@
 
 
   /* Your rules to style the menu in desktop view here... */
-  .sm-civicrm li{padding:3px 10px;}
-  
-  #civicrm-menu-nav {
-    line-height: 0;
-    text-align: left;
-  }
-  #civicrm-menu {
-    display: inline-block;
-  }
 
+.sm-civicrm li{
+	padding:3px 10px;
+}
+#civicrm-menu-nav {
+  line-height: 0;
+  text-align: left;
+}
+#civicrm-menu {
+  display: inline-block;
+}
+#civicrm-menu {
+	background-color: #333;
+	width: 100% !important;
+}
+#civicrm-menu a {
+	color: #fff;
+}
+.sm-civicrm li {
+	padding: 0;
+}
+.sm-civicrm li a {
+	padding: 6px 8px;
+}
+.sm-civicrm li li a {
+	padding: 6px 36px 6px 10px;
+}
+.sm-civicrm ul {
+	background-color: #333;
+}
+.sm-civicrm ul ul {
+	background-color: #444;
+}
+.sm-civicrm ul ul ul {
+	background-color: #555;
+}
+.sm-civicrm li.menu-separator {
+	border-bottom: 1px solid #cdcdcd;
+	padding: 0;
+	margin: 5px 0;
+}
+.sm-civicrm li a:focus,
+.sm-civicrm li a:hover {
+	text-decoration: none;
+	background-color: #666;
+}
+.sm-civicrm li li .sub-arrow::after {
+    content: "\f061";
+	font-family: 'FontAwesome';
+	color: #fff;
+	float: right;
+	margin-right: -25px;
+}
+.sm-civicrm ul li:last-child a{
+	margin-bottom: 5px;
+}
+.sm-civicrm ul > li:first-child a{
+	margin-top: 5px;
+}
+@media (max-width: 768px) {
+	.sm-civicrm li a {
+		text-align: center;
+		font-size: 14px;
+	}
+	.sm-civicrm li .sub-arrow::after,
+	.sm-civicrm li li .sub-arrow::after{
+		content: "\f063";
+		font-family: 'FontAwesome';
+		color: #fff;
+		float: none;
+		margin-left: 10px;
+	}
 }
