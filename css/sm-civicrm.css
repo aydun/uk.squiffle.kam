@@ -20,9 +20,6 @@
 
 
   /* Your rules to style the menu in desktop view here... */
-
-.sm-civicrm li{
-	padding:3px 10px;
 }
 #civicrm-menu-nav {
   line-height: 0;
@@ -30,8 +27,6 @@
 }
 #civicrm-menu {
   display: inline-block;
-}
-#civicrm-menu {
 	background-color: #333;
 	width: 100% !important;
 }
