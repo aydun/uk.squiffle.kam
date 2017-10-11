@@ -75,6 +75,38 @@
 	margin-top: 5px;
 }
 @media (max-width: 768px) {
+	.main-menu-btn {
+	  position: relative;
+	  display: inline-block;
+	  width: 28px;
+	  height: 28px;
+	  text-indent: 28px;
+	  white-space: nowrap;
+	  overflow: hidden;
+	  cursor: pointer;
+	  -webkit-tap-highlight-color: rgba(0,0,0,0);
+	}
+	/* responsive icon */
+	.main-menu-btn-icon, .main-menu-btn-icon:before, .main-menu-btn-icon:after {
+	  position: absolute;
+	  top: 50%;
+	  left: 2px;
+	  height: 2px;
+	  width: 24px;
+	  background: #bbb;
+	  -webkit-transition: all 0.25s;
+	  transition: all 0.25s;
+	}
+	.main-menu-btn-icon:before {
+	  content: '';
+	  top: -7px;
+	  left: 0;
+	}
+	.main-menu-btn-icon:after {
+	  content: '';
+	  top: 7px;
+	  left: 0;
+	}
 	.sm-civicrm li a {
 		text-align: center;
 		font-size: 14px;
