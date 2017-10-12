@@ -59,14 +59,18 @@ function smartmenu_civicrm_coreResourceList(&$list, $region) {
  * Implements hook_civicrm_navigationMenu().
  *
  * @link http://wiki.civicrm.org/confluence/display/CRMDOC/hook_civicrm_navigationMenu
- * Change all 'url' keys with null values to '#'
+ *
  * Submenus need a url so they are recognised by smartmenus
+ * Change all 'url' keys with null values to '#'
+ * This is a bit ugly ... can't just use '#', since this trips up
+ * CRM_Core_BAO_Navigation::getMenuName(), so we use 'http://#' then replace it
+ * in CRM_Smartmenu_Page_ResponsiveMenu::run()
  */
 function smartmenu_civicrm_navigationMenu(&$params) {
   array_walk_recursive($params,
     function (&$value, $key) {
       if ($key == 'url' && !$value) {
-        $value = '#';
+        $value = 'http://#';
       }
     }
   );

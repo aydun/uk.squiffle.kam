@@ -8,9 +8,14 @@ class CRM_Smartmenu_Page_ResponsiveMenu extends CRM_Core_Page {
     if (CRM_Core_Session::singleton()->get('userID')) {
       CRM_Core_Page_AJAX::setJsHeaders();
       $smarty = CRM_Core_Smarty::singleton();
-      ddl(CRM_Core_BAO_Navigation::buildNavigation());
+      $nav = CRM_Core_BAO_Navigation::createNavigation(NULL);  // param is not used...
+      // see comment for smartmenu_civicrm_navigationMenu()
+      $nav = str_replace('http://#', '#', $nav);
+      // Home logo is special...
+      $nav = str_replace('<span class="crm-logo-sm" ></span>', '<a href="#"><span class="crm-logo-sm" ></span></a>', $nav);
+      ddl($nav);
       print $smarty->fetchWith('CRM/Smartmenu/Page/navigation.js.tpl', array(
-        'navigation' => CRM_Core_BAO_Navigation::buildNavigation(),
+        'navigation' => $nav,
       ));
     }
     CRM_Utils_System::civiExit();

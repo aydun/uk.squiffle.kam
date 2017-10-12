@@ -72,6 +72,7 @@
   }
 
   $("#civicrm-menu").smartmenus();
+  $("#admin-menu").hide();
 
 {/literal}{else}{* Special menu hacks for Joomla *}{literal}
   // below div is present in older version of joomla 2.5.x
