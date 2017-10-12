@@ -2,97 +2,13 @@
 
 require_once 'smartmenu.civix.php';
 
+
+
 /**
- * Implements hook_civicrm_config().
+ * Implements hook_civicrm_coreResourceList().
+ * Adds js/css for the smartmenus menu
  *
- * @link http://wiki.civicrm.org/confluence/display/CRMDOC/hook_civicrm_config
- */
-function smartmenu_civicrm_config(&$config) {
-  _smartmenu_civix_civicrm_config($config);
-  // if (isset(Civi::$statics[__FILE__]['configured'])) {
-  //   return;
-  // }
-  // Civi::$statics[__FILE__]['configured'] = TRUE;
-  //
-  // $path = 'packages/smartmenus-1.1.0/';
-  // CRM_Core_Resources::singleton()
-  //   ->addScriptFile('uk.squiffle.smartmenu', $path . 'jquery.smartmenus.js', 10, 'html-header')
-  //   ->addScriptFile('uk.squiffle.smartmenu', $path . 'addons/keyboard/jquery.smartmenus.keyboard.js', 10, 'html-header')
-  //
-  //   ->addStyleFile('uk.squiffle.smartmenu', $path . 'css/sm-core-css.css')
-  //   ->addStyleFile('uk.squiffle.smartmenu', $path . 'css/sm-blue/sm-blue.css');
-  //
-  // $native = FALSE;
-  // if ($native) {
-  //   CRM_Core_Region::instance('page-footer')->add(array(
-  //     'jquery' => '$("#civicrm-menu").prop("id", "sm-mainmenu");'
-  //   ));
-  //   CRM_Core_Region::instance('page-footer')->add(array(
-  //     'jquery' => '$("#sm-mainmenu").wrap( "<nav id=\"main-nav\"></nav)" );'
-  //   ));
-  //   CRM_Core_Region::instance('page-footer')->add(array(
-  //     'jquery' => '$("#sm-mainmenu").addClass( "" ).removeAttr("style");'
-  //   ));
-  //   CRM_Core_Region::instance('page-footer')->add(array(
-  //     'jquery' => '$("#sm-mainmenu").smartmenus({
-  //       subMenusSubOffsetX: 1,
-  //       subMenusSubOffsetY: -8
-  //       });',
-  //     ));
-  //
-  // }
-  // else {
-  //   define('CIVICRM_DISABLE_DEFAULT_MENU', TRUE);
-  //   $navigations = CRM_Core_BAO_Navigation::buildNavigationTree();
-  //   // run the Navigation  through a hook so users can modify it
-  //   CRM_Utils_Hook::navigationMenu($navigations);
-  //   CRM_Core_BAO_Navigation::fixNavigationMenu($navigations);
-  //
-  //   $menuString = _smartmenu_buildMenu($navigations, $first = TRUE);
-  //   $menuString = '<nav id="main-nav">' . $menuString . '</nav>';
-  //   CRM_Core_Region::instance('page-header')->add(array(
-  //     'markup' => $menuString . '<pre>' . var_export($navigations, 1) . '</pre>',
-  //   ));
-  //
-  //   CRM_Core_Region::instance('page-header')->add(array(
-  //     'jquery' => '$("#sm-mainmenu").insertBefore("#wrapper");',
-  //   ));
-  //   CRM_Core_Region::instance('page-header')->add(array(
-  //     'jquery' => '$("#sm-mainmenu").smartmenus({
-  //       subMenusSubOffsetX: 1,
-  //       subMenusSubOffsetY: -8
-  //       });',
-  //     ));
-  // }
-  //
-
-}
-
-function _smartmenu_buildMenu($navigations, $first = FALSE) {
-  if ($first) {
-    $str = '<ul id="sm-mainmenu" class="sm sm-blue">' . "\n";
-  }
-  else {
-    $str = '<ul>' . "\n";
-  }
-  foreach ($navigations as $navigation) {
-    $str .= '<li>';
-    if ($navigation['attributes']['url']) {
-      $str .= '<a href="' . $navigation['attributes']['url'] . '">' . $navigation['attributes']['name'] . '</a>' . "\n";
-    }
-    else {
-      $str .= '<a href="?' . $navigation['attributes']['label'] . '">' . $navigation['attributes']['name'] . '</a>' . "\n";
-      $str .= _smartmenu_buildMenu($navigation['child']);
-    }
-    $str .= '</li>'. "\n";
-  }
-
-  $str .= '</ul>'. "\n";
-  return $str;
-}
-
-/**
- * Adds js/css for the slicknav menu
+ *  * @link http://wiki.civicrm.org/confluence/display/CRMDOC/hook_civicrm_coreResourceList()
  *
  * @param $list
  * @param $region
@@ -102,20 +18,16 @@ function smartmenu_civicrm_coreResourceList(&$list, $region) {
   //check if logged in user has access CiviCRM permission and build menu
   $buildNavigation = !CRM_Core_Config::isUpgradeMode() && CRM_Core_Permission::check('access CiviCRM');
 
+  // Don't load default navigation css
   $cssWeDontWant = array_search('css/civicrmNavigation.css', $list);
-  // ddl($cssWeDontWant);
   unset($list[$cssWeDontWant]);
-  // ddl($list);
   define('CIVICRM_DISABLE_DEFAULT_MENU', TRUE);
 
   if ($config->userFrameworkFrontend) {
     return;
   }
-  // if (defined('CIVICRM_DISABLE_DEFAULT_MENU') || $config->userFrameworkFrontend) {
-  //   $buildNavigation = FALSE;
-  // }
-  $buildNavigation = TRUE;
-  if ($buildNavigation && $region == 'html-header') {
+
+  if ($region == 'html-header') {
     $contactID = CRM_Core_Session::getLoggedInContactID();
     if ($contactID) {
       $path = 'packages/smartmenus-1.1.0/';
@@ -158,6 +70,15 @@ function smartmenu_civicrm_navigationMenu(&$params) {
       }
     }
   );
+}
+
+/**
+ * Implements hook_civicrm_config().
+ *
+ * @link http://wiki.civicrm.org/confluence/display/CRMDOC/hook_civicrm_config
+ */
+function smartmenu_civicrm_config(&$config) {
+  _smartmenu_civix_civicrm_config($config);
 }
 
 /**
