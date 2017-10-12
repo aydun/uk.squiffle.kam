@@ -25,6 +25,11 @@
 *}// http://civicrm.org/licensing
 {capture assign=menuMarkup}{strip}
 <nav id="civicrm-menu-nav">
+  <!-- Mobile menu toggle button -->
+  <input id="main-menu-state" type="checkbox" />
+  <label class="main-menu-btn" for="main-menu-state">
+    <span class="main-menu-btn-icon"></span> Toggle main menu visibility
+  </label>
   <ul id="civicrm-menu" class="sm sm-civicrm">
       <li id="crm-qsearch" class="menumain">
         <form action="{crmURL p='civicrm/contact/search/advanced' h=0 }" name="search_block" id="id_search_block" method="post">

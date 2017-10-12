@@ -20,9 +20,6 @@
 
 
   /* Your rules to style the menu in desktop view here... */
-
-.sm-civicrm li{
-	padding:3px 10px;
 }
 #civicrm-menu-nav {
   line-height: 0;
@@ -30,8 +27,6 @@
 }
 #civicrm-menu {
   display: inline-block;
-}
-#civicrm-menu {
 	background-color: #333;
 	width: 100% !important;
 }
@@ -64,7 +59,7 @@
 .sm-civicrm li a:focus,
 .sm-civicrm li a:hover {
 	text-decoration: none;
-	background-color: #666;
+	background-color: #676767;
 }
 .sm-civicrm li li .sub-arrow::after {
     content: "\f061";
@@ -80,6 +75,15 @@
 	margin-top: 5px;
 }
 @media (max-width: 768px) {
+	.sm-civicrm ul {
+		background-color: #444;
+	}
+	.sm-civicrm ul ul {
+		background-color: #555;
+	}
+	.sm-civicrm ul ul ul {
+		background-color: #666;
+	}
 	.sm-civicrm li a {
 		text-align: center;
 		font-size: 14px;
@@ -91,5 +95,39 @@
 		color: #fff;
 		float: none;
 		margin-left: 10px;
+	}
+	.main-menu-btn {
+	  position: relative;
+	  display: inline-block;
+	  width: 28px;
+	  height: 28px;
+	  text-indent: 28px;
+	  white-space: nowrap;
+	  overflow: hidden;
+	  cursor: pointer;
+	  -webkit-tap-highlight-color: rgba(0,0,0,0);
+	}
+	
+	/* responsive icon */
+	
+	.main-menu-btn-icon, .main-menu-btn-icon:before, .main-menu-btn-icon:after {
+	  position: absolute;
+	  top: 50%;
+	  left: 2px;
+	  height: 2px;
+	  width: 24px;
+	  background: #bbb;
+	  -webkit-transition: all 0.25s;
+	  transition: all 0.25s;
+	}
+	.main-menu-btn-icon:before {
+	  content: '';
+	  top: -7px;
+	  left: 0;
+	}
+	.main-menu-btn-icon:after {
+	  content: '';
+	  top: 7px;
+	  left: 0;
 	}
 }
