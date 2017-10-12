@@ -34,6 +34,7 @@ function smartmenu_civicrm_coreResourceList(&$list, $region) {
       CRM_Core_Resources::singleton()
         ->addScriptFile('uk.squiffle.smartmenu', $path . 'jquery.smartmenus.js', 0, 'html-header')
         ->addScriptFile('uk.squiffle.smartmenu', $path . 'addons/keyboard/jquery.smartmenus.keyboard.js', 1, 'html-header')
+        ->addScriptFile('uk.squiffle.smartmenu', $path . 'js/sm-civicrm.js', 2, 'html-header')
         ->addStyleFile('uk.squiffle.smartmenu', $path . 'css/sm-core-css.css', 10)
         ->addStyleFile('uk.squiffle.smartmenu', $path . 'css/sm-blue/sm-blue.css', 11)
         ->addStyleFile('uk.squiffle.smartmenu', 'css/sm-civicrm.css', 12);

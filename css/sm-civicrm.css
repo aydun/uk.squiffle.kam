@@ -1,35 +1,5 @@
 /* Your rules to style the menu in mobile view (collapsible mode) here... */
 
-
-@media (min-width: 768px) {
-
-  /* Switch to desktop layout
-  -----------------------------------------------
-     These transform the menu tree from
-     collapsible to desktop (navbar + dropdowns)
-  -----------------------------------------------*/
-  /* start... (it's not recommended editing these rules) */
-  .sm-civicrm ul{position:absolute;width:12em;}
-  .sm-civicrm li{float:left;}
-  .sm-civicrm.sm-rtl li{float:right;}
-  .sm-civicrm ul li,.sm-civicrm.sm-rtl ul li,.sm-civicrm.sm-vertical li{float:none;}
-  .sm-civicrm a{white-space:nowrap;}
-  .sm-civicrm ul a,.sm-civicrm.sm-vertical a{white-space:normal;}
-  .sm-civicrm .sm-nowrap > li > a,.sm-civicrm .sm-nowrap > li > :not(ul) a{white-space:nowrap;}
-  /* ...end */
-
-  /* Your rules to style the menu in desktop view here... */
-
-  /* hide the button in desktop view */
-  .main-menu-btn {
-    position: absolute;
-    top: -99999px;
-  }
-  /* always show the menu in desktop view */
-  #main-menu-state:not(:checked) ~ #main-menu {
-    display: block;
-  }
-}
 #civicrm-menu-nav {
   line-height: 0;
   text-align: left;
@@ -110,10 +80,10 @@
   clip: rect(1px,1px,1px,1px);
 }
 /* hide the menu in mobile view */
-#main-menu-state:not(:checked) ~ #main-menu {
+#main-menu-state:not(:checked) ~ #civicrm-menu {
   display: none;
 }
-#main-menu-state:checked ~ #main-menu {
+#main-menu-state:checked ~ #civicrm-menu {
   display: block;
 }
 .main-menu-btn {
@@ -151,6 +121,37 @@
   left: 0;
 }
 
+
+@media (min-width: 768px) {
+
+  /* Switch to desktop layout
+  -----------------------------------------------
+     These transform the menu tree from
+     collapsible to desktop (navbar + dropdowns)
+  -----------------------------------------------*/
+  /* start... (it's not recommended editing these rules) */
+  .sm-civicrm ul{position:absolute;width:12em;}
+  .sm-civicrm li{float:left;}
+  .sm-civicrm.sm-rtl li{float:right;}
+  .sm-civicrm ul li,.sm-civicrm.sm-rtl ul li,.sm-civicrm.sm-vertical li{float:none;}
+  .sm-civicrm a{white-space:nowrap;}
+  .sm-civicrm ul a,.sm-civicrm.sm-vertical a{white-space:normal;}
+  .sm-civicrm .sm-nowrap > li > a,.sm-civicrm .sm-nowrap > li > :not(ul) a{white-space:nowrap;}
+  /* ...end */
+
+  /* Your rules to style the menu in desktop view here... */
+
+  /* hide the button in desktop view */
+  .main-menu-btn {
+    position: absolute;
+    top: -99999px;
+  }
+  /* always show the menu in desktop view */
+  #main-menu-state:not(:checked) ~ #civicrm-menu {
+    display: block;
+  }
+}
+
 @media (max-width: 768px) {
 	.sm-civicrm ul {
 		background-color: #444;
@@ -173,4 +174,21 @@
 		float: none;
 		margin-left: 10px;
 	}
+  #civicrm-menu-nav {
+    position: absolute;
+    background: #222;
+    top: 0px;
+    height: 35px;
+    z-index: 100000;
+    width: 100%;
+  }
+  .main-menu-btn {
+    margin-left: 20px;
+  }
+  #civicrm-menu {
+    margin-top: 30px;
+  }
+  #crm-qsearch {
+    text-align: center;
+  }
 }

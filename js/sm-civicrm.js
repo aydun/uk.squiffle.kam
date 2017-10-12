@@ -3,7 +3,7 @@ $(function() {
   if ($mainMenuState.length) {
     // animate mobile menu
     $mainMenuState.change(function(e) {
-      var $menu = $('#main-menu');
+      var $menu = $('#civicrm-menu');
       if (this.checked) {
         $menu.hide().slideDown(250, function() { $menu.css('display', ''); });
       } else {
