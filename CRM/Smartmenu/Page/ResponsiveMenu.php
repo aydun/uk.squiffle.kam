@@ -13,7 +13,6 @@ class CRM_Smartmenu_Page_ResponsiveMenu extends CRM_Core_Page {
       $nav = str_replace('http://#', '#', $nav);
       // Home logo is special...
       $nav = str_replace('<span class="crm-logo-sm" ></span>', '<a href="#"><span class="crm-logo-sm" ></span></a>', $nav);
-      ddl($nav);
       print $smarty->fetchWith('CRM/Smartmenu/Page/navigation.js.tpl', array(
         'navigation' => $nav,
       ));

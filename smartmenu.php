@@ -2,8 +2,6 @@
 
 require_once 'smartmenu.civix.php';
 
-
-
 /**
  * Implements hook_civicrm_coreResourceList().
  * Adds js/css for the smartmenus menu
@@ -15,15 +13,15 @@ require_once 'smartmenu.civix.php';
  */
 function smartmenu_civicrm_coreResourceList(&$list, $region) {
   $config = CRM_Core_Config::singleton();
-  //check if logged in user has access CiviCRM permission and build menu
-  $buildNavigation = !CRM_Core_Config::isUpgradeMode() && CRM_Core_Permission::check('access CiviCRM');
 
-  // Don't load default navigation css
+  // Don't load default navigation css and menu
   $cssWeDontWant = array_search('css/civicrmNavigation.css', $list);
   unset($list[$cssWeDontWant]);
   define('CIVICRM_DISABLE_DEFAULT_MENU', TRUE);
 
-  if ($config->userFrameworkFrontend) {
+  //check if logged in user has access CiviCRM permission and build menu
+  $buildNavigation = !CRM_Core_Config::isUpgradeMode() && CRM_Core_Permission::check('access CiviCRM');
+  if (!$buildNavigation || $config->userFrameworkFrontend) {
     return;
   }
 
@@ -36,8 +34,7 @@ function smartmenu_civicrm_coreResourceList(&$list, $region) {
         ->addScriptFile('uk.squiffle.smartmenu', $path . 'addons/keyboard/jquery.smartmenus.keyboard.js', 1, 'html-header')
         ->addScriptFile('uk.squiffle.smartmenu', $path . 'js/sm-civicrm.js', 2, 'html-header')
         ->addStyleFile('uk.squiffle.smartmenu', $path . 'css/sm-core-css.css', 10)
-        ->addStyleFile('uk.squiffle.smartmenu', $path . 'css/sm-blue/sm-blue.css', 11)
-        ->addStyleFile('uk.squiffle.smartmenu', 'css/sm-civicrm.css', 12);
+        ->addStyleUrl(\Civi::service('asset_builder')->getUrl('sm-civicrm.css'));
 
       // These params force the browser to refresh the js file when switching user, domain, or language
       if (is_callable(array('CRM_Core_I18n', 'getLocale'))) {
@@ -55,6 +52,21 @@ function smartmenu_civicrm_coreResourceList(&$list, $region) {
   }
 }
 
+/**
+ * Implements hook_civicrm_buildAsset().
+ *
+ * @link http://wiki.civicrm.org/confluence/display/CRMDOC/hook_civicrm_buildAsset
+ */
+function smartmenu_civicrm_buildAsset($asset, $params, &$mimetype, &$content) {
+  if ($asset !== 'sm-civicrm.css') return;
+  $path = 'packages/smartmenus-1.1.0/';
+  $raw = '';
+  foreach (array($path . 'css/sm-core-css.css', 'css/sm-civicrm.css') as $file) {
+    $raw .= file_get_contents(Civi::resources()->getPath('uk.squiffle.smartmenu', $file));
+  }
+  $content = str_replace('LOGO_URL', Civi::resources()->getUrl('civicrm', 'i/logo_sm.png'), $raw);
+  $mimetype = 'text/css';
+}
 
 /**
  * Implements hook_civicrm_navigationMenu().
