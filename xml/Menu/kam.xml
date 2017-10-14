@@ -1,8 +1,8 @@
 <?xml version="1.0"?>
 <menu>
   <item>
-    <path>civicrm/ajax/smartmenu</path>
-    <page_callback>CRM_Smartmenu_Page_ResponsiveMenu</page_callback>
+    <path>civicrm/ajax/kam</path>
+    <page_callback>CRM_Kam_Page_AdminMenu</page_callback>
     <title>ResponsiveMenu</title>
     <access_arguments>access CiviCRM</access_arguments>
   </item>

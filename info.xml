@@ -1,17 +1,17 @@
 <?xml version="1.0"?>
-<extension key="uk.squiffle.smartmenu" type="module">
-  <file>smartmenu</file>
-  <name>SmartMenu Accessible Admin Menu</name>
-  <description>This module replaces the default admin menu with an accessible, responsive one</description>
+<extension key="uk.squiffle.kam" type="module">
+  <file>kam</file>
+  <name>Keyboard Accessible Menu</name>
+  <description>This module replaces the default admin menu with an accessible, responsive one using the SmartMenus jQuery menu plugin (smartmenus.org)</description>
   <license>AGPL-3.0</license>
   <maintainer>
     <author>Aidan Saunders</author>
     <email>aidan.saunders@squiffle.uk</email>
   </maintainer>
   <urls>
-    <url desc="Main Extension Page">http://FIXME</url>
-    <url desc="Documentation">http://FIXME</url>
-    <url desc="Support">http://FIXME</url>
+    <url desc="Main Extension Page">https://github.com/aydun/uk.squiffle.kam</url>
+    <url desc="Documentation">https://github.com/aydun/uk.squiffle.kam</url>
+    <url desc="Support">https://github.com/aydun/uk.squiffle.kam</url>
     <url desc="Licensing">http://www.gnu.org/licenses/agpl-3.0.html</url>
   </urls>
   <releaseDate>2017-10-09</releaseDate>
@@ -20,8 +20,8 @@
   <compatibility>
     <ver>4.7</ver>
   </compatibility>
-  <comments>This is a new, undeveloped module and not yet functional</comments>
+  <comments>This is a new module and not yet fully functional</comments>
   <civix>
-    <namespace>CRM/Smartmenu</namespace>
+    <namespace>CRM/Kam</namespace>
   </civix>
 </extension>

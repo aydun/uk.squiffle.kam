@@ -1,17 +1,14 @@
 <?php
 
-require_once 'smartmenu.civix.php';
+require_once 'kam.civix.php';
 
 /**
  * Implements hook_civicrm_coreResourceList().
  * Adds js/css for the smartmenus menu
  *
  *  * @link http://wiki.civicrm.org/confluence/display/CRMDOC/hook_civicrm_coreResourceList()
- *
- * @param $list
- * @param $region
  */
-function smartmenu_civicrm_coreResourceList(&$list, $region) {
+function kam_civicrm_coreResourceList(&$list, $region) {
   $config = CRM_Core_Config::singleton();
 
   // Don't load default navigation css and menu
@@ -30,10 +27,10 @@ function smartmenu_civicrm_coreResourceList(&$list, $region) {
     if ($contactID) {
       $path = 'packages/smartmenus-1.1.0/';
       CRM_Core_Resources::singleton()
-        ->addScriptFile('uk.squiffle.smartmenu', $path . 'jquery.smartmenus.js', 0, 'html-header')
-        ->addScriptFile('uk.squiffle.smartmenu', $path . 'addons/keyboard/jquery.smartmenus.keyboard.js', 1, 'html-header')
-        ->addScriptFile('uk.squiffle.smartmenu', $path . 'js/sm-civicrm.js', 2, 'html-header')
-        ->addStyleFile('uk.squiffle.smartmenu', $path . 'css/sm-core-css.css', 10)
+        ->addScriptFile('uk.squiffle.kam', $path . 'jquery.smartmenus.js', 0, 'html-header')
+        ->addScriptFile('uk.squiffle.kam', $path . 'addons/keyboard/jquery.smartmenus.keyboard.js', 1, 'html-header')
+        ->addScriptFile('uk.squiffle.kam', $path . 'js/sm-civicrm.js', 2, 'html-header')
+        ->addStyleFile('uk.squiffle.kam', $path . 'css/sm-core-css.css', 10)
         ->addStyleUrl(\Civi::service('asset_builder')->getUrl('sm-civicrm.css'));
 
       // These params force the browser to refresh the js file when switching user, domain, or language
@@ -46,7 +43,7 @@ function smartmenu_civicrm_coreResourceList(&$list, $region) {
       }
       $domain = CRM_Core_Config::domainID();
       $key = CRM_Core_BAO_Navigation::getCacheKey($contactID);
-      $src = CRM_Utils_System::url("civicrm/ajax/smartmenu/$contactID/$tsLocale/$domain/$key", 1, 'html-header');
+      $src = CRM_Utils_System::url("civicrm/ajax/kam/$contactID/$tsLocale/$domain/$key", 1, 'html-header');
       CRM_Core_Resources::singleton()->addScriptUrl($src);
     }
   }
@@ -57,12 +54,14 @@ function smartmenu_civicrm_coreResourceList(&$list, $region) {
  *
  * @link http://wiki.civicrm.org/confluence/display/CRMDOC/hook_civicrm_buildAsset
  */
-function smartmenu_civicrm_buildAsset($asset, $params, &$mimetype, &$content) {
-  if ($asset !== 'sm-civicrm.css') return;
+function kam_civicrm_buildAsset($asset, $params, &$mimetype, &$content) {
+  if ($asset !== 'sm-civicrm.css') {
+    return;
+  }
   $path = 'packages/smartmenus-1.1.0/';
   $raw = '';
   foreach (array($path . 'css/sm-core-css.css', 'css/sm-civicrm.css') as $file) {
-    $raw .= file_get_contents(Civi::resources()->getPath('uk.squiffle.smartmenu', $file));
+    $raw .= file_get_contents(Civi::resources()->getPath('uk.squiffle.kam', $file));
   }
   $content = str_replace('LOGO_URL', Civi::resources()->getUrl('civicrm', 'i/logo_sm.png'), $raw);
   $mimetype = 'text/css';
@@ -77,9 +76,9 @@ function smartmenu_civicrm_buildAsset($asset, $params, &$mimetype, &$content) {
  * Change all 'url' keys with null values to '#'
  * This is a bit ugly ... can't just use '#', since this trips up
  * CRM_Core_BAO_Navigation::getMenuName(), so we use 'http://#' then replace it
- * in CRM_Smartmenu_Page_ResponsiveMenu::run()
+ * in CRM_Kam_Page_AdminMenu::run()
  */
-function smartmenu_civicrm_navigationMenu(&$params) {
+function kam_civicrm_navigationMenu(&$params) {
   array_walk_recursive($params,
     function (&$value, $key) {
       if ($key == 'url' && !$value) {
@@ -94,8 +93,8 @@ function smartmenu_civicrm_navigationMenu(&$params) {
  *
  * @link http://wiki.civicrm.org/confluence/display/CRMDOC/hook_civicrm_config
  */
-function smartmenu_civicrm_config(&$config) {
-  _smartmenu_civix_civicrm_config($config);
+function kam_civicrm_config(&$config) {
+  _kam_civix_civicrm_config($config);
 }
 
 /**
@@ -103,8 +102,8 @@ function smartmenu_civicrm_config(&$config) {
  *
  * @link http://wiki.civicrm.org/confluence/display/CRMDOC/hook_civicrm_xmlMenu
  */
-function smartmenu_civicrm_xmlMenu(&$files) {
-  _smartmenu_civix_civicrm_xmlMenu($files);
+function kam_civicrm_xmlMenu(&$files) {
+  _kam_civix_civicrm_xmlMenu($files);
 }
 
 /**
@@ -112,8 +111,8 @@ function smartmenu_civicrm_xmlMenu(&$files) {
  *
  * @link http://wiki.civicrm.org/confluence/display/CRMDOC/hook_civicrm_install
  */
-function smartmenu_civicrm_install() {
-  _smartmenu_civix_civicrm_install();
+function kam_civicrm_install() {
+  _kam_civix_civicrm_install();
 }
 
 /**
@@ -121,8 +120,8 @@ function smartmenu_civicrm_install() {
  *
  * @link http://wiki.civicrm.org/confluence/display/CRMDOC/hook_civicrm_postInstall
  */
-function smartmenu_civicrm_postInstall() {
-  _smartmenu_civix_civicrm_postInstall();
+function kam_civicrm_postInstall() {
+  _kam_civix_civicrm_postInstall();
 }
 
 /**
@@ -130,8 +129,8 @@ function smartmenu_civicrm_postInstall() {
  *
  * @link http://wiki.civicrm.org/confluence/display/CRMDOC/hook_civicrm_uninstall
  */
-function smartmenu_civicrm_uninstall() {
-  _smartmenu_civix_civicrm_uninstall();
+function kam_civicrm_uninstall() {
+  _kam_civix_civicrm_uninstall();
 }
 
 /**
@@ -139,8 +138,8 @@ function smartmenu_civicrm_uninstall() {
  *
  * @link http://wiki.civicrm.org/confluence/display/CRMDOC/hook_civicrm_enable
  */
-function smartmenu_civicrm_enable() {
-  _smartmenu_civix_civicrm_enable();
+function kam_civicrm_enable() {
+  _kam_civix_civicrm_enable();
 }
 
 /**
@@ -148,8 +147,8 @@ function smartmenu_civicrm_enable() {
  *
  * @link http://wiki.civicrm.org/confluence/display/CRMDOC/hook_civicrm_disable
  */
-function smartmenu_civicrm_disable() {
-  _smartmenu_civix_civicrm_disable();
+function kam_civicrm_disable() {
+  _kam_civix_civicrm_disable();
 }
 
 /**
@@ -157,8 +156,8 @@ function smartmenu_civicrm_disable() {
  *
  * @link http://wiki.civicrm.org/confluence/display/CRMDOC/hook_civicrm_upgrade
  */
-function smartmenu_civicrm_upgrade($op, CRM_Queue_Queue $queue = NULL) {
-  return _smartmenu_civix_civicrm_upgrade($op, $queue);
+function kam_civicrm_upgrade($op, CRM_Queue_Queue $queue = NULL) {
+  return _kam_civix_civicrm_upgrade($op, $queue);
 }
 
 /**
@@ -169,8 +168,8 @@ function smartmenu_civicrm_upgrade($op, CRM_Queue_Queue $queue = NULL) {
  *
  * @link http://wiki.civicrm.org/confluence/display/CRMDOC/hook_civicrm_managed
  */
-function smartmenu_civicrm_managed(&$entities) {
-  _smartmenu_civix_civicrm_managed($entities);
+function kam_civicrm_managed(&$entities) {
+  _kam_civix_civicrm_managed($entities);
 }
 
 /**
@@ -182,8 +181,8 @@ function smartmenu_civicrm_managed(&$entities) {
  *
  * @link http://wiki.civicrm.org/confluence/display/CRMDOC/hook_civicrm_caseTypes
  */
-function smartmenu_civicrm_caseTypes(&$caseTypes) {
-  _smartmenu_civix_civicrm_caseTypes($caseTypes);
+function kam_civicrm_caseTypes(&$caseTypes) {
+  _kam_civix_civicrm_caseTypes($caseTypes);
 }
 
 /**
@@ -196,8 +195,8 @@ function smartmenu_civicrm_caseTypes(&$caseTypes) {
  *
  * @link http://wiki.civicrm.org/confluence/display/CRMDOC/hook_civicrm_caseTypes
  */
-function smartmenu_civicrm_angularModules(&$angularModules) {
-  _smartmenu_civix_civicrm_angularModules($angularModules);
+function kam_civicrm_angularModules(&$angularModules) {
+  _kam_civix_civicrm_angularModules($angularModules);
 }
 
 /**
@@ -205,8 +204,8 @@ function smartmenu_civicrm_angularModules(&$angularModules) {
  *
  * @link http://wiki.civicrm.org/confluence/display/CRMDOC/hook_civicrm_alterSettingsFolders
  */
-function smartmenu_civicrm_alterSettingsFolders(&$metaDataFolders = NULL) {
-  _smartmenu_civix_civicrm_alterSettingsFolders($metaDataFolders);
+function kam_civicrm_alterSettingsFolders(&$metaDataFolders = NULL) {
+  _kam_civix_civicrm_alterSettingsFolders($metaDataFolders);
 }
 
 // --- Functions below this ship commented out. Uncomment as required. ---
@@ -216,7 +215,7 @@ function smartmenu_civicrm_alterSettingsFolders(&$metaDataFolders = NULL) {
  *
  * @link http://wiki.civicrm.org/confluence/display/CRMDOC/hook_civicrm_preProcess
  *
-function smartmenu_civicrm_preProcess($formName, &$form) {
+function kam_civicrm_preProcess($formName, &$form) {
 
 } // */
 
@@ -225,14 +224,14 @@ function smartmenu_civicrm_preProcess($formName, &$form) {
  *
  * @link http://wiki.civicrm.org/confluence/display/CRMDOC/hook_civicrm_navigationMenu
  *
-function smartmenu_civicrm_navigationMenu(&$menu) {
-  _smartmenu_civix_insert_navigation_menu($menu, NULL, array(
-    'label' => ts('The Page', array('domain' => 'uk.squiffle.smartmenu')),
+function kam_civicrm_navigationMenu(&$menu) {
+  _kam_civix_insert_navigation_menu($menu, NULL, array(
+    'label' => ts('The Page', array('domain' => 'uk.squiffle.kam')),
     'name' => 'the_page',
     'url' => 'civicrm/the-page',
     'permission' => 'access CiviReport,access CiviContribute',
     'operator' => 'OR',
     'separator' => 0,
   ));
-  _smartmenu_civix_navigationMenu($menu);
+  _kam_civix_navigationMenu($menu);
 } // */
