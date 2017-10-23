@@ -1,4 +1,4 @@
-$(function() {
+(function($) {
   var $mainMenuState = $('#main-menu-state');
   if ($mainMenuState.length) {
     // animate mobile menu
@@ -17,4 +17,4 @@ $(function() {
       }
     });
   }
-});
+}(cj, CRM));
