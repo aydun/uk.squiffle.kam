@@ -30,7 +30,6 @@ function kam_civicrm_coreResourceList(&$list, $region) {
         ->addScriptFile('uk.squiffle.kam', $path . 'jquery.smartmenus.js', 0, 'html-header')
         ->addScriptFile('uk.squiffle.kam', $path . 'addons/keyboard/jquery.smartmenus.keyboard.js', 1, 'html-header')
         ->addScriptFile('uk.squiffle.kam', 'js/sm-civicrm.js', 2, 'html-header')
-        ->addStyleFile('uk.squiffle.kam', $path . 'css/sm-core-css.css', 10)
         ->addStyleUrl(\Civi::service('asset_builder')->getUrl('sm-civicrm.css'));
 
       // These params force the browser to refresh the js file when switching user, domain, or language
