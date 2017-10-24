@@ -141,22 +141,22 @@ Based on civicrm/templates/CRM/common/navigation.js.tpl
         $(this).animate({width: '6em'});
       }
     });
-  // $('.crm-hidemenu').click(function(e) {
-  //   $('#civicrm-menu').slideUp();
-  //   if ($('#crm-notification-container').length) {
-  //     var alert = CRM.alert({/literal}'<a href="#" id="crm-restore-menu" style="text-align: center; margin-top: -8px;">{ts escape='js'}Restore CiviCRM Menu{/ts}</a>'{literal}, '', 'none', {expires: 10000});
-  //     $('#crm-restore-menu')
-  //       .button({icons: {primary: 'fa-undo'}})
-  //       .click(function(e) {
-  //         e.preventDefault();
-  //         alert.close();
-  //         $('#civicrm-menu').slideDown();
-  //       })
-  //       .parent().css('text-align', 'center').find('.ui-button-text').css({'padding-top': '4px', 'padding-bottom': '4px'})
-  //     ;
-  //   }
-  //   e.preventDefault();
-  // });
+  $('.crm-hidemenu').click(function(e) {
+    $('#civicrm-menu').slideUp();
+    if ($('#crm-notification-container').length) {
+      var alert = CRM.alert({/literal}'<a href="#" id="crm-restore-menu" style="text-align: center; margin-top: -8px;">{ts escape='js'}Restore CiviCRM Menu{/ts}</a>'{literal}, '', 'none', {expires: 10000});
+      $('#crm-restore-menu')
+        .button({icons: {primary: 'fa-undo'}})
+        .click(function(e) {
+          e.preventDefault();
+          alert.close();
+          $('#civicrm-menu').slideDown();
+        })
+        .parent().css('text-align', 'center').find('.ui-button-text').css({'padding-top': '4px', 'padding-bottom': '4px'})
+      ;
+    }
+    e.preventDefault();
+  });
   function setQuickSearchValue() {
     var $selection = $('.crm-quickSearchField input:checked'),
       label = $selection.parent().text(),
@@ -195,7 +195,7 @@ Based on civicrm/templates/CRM/common/navigation.js.tpl
   // $('#root-menu-div').on('click', 'a', $.Menu.closeAll);
 // });
 // $('#civicrm-menu').menuBar({arrowSrc: CRM.config.resourceBase + 'packages/jquery/css/images/arrow.png'});
-// $(window).on("beforeunload", function() {
-//   $('.crm-logo-sm', '#civicrm-menu').addClass('crm-i fa-spin');
-// });
+$(window).on("beforeunload", function() {
+  $('.crm-logo-sm', '#civicrm-menu').addClass('crm-i fa-spin fa-pulse');
+});
 })(CRM.$);{/literal}
