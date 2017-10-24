@@ -41,7 +41,8 @@ Based on civicrm/templates/CRM/common/navigation.js.tpl
 (function($) {
   var menuMarkup = {/literal}{$menuMarkup|@json_encode};
 {if $config->userFramework neq 'Joomla'}{literal}
-  $("#wrapper").before(menuMarkup);
+//  $("#wrapper").before(menuMarkup);
+  $('body').append(menuMarkup);
   $('#civicrm-menu').css({position: "fixed", top: "0px"});
 
   //Track Scrolling
