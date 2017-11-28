@@ -9,8 +9,9 @@
 	background-color: #333;
 	width: 100% !important;
 }
-#civicrm-menu a {
-	color: #fff;
+#civicrm-menu a,
+label.crm-quickSearchField {
+  color: #fff;
 }
 .sm-civicrm li {
 	padding: 0;
@@ -119,6 +120,11 @@
   content: '';
   top: 7px;
   left: 0;
+}
+
+/* Quicksearch */
+li#crm-qsearch ul {
+  padding: 5px 10px;
 }
 
 /* From css/civicrmNavigation.css */
