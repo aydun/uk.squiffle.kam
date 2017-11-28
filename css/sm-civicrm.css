@@ -8,6 +8,7 @@
   display: inline-block;
 	background-color: #333;
 	width: 100% !important;
+  height: auto;
 }
 #civicrm-menu a,
 label.crm-quickSearchField {
@@ -125,6 +126,12 @@ label.crm-quickSearchField {
 /* Quicksearch */
 li#crm-qsearch ul {
   padding: 5px 10px;
+}
+
+/* Hide the 1px "line" shown in the collapsed quicksearch */
+#quickSearch div input.crm-form-submit.default {
+  border: 0 transparent;
+  background-color: transparent;
 }
 
 /* From css/civicrmNavigation.css */
