@@ -8,9 +8,12 @@
   display: inline-block;
 	background-color: #333;
 	width: 100% !important;
+  z-index: 10000;
+  height: auto;
 }
-#civicrm-menu a {
-	color: #fff;
+#civicrm-menu a,
+label.crm-quickSearchField {
+  color: #fff;
 }
 .sm-civicrm li {
 	padding: 0;
@@ -121,6 +124,17 @@
   left: 0;
 }
 
+/* Quicksearch */
+li#crm-qsearch ul {
+  padding: 5px 10px;
+}
+
+/* Hide the 1px "line" shown in the collapsed quicksearch */
+#quickSearch div input.crm-form-submit.default {
+  border: 0 transparent;
+  background-color: transparent;
+}
+
 /* From css/civicrmNavigation.css */
 #civicrm-menu .crm-logo-sm,
 .crm-container .crm-logo-sm {
@@ -171,6 +185,9 @@
 	.sm-civicrm ul ul ul {
 		background-color: #666;
 	}
+  .sm-civicrm li {
+    padding: 5px;
+  }
 	.sm-civicrm li a {
 		text-align: center;
 		font-size: 14px;
@@ -186,18 +203,28 @@
   #civicrm-menu-nav {
     position: absolute;
     background: #222;
-    top: 0px;
+    top: 0;
     height: 35px;
-    z-index: 100000;
     width: 100%;
   }
   .main-menu-btn {
     margin-left: 20px;
+    z-index: 11000;
   }
   #civicrm-menu {
     margin-top: 30px;
   }
   #crm-qsearch {
     text-align: center;
+  }
+
+  /* Make sure we can click overlapped submenus in responsive mode */
+  #civicrm-menu li ul li {
+    z-index: 11000;
+    background-color: inherit;
+  }
+
+  #civicrm-menu li ul li.menu-separator {
+    margin: 0;
   }
 }

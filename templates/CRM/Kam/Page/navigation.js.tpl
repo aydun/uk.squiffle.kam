@@ -10,6 +10,7 @@ Based on civicrm/templates/CRM/common/navigation.js.tpl
   </label>
   <ul id="civicrm-menu" class="sm sm-civicrm">
       <li id="crm-qsearch" class="menumain">
+        <a href="#" class="has-submenu">
         <form action="{crmURL p='civicrm/contact/search/advanced' h=0 }" name="search_block" id="id_search_block" method="post">
           <div id="quickSearch">
             <input type="text" class="form-text" id="sort_name_navigation" placeholder="{ts}Contacts{/ts}" name="sort_name" style="width: 6em;" />
@@ -19,6 +20,7 @@ Based on civicrm/templates/CRM/common/navigation.js.tpl
             <div style="height:1px; overflow:hidden;"><input type="submit" value="{ts}Go{/ts}" name="_qf_Advanced_refresh" class="crm-form-submit default" /></div>
           </div>
         </form>
+        </a>
         <ul>
           <li><label class="crm-quickSearchField"><input type="radio" data-tablename="cc" checked="checked" value="" name="quickSearchField"> {if $includeEmail}{ts}Name/Email{/ts}{else}{ts}Name{/ts}{/if}</label></li>
           <li><label class="crm-quickSearchField"><input type="radio" data-tablename="cc" value="contact_id" name="quickSearchField"> {ts}Contact ID{/ts}</label></li>
@@ -170,7 +172,8 @@ Based on civicrm/templates/CRM/common/navigation.js.tpl
   }
   $('.crm-quickSearchField').click(function() {
     setQuickSearchValue();
-    $('#sort_name_navigation').focus();
+    $.Menu.closeAll();
+    $('#sort_name_navigation').focus().autocomplete("search");
   });
   // Set & retrieve default value
   if (window.localStorage) {
@@ -194,9 +197,10 @@ Based on civicrm/templates/CRM/common/navigation.js.tpl
   });
   // // Close menu after selecting an item
   // $('#root-menu-div').on('click', 'a', $.Menu.closeAll);
-// });
-// $('#civicrm-menu').menuBar({arrowSrc: CRM.config.resourceBase + 'packages/jquery/css/images/arrow.png'});
-$(window).on("beforeunload", function() {
-  $('.crm-logo-sm', '#civicrm-menu').addClass('crm-i fa-spin fa-pulse');
-});
+  // });
+  // $('#civicrm-menu').menuBar({arrowSrc: CRM.config.resourceBase + 'packages/jquery/css/images/arrow.png'});
+  $(window).on("beforeunload", function() {
+    $('.crm-logo-sm', '#civicrm-menu').addClass('crm-i fa-spin fa-pulse');
+  });
+
 })(CRM.$);{/literal}
