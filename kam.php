@@ -67,7 +67,23 @@ function kam_civicrm_buildAsset($asset, $params, &$mimetype, &$content) {
 }
 
 /**
+ * Implements hook_civicrm_config().
+ *
+ * @link http://wiki.civicrm.org/confluence/display/CRMDOC/hook_civicrm_config
+ */
+function kam_civicrm_config(&$config) {
+  if (isset(Civi::$statics[__FUNCTION__])) {
+    return;
+  }
+  Civi::$statics[__FUNCTION__] = 1;
+  Civi::dispatcher()->addListener('hook_civicrm_navigationMenu', 'kam_event_civicrm_navigationmenu', -1000);
+
+  _kam_civix_civicrm_config($config);
+}
+
+/**
  * Implements hook_civicrm_navigationMenu().
+ * Called via event dispatcher so we can ensure it is called after all other navigationMenu hooks
  *
  * @link http://wiki.civicrm.org/confluence/display/CRMDOC/hook_civicrm_navigationMenu
  *
@@ -77,23 +93,20 @@ function kam_civicrm_buildAsset($asset, $params, &$mimetype, &$content) {
  * CRM_Core_BAO_Navigation::getMenuName(), so we use 'http://#' then replace it
  * in CRM_Kam_Page_AdminMenu::run()
  */
-function kam_civicrm_navigationMenu(&$params) {
-  array_walk_recursive($params,
-    function (&$value, $key) {
-      if ($key == 'url' && !$value) {
-        $value = 'http://#';
-      }
-    }
-  );
+function kam_event_civicrm_navigationmenu($event) {
+  $params = $event->getHookValues();
+  _kam_recurse_navigationMenu($params[0]);
 }
 
-/**
- * Implements hook_civicrm_config().
- *
- * @link http://wiki.civicrm.org/confluence/display/CRMDOC/hook_civicrm_config
- */
-function kam_civicrm_config(&$config) {
-  _kam_civix_civicrm_config($config);
+function _kam_recurse_navigationMenu(&$menu) {
+  foreach ($menu as $menuKey => $menuItem) {
+    if (empty($menuItem['attributes']['url'])) {
+      $menu[$menuKey]['attributes']['url'] = 'http://#';
+    }
+    if (isset($menuItem['child'])) {
+      _kam_recurse_navigationMenu($menu[$menuKey]['child']);
+    }
+  }
 }
 
 /**
