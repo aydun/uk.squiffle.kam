@@ -15,6 +15,9 @@
 label.crm-quickSearchField {
   color: #fff;
 }
+#civicrm-menu i {
+  margin-right: 5px;
+}
 .sm-civicrm li {
 	padding: 0;
 }
