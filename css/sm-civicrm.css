@@ -231,3 +231,30 @@ li#crm-qsearch ul {
     margin: 0;
   }
 }
+
+/* Joomla Specific Fixes */
+
+body.admin.com_civicrm ul#civicrm-menu li#crm-qsearch {
+	height: 1px;
+}
+body.admin.com_civicrm ul#civicrm-menu li#crm-qsearch a {
+	padding: 3px 0 0 0;
+}
+@media (max-width: 768px) {
+	body.admin.com_civicrm #civicrm-menu-nav {
+		position: inherit;
+		}
+	body.admin.com_civicrm {
+		margin-top: 0 !important;
+	}
+	body.admin.com_civicrm .container-fluid.container-main {
+		margin: 0 -20px;
+	}
+	body.admin.com_civicrm .main-menu-btn {
+		top: 5px;
+	}
+	body.admin.com_civicrm ul#civicrm-menu {
+		top: 17px;
+		margin: 0;
+	}
+}
