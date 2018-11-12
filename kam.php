@@ -29,21 +29,8 @@ function kam_civicrm_coreResourceList(&$list, $region) {
       CRM_Core_Resources::singleton()
         ->addScriptFile('uk.squiffle.kam', $path . 'jquery.smartmenus.js', 0, 'html-header')
         ->addScriptFile('uk.squiffle.kam', $path . 'addons/keyboard/jquery.smartmenus.keyboard.js', 1, 'html-header')
-        ->addScriptFile('uk.squiffle.kam', 'js/sm-civicrm.js', 2, 'html-header')
+        ->addScriptFile('uk.squiffle.kam', 'js/crm.menubar.js', -9)
         ->addStyleUrl(\Civi::service('asset_builder')->getUrl('sm-civicrm.css'));
-
-      // These params force the browser to refresh the js file when switching user, domain, or language
-      if (is_callable(array('CRM_Core_I18n', 'getLocale'))) {
-        $tsLocale = CRM_Core_I18n::getLocale();
-      }
-      // 4.6 compatibility
-      else {
-        global $tsLocale;
-      }
-      $domain = CRM_Core_Config::domainID();
-      $key = CRM_Core_BAO_Navigation::getCacheKey($contactID);
-      $src = CRM_Utils_System::url("civicrm/ajax/kam/$contactID/$tsLocale/$domain/$key", 1, 'html-header');
-      CRM_Core_Resources::singleton()->addScriptUrl($src);
     }
   }
 }
@@ -72,41 +59,7 @@ function kam_civicrm_buildAsset($asset, $params, &$mimetype, &$content) {
  * @link http://wiki.civicrm.org/confluence/display/CRMDOC/hook_civicrm_config
  */
 function kam_civicrm_config(&$config) {
-  if (isset(Civi::$statics[__FUNCTION__])) {
-    return;
-  }
-  Civi::$statics[__FUNCTION__] = 1;
-  Civi::dispatcher()->addListener('hook_civicrm_navigationMenu', 'kam_event_civicrm_navigationmenu', -1000);
-
   _kam_civix_civicrm_config($config);
-}
-
-/**
- * Implements hook_civicrm_navigationMenu().
- * Called via event dispatcher so we can ensure it is called after all other navigationMenu hooks
- *
- * @link http://wiki.civicrm.org/confluence/display/CRMDOC/hook_civicrm_navigationMenu
- *
- * Submenus need a url so they are recognised by smartmenus
- * Change all 'url' keys with null values to '#'
- * This is a bit ugly ... can't just use '#', since this trips up
- * CRM_Core_BAO_Navigation::getMenuName(), so we use 'http://#' then replace it
- * in CRM_Kam_Page_AdminMenu::run()
- */
-function kam_event_civicrm_navigationmenu($event) {
-  $params = $event->getHookValues();
-  _kam_recurse_navigationMenu($params[0]);
-}
-
-function _kam_recurse_navigationMenu(&$menu) {
-  foreach ($menu as $menuKey => $menuItem) {
-    if (empty($menuItem['attributes']['url'])) {
-      $menu[$menuKey]['attributes']['url'] = 'http://#';
-    }
-    if (isset($menuItem['child'])) {
-      _kam_recurse_navigationMenu($menu[$menuKey]['child']);
-    }
-  }
 }
 
 /**

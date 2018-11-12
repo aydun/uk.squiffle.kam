@@ -1,4 +1,4 @@
-/* Your rules to style the menu in mobile view (collapsible mode) here... */
+/* CiviCRM navigation menu stylesheet */
 
 #civicrm-menu-nav {
   line-height: 0;
@@ -7,9 +7,13 @@
 #civicrm-menu {
   display: inline-block;
 	background-color: #333;
-	width: 100% !important;
+	width: 100%;
   z-index: 10000;
   height: auto;
+}
+body > #civicrm-menu-nav #civicrm-menu {
+  position: fixed;
+  top: 0;
 }
 #civicrm-menu a,
 label.crm-quickSearchField {
@@ -36,18 +40,19 @@ label.crm-quickSearchField {
 .sm-civicrm ul ul ul {
 	background-color: #555;
 }
-.sm-civicrm li.menu-separator {
-	border-bottom: 1px solid #cdcdcd;
-	padding: 0;
-	margin: 5px 0;
+.sm-civicrm li.crm-menu-border-bottom {
+	border-bottom: 2px groove #888;
+}
+.sm-civicrm li.crm-menu-border-top {
+	border-top: 2px ridge #888;
 }
 .sm-civicrm li a:focus,
 .sm-civicrm li a:hover {
 	text-decoration: none;
 	background-color: #676767;
 }
-.sm-civicrm li li .sub-arrow::after {
-    content: "\f061";
+.sm-civicrm li li .sub-arrow:before {
+  content: "\f0da";
 	font-family: 'FontAwesome';
 	color: #fff;
 	float: right;
@@ -225,10 +230,6 @@ li#crm-qsearch ul {
   #civicrm-menu li ul li {
     z-index: 11000;
     background-color: inherit;
-  }
-
-  #civicrm-menu li ul li.menu-separator {
-    margin: 0;
   }
 }
 
