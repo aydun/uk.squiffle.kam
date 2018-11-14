@@ -11,7 +11,7 @@ No other configuration is required
 
 ## Requirements
 
-Requires CiviCRM 4.8 or later.
+Requires CiviCRM 5.8 or later.
 
 ## API
 
