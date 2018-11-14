@@ -34,6 +34,7 @@ Requires CiviCRM 5.8 or later.
 | `spin( [spin] )`  | Spins the icon in the home menu.<br />`spin`: pass a boolean to start or stop the spinning, or pass no arguments to toggle. | `CRM.menubar.spin(true)` |
 | `updateItem( item )`  | Updates the properties of a menu item (label, url, separator, icon, etc.<br />`item`: object with at least a `name` plus properties to update. | `CRM.menubar.updateItem({name: 'Search', label: 'Find')` |
 
+Tip: Try pasting those examples into your browser console.
 
 ## Acknowledgements
 
