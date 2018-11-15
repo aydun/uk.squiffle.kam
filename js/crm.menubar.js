@@ -1,11 +1,13 @@
 // https://civicrm.org/licensing
 (function($, _) {
   "use strict";
-  var branchTpl, searchTpl, treeTpl;
+  var branchTpl, searchTpl, treeTpl, initialized;
   CRM.menubar = _.extend({
     data: null,
     attachTo: 'body',
     initialize: function() {
+      $('body').trigger('crmMenuLoad', [CRM.menubar.data]);
+      initialized = true;
       branchTpl = _.template(CRM.menubar.branchTpl, {imports: {_: _, attr: attr}});
       searchTpl = _.template(CRM.menubar.searchTpl, {imports: {_: _, ts: ts, CRM: CRM}});
       treeTpl = _.template(CRM.menubar.treeTpl, {imports: {branchTpl: branchTpl, searchTpl: searchTpl, ts: ts}});
@@ -26,6 +28,7 @@
     destroy: function() {
       $.SmartMenus.destroy();
       $('#civicrm-menu-nav').remove();
+      initialized = false;
     },
     show: function(speed) {
       if (typeof speed === 'number') {
@@ -40,7 +43,7 @@
       } else {
         $('#civicrm-menu').hide();
       }
-      if (showMessage === true && $('#crm-notification-container').length) {
+      if (showMessage === true && $('#crm-notification-container').length && initialized) {
         var alert = CRM.alert('<a href="#" id="crm-restore-menu" style="text-align: center; margin-top: -8px;">' + _.escape(ts('Restore CiviCRM Menu')) + '</a>', '', 'none', {expires: 10000});
         $('#crm-restore-menu')
           .button({icons: {primary: 'fa-undo'}})
@@ -109,12 +112,14 @@
       } else {
         list.splice.apply(list, [position, 0].concat(items));
       }
-      if (targetName && !$ul.is('#civicrm-menu')) {
-        $ul.html(branchTpl({items: list, branchTpl: branchTpl}));
-      } else {
-        $('#civicrm-menu > li').eq(position).after(branchTpl({items: items, branchTpl: branchTpl}));
+      if (initialized) {
+        if (targetName && !$ul.is('#civicrm-menu')) {
+          $ul.html(branchTpl({items: list, branchTpl: branchTpl}));
+        } else {
+          $('#civicrm-menu > li').eq(position).after(branchTpl({items: items, branchTpl: branchTpl}));
+        }
+        CRM.menubar.refresh();
       }
-      CRM.menubar.refresh();
     },
     removeItem: function(itemName) {
       traverse(CRM.menubar.data.menu, itemName, 'delete');
@@ -130,8 +135,10 @@
         throw item.name + ' not found';
       }
       _.extend(menuItem, item);
-      $('li[data-name="' + item.name + '"]', '#civicrm-menu').replaceWith(branchTpl({items: [menuItem], branchTpl: branchTpl}));
-      CRM.menubar.refresh();
+      if (initialized) {
+        $('li[data-name="' + item.name + '"]', '#civicrm-menu').replaceWith(branchTpl({items: [menuItem], branchTpl: branchTpl}));
+        CRM.menubar.refresh();
+      }
     },
     refresh: function() {
       $('#civicrm-menu').smartmenus('refresh');
