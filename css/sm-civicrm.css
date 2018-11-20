@@ -8,60 +8,64 @@
   display: inline-block;
 	background-color: #333;
 	width: 100%;
-  z-index: 10000;
+  z-index: 100000;
   height: auto;
 }
 body > #civicrm-menu-nav #civicrm-menu {
   position: fixed;
   top: 0;
 }
-#civicrm-menu a,
-label.crm-quickSearchField {
-  color: #fff;
-}
 #civicrm-menu i {
   margin-right: 5px;
 }
-.sm-civicrm li {
+#civicrm-menu li {
 	padding: 0;
 }
-.sm-civicrm li a {
+#civicrm-menu li a {
 	padding: 6px 8px;
+  text-decoration: none;
+  color: #ddd;
+  box-shadow: none;
+  border: none;
 }
-.sm-civicrm li li a {
+#civicrm-menu li li a {
 	padding: 6px 36px 6px 10px;
+  color: #eee;
 }
-.sm-civicrm ul {
+#civicrm-menu ul {
 	background-color: #333;
+  box-shadow: 1px 1px 7px rgba(0, 0, 0, 0.5);
 }
-.sm-civicrm ul ul {
+#civicrm-menu ul ul {
 	background-color: #444;
 }
-.sm-civicrm ul ul ul {
+#civicrm-menu ul ul ul {
 	background-color: #555;
 }
-.sm-civicrm li.crm-menu-border-bottom {
+#civicrm-menu li.crm-menu-border-bottom {
 	border-bottom: 2px groove #888;
 }
-.sm-civicrm li.crm-menu-border-top {
+#civicrm-menu li.crm-menu-border-top {
 	border-top: 2px ridge #888;
 }
-.sm-civicrm li a:focus,
-.sm-civicrm li a:hover {
+#civicrm-menu li a:focus,
+#civicrm-menu li a:hover,
+#civicrm-menu li a.highlighted {
 	text-decoration: none;
 	background-color: #676767;
+  color: #fff;
 }
-.sm-civicrm li li .sub-arrow:before {
+#civicrm-menu li li .sub-arrow:before {
   content: "\f0da";
 	font-family: 'FontAwesome';
-	color: #fff;
+	color: #eee;
 	float: right;
 	margin-right: -25px;
 }
-.sm-civicrm ul li:last-child a{
+#civicrm-menu ul li:last-child a{
 	margin-bottom: 5px;
 }
-.sm-civicrm ul > li:first-child a{
+#civicrm-menu ul > li:first-child a{
 	margin-top: 5px;
 }
 /* x icon */
@@ -161,13 +165,13 @@ li#crm-qsearch ul {
      collapsible to desktop (navbar + dropdowns)
   -----------------------------------------------*/
   /* start... (it's not recommended editing these rules) */
-  .sm-civicrm ul{position:absolute;width:12em;}
-  .sm-civicrm li{float:left;}
-  .sm-civicrm.sm-rtl li{float:right;}
-  .sm-civicrm ul li,.sm-civicrm.sm-rtl ul li,.sm-civicrm.sm-vertical li{float:none;}
-  .sm-civicrm a{white-space:nowrap;}
-  .sm-civicrm ul a,.sm-civicrm.sm-vertical a{white-space:normal;}
-  .sm-civicrm .sm-nowrap > li > a,.sm-civicrm .sm-nowrap > li > :not(ul) a{white-space:nowrap;}
+  #civicrm-menu ul{position:absolute;width:12em;}
+  #civicrm-menu li{float:left;}
+  #civicrm-menu.sm-rtl li{float:right;}
+  #civicrm-menu ul li,#civicrm-menu.sm-rtl ul li,#civicrm-menu.sm-vertical li{float:none;}
+  #civicrm-menu a{white-space:nowrap;}
+  #civicrm-menu ul a,#civicrm-menu.sm-vertical a{white-space:normal;}
+  #civicrm-menu .sm-nowrap > li > a,#civicrm-menu .sm-nowrap > li > :not(ul) a{white-space:nowrap;}
   /* ...end */
 
   /* Your rules to style the menu in desktop view here... */
@@ -184,30 +188,33 @@ li#crm-qsearch ul {
 }
 
 @media (max-width: 768px) {
-	.sm-civicrm ul {
+	#civicrm-menu ul {
 		background-color: #444;
 	}
-	.sm-civicrm ul ul {
+	#civicrm-menu ul ul {
 		background-color: #555;
 	}
-	.sm-civicrm ul ul ul {
+	#civicrm-menu ul ul ul {
 		background-color: #666;
 	}
-  .sm-civicrm li {
+  #civicrm-menu li {
     padding: 5px;
   }
-	.sm-civicrm li a {
+	#civicrm-menu li a {
 		text-align: center;
 		font-size: 14px;
 	}
-	.sm-civicrm li .sub-arrow::after,
-	.sm-civicrm li li .sub-arrow::after{
-		content: "\f063";
-		font-family: 'FontAwesome';
-		color: #fff;
-		float: none;
-		margin-left: 10px;
-	}
+  #civicrm-menu li .sub-arrow:before,
+  #civicrm-menu li li .sub-arrow:before {
+    content: "\f0da";
+    font-family: 'FontAwesome';
+    color: #eee;
+    float: none;
+    margin-left: 10px;
+  }
+  #civicrm-menu li a.highlighted .sub-arrow:before {
+    content: "\f0d7";
+  }
   #civicrm-menu-nav {
     position: absolute;
     background: #222;

@@ -241,6 +241,7 @@
         $('#sort_name_navigation').attr({name: value, placeholder: label});
       }
       $('.crm-quickSearchField').click(function() {
+        $('input', this).prop('checked', true);
         setQuickSearchValue();
         $('#sort_name_navigation').focus().autocomplete("search");
       });
@@ -270,7 +271,7 @@
       '  </a>' +
       '  <ul>' +
       '    <% _.forEach(items, function(item) { %>' +
-      '      <li><label class="crm-quickSearchField"><input type="radio" <%= item.key === "sort_name" ? \'checked="checked"\' : "" %> value="<%= item.key %>" name="quickSearchField"> <%- item.value %></label></li>' +
+      '      <li><a href="#" class="crm-quickSearchField"><label><input type="radio" <%= item.key === "sort_name" ? \'checked="checked"\' : "" %> value="<%= item.key %>" name="quickSearchField"> <%- item.value %></label></a></li>' +
       '    <% }) %>' +
       '  </ul>' +
       '</li>',
