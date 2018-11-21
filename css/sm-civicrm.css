@@ -5,7 +5,6 @@
   text-align: left;
 }
 #civicrm-menu {
-  display: inline-block;
 	background-color: #333;
 	width: 100%;
   z-index: 100000;
@@ -94,13 +93,6 @@ body > #civicrm-menu-nav #civicrm-menu {
   overflow: hidden;
   clip: rect(1px,1px,1px,1px);
 }
-/* hide the menu in mobile view */
-#main-menu-state:not(:checked) ~ #civicrm-menu {
-  display: none;
-}
-#main-menu-state:checked ~ #civicrm-menu {
-  display: block;
-}
 .main-menu-btn {
   position: relative;
   display: inline-block;
@@ -137,12 +129,29 @@ body > #civicrm-menu-nav #civicrm-menu {
 }
 
 /* Quicksearch */
-li#crm-qsearch ul {
-  padding: 5px 10px;
+#crm-qsearch {
+  padding: 1px 0 1px 2px;
+  background-color: transparent !important;
+  border-right: none;
+}
+#civicrm-menu #crm-qsearch > a {
+  padding: 2px 0 0 2px;
+}
+
+#crm-qsearch form input.ui-autocomplete-input {
+  background: #eaeaea url(SEARCH_URL) no-repeat scroll right -23px;
+  border: 1px solid black;
+  margin: 0;
+  padding: 2px 16px 3px 2px;
+  height: 17px;
+}
+
+#crm-qsearch form input.ui-autocomplete-input:focus {
+  background-color: white;
 }
 
 /* Hide the 1px "line" shown in the collapsed quicksearch */
-#quickSearch div input.crm-form-submit.default {
+#crm-qsearch form div input.crm-form-submit.default {
   border: 0 transparent;
   background-color: transparent;
 }
@@ -181,13 +190,13 @@ li#crm-qsearch ul {
     position: absolute;
     top: -99999px;
   }
-  /* always show the menu in desktop view */
-  #main-menu-state:not(:checked) ~ #civicrm-menu {
-    display: block;
-  }
 }
 
 @media (max-width: 768px) {
+  /* hide the menu in mobile view */
+  #main-menu-state:not(:checked) ~ #civicrm-menu {
+    display: none;
+  }
 	#civicrm-menu ul {
 		background-color: #444;
 	}
@@ -224,10 +233,11 @@ li#crm-qsearch ul {
   }
   .main-menu-btn {
     margin-left: 20px;
-    z-index: 11000;
+    z-index: 110000;
   }
   #civicrm-menu {
     margin-top: 30px;
+    width: 100% !important;
   }
   #crm-qsearch {
     text-align: center;
@@ -235,7 +245,7 @@ li#crm-qsearch ul {
 
   /* Make sure we can click overlapped submenus in responsive mode */
   #civicrm-menu li ul li {
-    z-index: 11000;
+    z-index: 110000;
     background-color: inherit;
   }
 }

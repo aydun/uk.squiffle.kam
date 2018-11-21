@@ -49,6 +49,7 @@ function kam_civicrm_buildAsset($asset, $params, &$mimetype, &$content) {
   foreach (array($path . 'css/sm-core-css.css', 'css/sm-civicrm.css') as $file) {
     $raw .= file_get_contents(Civi::resources()->getPath('uk.squiffle.kam', $file));
   }
+  $raw = str_replace('SEARCH_URL', Civi::resources()->getUrl('civicrm', 'bower_components/select2/select2.png'), $raw);
   $content = str_replace('LOGO_URL', Civi::resources()->getUrl('civicrm', 'i/logo_sm.png'), $raw);
   $mimetype = 'text/css';
 }

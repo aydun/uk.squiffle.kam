@@ -257,10 +257,10 @@
       '</nav>',
     searchTpl:
       '<li id="crm-qsearch" data-name="QuickSearch">' +
-      '  <a href="#" class="has-submenu"> ' +
+      '  <a href="#"> ' +
       '    <form action="<%= CRM.url(\'civicrm/contact/search/advanced\') %>" name="search_block" id="id_search_block" method="post">' +
-      '      <div id="quickSearch">' +
-      '        <input type="text" class="form-text" id="sort_name_navigation" name="sort_name" style="width: 6em;" placeholder="<%- ts("Contacts") %>" />' +
+      '      <div>' +
+      '        <input type="text" id="sort_name_navigation" name="sort_name" style="width: 6em;" placeholder="<%- ts("Contacts") %>" />' +
       '        <input type="text" id="sort_contact_id" style="display: none" />' +
       '        <input type="hidden" name="hidden_location" value="1" />' +
       '        <input type="hidden" name="hidden_custom" value="1" />' +
