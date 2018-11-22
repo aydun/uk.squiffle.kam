@@ -25,11 +25,14 @@ function kam_civicrm_coreResourceList(&$list, $region) {
   if ($region == 'html-header') {
     $contactID = CRM_Core_Session::getLoggedInContactID();
     if ($contactID) {
+      $cms = strtolower(CRM_Core_Config::singleton()->userFramework);
+      $cms = $cms === 'drupal' ? 'drupal7' : $cms;
       $path = 'packages/smartmenus-1.1.0/';
       CRM_Core_Resources::singleton()
         ->addScriptFile('uk.squiffle.kam', $path . 'jquery.smartmenus.js', 0, 'html-header')
         ->addScriptFile('uk.squiffle.kam', $path . 'addons/keyboard/jquery.smartmenus.keyboard.js', 1, 'html-header')
         ->addScriptFile('uk.squiffle.kam', 'js/crm.menubar.js', -9)
+        ->addStyleFile('uk.squiffle.kam', "css/menubar-$cms.css")
         ->addStyleUrl(\Civi::service('asset_builder')->getUrl('sm-civicrm.css'));
     }
   }
@@ -46,7 +49,7 @@ function kam_civicrm_buildAsset($asset, $params, &$mimetype, &$content) {
   }
   $path = 'packages/smartmenus-1.1.0/';
   $raw = '';
-  foreach (array($path . 'css/sm-core-css.css', 'css/sm-civicrm.css') as $file) {
+  foreach (array($path . 'css/sm-core-css.css', 'css/crm-menubar.css') as $file) {
     $raw .= file_get_contents(Civi::resources()->getPath('uk.squiffle.kam', $file));
   }
   $raw = str_replace('SEARCH_URL', Civi::resources()->getUrl('civicrm', 'bower_components/select2/select2.png'), $raw);
