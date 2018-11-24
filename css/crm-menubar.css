@@ -188,7 +188,7 @@
   /* ...end */
 
   /* hide the button in desktop view */
-  .crm-menubar-toggle-btn {
+  #civicrm-menu-nav .crm-menubar-toggle-btn {
     position: absolute;
     top: -99999px;
   }
