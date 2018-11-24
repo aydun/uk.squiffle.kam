@@ -28,7 +28,7 @@ function kam_civicrm_coreResourceList(&$list, $region) {
       $cms = strtolower(CRM_Core_Config::singleton()->userFramework);
       $cms = $cms === 'drupal' ? 'drupal7' : $cms;
       $path = 'packages/smartmenus-1.1.0/';
-      CRM_Core_Resources::singleton()
+      Civi::resources()
         ->addScriptFile('uk.squiffle.kam', $path . 'jquery.smartmenus.js', 0, 'html-header')
         ->addScriptFile('uk.squiffle.kam', $path . 'addons/keyboard/jquery.smartmenus.keyboard.js', 1, 'html-header')
         ->addScriptFile('uk.squiffle.kam', 'js/crm.menubar.js', -9)
@@ -36,6 +36,19 @@ function kam_civicrm_coreResourceList(&$list, $region) {
         ->addStyleUrl(\Civi::service('asset_builder')->getUrl('sm-civicrm.css'));
       $list[] = ['menubar' => ['position' => Civi::settings()->get('menubar_position')]];
     }
+  }
+}
+
+/**
+ * Implements hook_civicrm_alterContent().
+ */
+function kam_civicrm_alterContent(&$content, $context, $tplName, &$object) {
+  // Override core joomla.css file
+  $region = CRM_Core_Region::instance('html-header');
+  $joomlaCss = $region->get(Civi::resources()->getUrl('civicrm', 'css/joomla.css', TRUE));
+  if ($joomlaCss) {
+    $override = ['styleUrl' => Civi::resources()->getUrl('uk.squiffle.kam', 'css/core-joomla.css', TRUE)];
+    $region->update($joomlaCss['name'], $override);
   }
 }
 
