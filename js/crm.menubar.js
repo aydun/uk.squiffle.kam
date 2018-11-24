@@ -257,7 +257,11 @@
     treeTpl:
       '<nav id="civicrm-menu-nav">' +
       '  <input id="main-menu-state" type="checkbox" />' +
-      '  <label class="main-menu-btn" for="main-menu-state"><span class="main-menu-btn-icon"></span> <%- ts("Toggle main menu") %> </label>' +
+      '  <label class="main-menu-btn" for="main-menu-state">' +
+      '    <span class="crm-logo-sm"></span>' +
+      '    <span class="main-menu-btn-icon"></span>' +
+      '    <%- ts("Toggle main menu") %>' +
+      '  </label>' +
       '  <ul id="civicrm-menu" class="sm sm-civicrm">' +
       '    <%= searchTpl({items: search}) %>' +
       '    <%= branchTpl({items: menu, branchTpl: branchTpl}) %>' +
@@ -273,7 +277,7 @@
       '        <input type="hidden" name="hidden_location" value="1" />' +
       '        <input type="hidden" name="hidden_custom" value="1" />' +
       '        <input type="hidden" name="qfKey" value="" />' +
-      '        <div style="height:1px; overflow:hidden;"><input type="submit" name="_qf_Advanced_refresh" class="crm-form-submit default" value="<%- ts("Search") %>" /></div>' +
+      '        <div style="height:1px; overflow:hidden;"><input type="submit" name="_qf_Advanced_refresh" value="<%- ts("Search") %>" /></div>' +
       '      </div>' +
       '    </form>' +
       '  </a>' +

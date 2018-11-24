@@ -16,7 +16,7 @@ return [
     'name' => 'menubar_position',
     'type' => 'String',
     'html_type' => 'select',
-    'default' => 'top',
+    'default' => 'over-cms-menu',
     'add' => '5.9',
     'title' => ts('Menubar position'),
     'is_domain' => 1,
