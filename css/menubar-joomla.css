@@ -14,7 +14,7 @@ body.admin.com_civicrm ul#civicrm-menu li#crm-qsearch a {
   body.admin.com_civicrm .container-fluid.container-main {
     margin: 0 -20px;
   }
-  body.admin.com_civicrm .main-menu-btn {
+  body.admin.com_civicrm .crm-menubar-toggle-btn {
     top: 5px;
   }
   body.admin.com_civicrm ul#civicrm-menu {

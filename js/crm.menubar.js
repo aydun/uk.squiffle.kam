@@ -4,6 +4,7 @@
   var branchTpl, searchTpl, treeTpl, initialized;
   CRM.menubar = _.extend({
     data: null,
+    settings: {collapsibleBehavior: 'accordion'},
     attachTo: CRM.menubar.position === 'above-crm-container' ? '#crm-container' : 'body',
     initialize: function() {
       $('body')
@@ -24,7 +25,7 @@
           e.preventDefault();
           CRM.menubar.hide(250, true);
         })
-        .smartmenus().trigger('crmLoad');
+        .smartmenus(CRM.menubar.settings).trigger('crmLoad');
       CRM.menubar.initializeSearch();
       CRM.menubar.initializeMobile();
     },
@@ -156,13 +157,24 @@
       $('#civicrm-menu').smartmenus('refresh');
     },
     initializeMobile: function() {
-      var $mainMenuState = $('#main-menu-state');
+      var $mainMenuState = $('#crm-menubar-state');
       // hide mobile menu beforeunload
       $(window).on('beforeunload unload', function() {
         CRM.menubar.spin(true);
         if ($mainMenuState[0].checked) {
           $mainMenuState[0].click();
         }
+      });
+      $mainMenuState.click(function() {
+        // Use absolute position instead of fixed when open to allow scrolling menu
+        var open = $(this).is(':checked');
+        if (open) {
+          window.scroll({top:0});
+        }
+        $('#civicrm-menu-nav')
+          .css('position', open ? 'absolute' : '')
+          .parents().not('html,body')
+          .css('position', open ? 'static' : '');
       });
     },
     initializeSearch: function() {
@@ -256,10 +268,10 @@
     },
     treeTpl:
       '<nav id="civicrm-menu-nav">' +
-      '  <input id="main-menu-state" type="checkbox" />' +
-      '  <label class="main-menu-btn" for="main-menu-state">' +
-      '    <span class="crm-logo-sm"></span>' +
-      '    <span class="main-menu-btn-icon"></span>' +
+      '  <input id="crm-menubar-state" type="checkbox" />' +
+      '  <label class="crm-menubar-toggle-btn" for="crm-menubar-state">' +
+      '    <span class="crm-menu-logo"></span>' +
+      '    <span class="crm-menubar-toggle-btn-icon"></span>' +
       '    <%- ts("Toggle main menu") %>' +
       '  </label>' +
       '  <ul id="civicrm-menu" class="sm sm-civicrm">' +

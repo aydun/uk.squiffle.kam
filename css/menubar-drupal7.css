@@ -38,4 +38,8 @@ body.crm-menubar-visible.crm-menubar-over-cms-menu #toolbar-menu {
     visibility: hidden;
   }
 
+  body #civicrm-menu-nav .crm-menubar-toggle-btn {
+    margin-top: 0;
+  }
+
 }
