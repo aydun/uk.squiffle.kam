@@ -7,17 +7,15 @@
 #civicrm-menu {
 	background-color: #333;
 	width: 100%;
-  z-index: 100000;
+  z-index: 500;
   height: auto;
-}
-body > #civicrm-menu-nav #civicrm-menu {
-  position: fixed;
-  top: 0;
+  margin: 0;
 }
 #civicrm-menu i {
   margin-right: 5px;
 }
 #civicrm-menu li {
+  border: none;
 	padding: 0;
 }
 #civicrm-menu li a {
@@ -132,7 +130,6 @@ body > #civicrm-menu-nav #civicrm-menu {
 #crm-qsearch {
   padding: 1px 0 1px 2px;
   background-color: transparent !important;
-  border-right: none;
 }
 #civicrm-menu #crm-qsearch > a {
   padding: 2px 0 0 2px;
@@ -183,12 +180,28 @@ body > #civicrm-menu-nav #civicrm-menu {
   #civicrm-menu .sm-nowrap > li > a,#civicrm-menu .sm-nowrap > li > :not(ul) a{white-space:nowrap;}
   /* ...end */
 
-  /* Your rules to style the menu in desktop view here... */
-
   /* hide the button in desktop view */
   .main-menu-btn {
     position: absolute;
     top: -99999px;
+  }
+
+  body.crm-menubar-below-cms-menu > #civicrm-menu-nav #civicrm-menu {
+    top: 30px;
+  }
+
+  #civicrm-menu > li {
+    height: 30px;
+  }
+
+  body.crm-menubar-over-cms-menu #civicrm-menu,
+  body.crm-menubar-below-cms-menu #civicrm-menu {
+    position: fixed;
+    top: 0;
+  }
+
+  body.crm-menubar-over-cms-menu #civicrm-menu {
+    z-index: 100000;
   }
 }
 
@@ -225,11 +238,12 @@ body > #civicrm-menu-nav #civicrm-menu {
     content: "\f0d7";
   }
   #civicrm-menu-nav {
-    position: absolute;
+    position: fixed;
     background: #222;
     top: 0;
     height: 35px;
     width: 100%;
+    z-index: 100000;
   }
   .main-menu-btn {
     margin-left: 20px;
@@ -238,6 +252,7 @@ body > #civicrm-menu-nav #civicrm-menu {
   #civicrm-menu {
     margin-top: 30px;
     width: 100% !important;
+    z-index: 100000;
   }
   #crm-qsearch {
     text-align: center;

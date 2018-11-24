@@ -4,14 +4,17 @@
   var branchTpl, searchTpl, treeTpl, initialized;
   CRM.menubar = _.extend({
     data: null,
-    attachTo: 'body',
+    attachTo: CRM.menubar.position === 'above-crm-container' ? '#crm-container' : 'body',
     initialize: function() {
-      $('body').trigger('crmMenuLoad', [CRM.menubar.data]);
+      $('body')
+        .addClass('crm-menubar-visible crm-menubar-' + CRM.menubar.position)
+        .trigger('crmMenuLoad', [CRM.menubar.data]);
       initialized = true;
       branchTpl = _.template(CRM.menubar.branchTpl, {imports: {_: _, attr: attr}});
       searchTpl = _.template(CRM.menubar.searchTpl, {imports: {_: _, ts: ts, CRM: CRM}});
       treeTpl = _.template(CRM.menubar.treeTpl, {imports: {branchTpl: branchTpl, searchTpl: searchTpl, ts: ts}});
-      $(CRM.menubar.attachTo).append(treeTpl(CRM.menubar.data));
+      var attachFn = CRM.menubar.attachTo === 'body' ? 'append' : 'prepend';
+      $(CRM.menubar.attachTo)[attachFn](treeTpl(CRM.menubar.data));
       $('#civicrm-menu')
         .on('click', 'a[href="#"]', function() {
           // For empty links - keep the menu open and don't jump the page anchor
@@ -29,6 +32,9 @@
       $.SmartMenus.destroy();
       $('#civicrm-menu-nav').remove();
       initialized = false;
+      $('body[class]').attr('class', function(i, c) {
+        return c.replace(/(^|\s)crm-menubar-\S+/g, '');
+      });
     },
     show: function(speed) {
       if (typeof speed === 'number') {
@@ -36,6 +42,9 @@
       } else {
         $('#civicrm-menu').show();
       }
+      $('body')
+        .removeClass('crm-menubar-hidden')
+        .addClass('crm-menubar-visible');
     },
     hide: function(speed, showMessage) {
       if (typeof speed === 'number') {
@@ -43,6 +52,9 @@
       } else {
         $('#civicrm-menu').hide();
       }
+      $('body')
+        .addClass('crm-menubar-hidden')
+        .removeClass('crm-menubar-visible');
       if (showMessage === true && $('#crm-notification-container').length && initialized) {
         var alert = CRM.alert('<a href="#" id="crm-restore-menu" style="text-align: center; margin-top: -8px;">' + _.escape(ts('Restore CiviCRM Menu')) + '</a>', '', 'none', {expires: 10000});
         $('#crm-restore-menu')
@@ -145,10 +157,6 @@
     },
     initializeMobile: function() {
       var $mainMenuState = $('#main-menu-state');
-      // animate mobile menu
-      $mainMenuState.change(function() {
-        CRM.menubar[this.checked ? 'show' : 'hide'](250);
-      });
       // hide mobile menu beforeunload
       $(window).on('beforeunload unload', function() {
         CRM.menubar.spin(true);
@@ -328,7 +336,11 @@
   $.getJSON(CRM.url('civicrm/ajax/navmenu', {c: CRM.config.menuCacheCode, l: CRM.config.lcMessages}))
     .done(function(data) {
       CRM.menubar.data = data;
-      CRM.menubar.initialize();
+      if (CRM.menubar.attachTo === 'body') {
+        CRM.menubar.initialize();
+      } else {
+        $(CRM.menubar.initialize);
+      }
     });
 
 })(CRM.$, CRM._);

@@ -34,6 +34,7 @@ function kam_civicrm_coreResourceList(&$list, $region) {
         ->addScriptFile('uk.squiffle.kam', 'js/crm.menubar.js', -9)
         ->addStyleFile('uk.squiffle.kam', "css/menubar-$cms.css")
         ->addStyleUrl(\Civi::service('asset_builder')->getUrl('sm-civicrm.css'));
+      $list[] = ['menubar' => ['position' => Civi::settings()->get('menubar_position')]];
     }
   }
 }
@@ -177,16 +178,27 @@ function kam_civicrm_alterSettingsFolders(&$metaDataFolders = NULL) {
   _kam_civix_civicrm_alterSettingsFolders($metaDataFolders);
 }
 
-// --- Functions below this ship commented out. Uncomment as required. ---
-
 /**
  * Implements hook_civicrm_preProcess().
- *
- * @link http://wiki.civicrm.org/confluence/display/CRMDOC/hook_civicrm_preProcess
- *
+ * @var CRM_Admin_Form_Preferences_Display $form
+ */
 function kam_civicrm_preProcess($formName, &$form) {
-
-} // */
+  if ($formName === 'CRM_Admin_Form_Preferences_Display') {
+    $setting = civicrm_api3('Setting', 'getfields', ['name' => "menubar_position"])['values']['menubar_position'];
+    $element = $form->add('select', 'menubar_position', $setting['title'], $setting['options']);
+    $element->setValue(Civi::settings()->get('menubar_position'));
+  }
+}
+/**
+ * Implements hook_civicrm_postProcess().
+ * @var CRM_Admin_Form_Preferences_Display $form
+ */
+function kam_civicrm_postProcess($formName, &$form) {
+  if ($formName === 'CRM_Admin_Form_Preferences_Display') {
+    $params = $form->controller->exportValues('Display');
+    Civi::settings()->set('menubar_position', $params['menubar_position']);
+  }
+}
 
 /**
  * Implements hook_civicrm_navigationMenu().
