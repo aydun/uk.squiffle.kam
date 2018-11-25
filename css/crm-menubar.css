@@ -210,6 +210,10 @@
   body.crm-menubar-over-cms-menu #civicrm-menu {
     z-index: 100000;
   }
+
+  body.crm-menubar-hidden #civicrm-menu {
+    display: none;
+  }
 }
 
 @media (max-width: 768px) {
@@ -280,6 +284,10 @@
     text-align: center;
   }
   #crm-qsearch .sub-arrow {
+    display: none;
+  }
+
+  #civicrm-menu li[data-name="Hide Menu"] {
     display: none;
   }
 

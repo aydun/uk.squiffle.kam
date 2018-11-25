@@ -39,9 +39,9 @@
     },
     show: function(speed) {
       if (typeof speed === 'number') {
-        $('#civicrm-menu').slideDown(speed);
-      } else {
-        $('#civicrm-menu').show();
+        $('#civicrm-menu').slideDown(speed, function() {
+          $(this).css('display', '');
+        });
       }
       $('body')
         .removeClass('crm-menubar-hidden')
@@ -49,9 +49,9 @@
     },
     hide: function(speed, showMessage) {
       if (typeof speed === 'number') {
-        $('#civicrm-menu').slideUp(speed);
-      } else {
-        $('#civicrm-menu').hide();
+        $('#civicrm-menu').slideUp(speed, function() {
+          $(this).css('display', '');
+        });
       }
       $('body')
         .addClass('crm-menubar-hidden')
@@ -164,7 +164,12 @@
         if ($mainMenuState[0].checked) {
           $mainMenuState[0].click();
         }
-      });
+      })
+        .on('resize', function() {
+          if ($(window).width() > 768 && $mainMenuState[0].checked) {
+            $mainMenuState[0].click();
+          }
+        });
       $mainMenuState.click(function() {
         // Use absolute position instead of fixed when open to allow scrolling menu
         var open = $(this).is(':checked');
