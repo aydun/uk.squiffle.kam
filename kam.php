@@ -43,8 +43,14 @@ function kam_civicrm_coreResourceList(&$list, $region) {
  * Implements hook_civicrm_alterContent().
  */
 function kam_civicrm_alterContent(&$content, $context, $tplName, &$object) {
-  // Override core joomla.css file
   $region = CRM_Core_Region::instance('html-header');
+  // Remove backdrop.js file
+  $backdropJs = $region->get(Civi::resources()->getUrl('civicrm', 'js/crm.backdrop.js', TRUE));
+  if ($backdropJs) {
+    $override = ['scriptUrl' => NULL];
+    $region->update($backdropJs['name'], $override);
+  }
+  // Override core joomla.css file
   $joomlaCss = $region->get(Civi::resources()->getUrl('civicrm', 'css/joomla.css', TRUE));
   if ($joomlaCss) {
     $override = ['styleUrl' => Civi::resources()->getUrl('uk.squiffle.kam', 'css/core-joomla.css', TRUE)];
