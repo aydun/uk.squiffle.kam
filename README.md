@@ -1,20 +1,24 @@
 # KAM - Keyboard Accessible Menus
 
-## What this module does
-
-This module uses the SmartMenus jQuery plugin to add a responsive, accessible menu to CiviCRM.
-
-## Installation
-
-Install as a normal CiviCRM extension; no other configuration is required.
+This module uses the SmartMenus jQuery plugin to add a responsive, accessible, configurable menu to CiviCRM.
 
 ## Requirements
 
 Requires CiviCRM 5.8 or later.
 
+## Installation
+
+Install as a normal CiviCRM extension; then optionally visit **Administer -> Customize Data & Screens -> Display Preferences** to choose menubar placement.
+
 ## Roadmap
 
 This extension will be merged into CiviCRM core in the near future. See https://lab.civicrm.org/dev/core/issues/487
+
+## Configuration
+
+Menubar placement can be configured at **Administer -> Customize Data & Screens -> Display Preferences**. The options control where the menubar appears on desktop screens (on mobile screens it will always be collapsed regardless of this setting).
+
+![Settings screen](images/configuration.png)
 
 ## API
 
@@ -45,6 +49,19 @@ This extension will be merged into CiviCRM core in the near future. See https://
 | `updateItem( item )`  | Updates the properties of a menu item (label, url, separator, icon, etc.<br />`item`: object with at least a `name` plus properties to update. | `CRM.menubar.updateItem({name: 'Search', label: 'Find');` |
 
 Tip: Try pasting those examples into your browser console.
+
+#### CSS classes
+
+*The following css classes are added to the page body when the menubar is initialized*
+
+* `crm-menubar-visible` When the menubar is present and visible.
+* `crm-menubar-hidden` When the menubar is present but hidden via `CRM.menubar.hide()`.
+* Depending on which option is selected, the body will also have one of: `crm-menubar-over-cms-menu`, `crm-menubar-below-cms-menu`, `crm-menubar-above-crm-container`.
+
+#### Hooks
+
+Your custom code can alter the list of menubar placement options via [hook_civicrm_alterSettingsMetaData](https://docs.civicrm.org/dev/en/latest/hooks/hook_civicrm_alterSettingsMetaData/) - modify the `options` array in the setting `menubar_position`.
+E.g. adding a new option named "foo" will add class `crm-menubar-foo` to the page body when selected which can be targeted from your stylesheet. 
 
 ## Acknowledgements
 
