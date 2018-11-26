@@ -3,21 +3,20 @@
 #civicrm-menu-nav {
   line-height: 0;
   text-align: left;
+  font-size: 13px;
 }
 #civicrm-menu {
 	background-color: #333;
 	width: 100%;
-  z-index: 100000;
+  z-index: 500;
   height: auto;
-}
-body > #civicrm-menu-nav #civicrm-menu {
-  position: fixed;
-  top: 0;
+  margin: 0;
 }
 #civicrm-menu i {
   margin-right: 5px;
 }
 #civicrm-menu li {
+  border: none;
 	padding: 0;
 }
 #civicrm-menu li a {
@@ -26,6 +25,9 @@ body > #civicrm-menu-nav #civicrm-menu {
   color: #ddd;
   box-shadow: none;
   border: none;
+}
+#civicrm-menu li a[href="#"] {
+  cursor: default;
 }
 #civicrm-menu li li a {
 	padding: 6px 36px 6px 10px;
@@ -68,22 +70,22 @@ body > #civicrm-menu-nav #civicrm-menu {
 	margin-top: 5px;
 }
 /* x icon */
-#main-menu-state:checked ~ .main-menu-btn .main-menu-btn-icon {
+#crm-menubar-state:checked ~ .crm-menubar-toggle-btn .crm-menubar-toggle-btn-icon {
   height: 0;
   background: transparent;
 }
-#main-menu-state:checked ~ .main-menu-btn .main-menu-btn-icon:before {
+#crm-menubar-state:checked ~ .crm-menubar-toggle-btn .crm-menubar-toggle-btn-icon:before {
   top: 0;
   -webkit-transform: rotate(-45deg);
   transform: rotate(-45deg);
 }
-#main-menu-state:checked ~ .main-menu-btn .main-menu-btn-icon:after {
+#crm-menubar-state:checked ~ .crm-menubar-toggle-btn .crm-menubar-toggle-btn-icon:after {
   top: 0;
   -webkit-transform: rotate(45deg);
   transform: rotate(45deg);
 }
 /* hide menu state checkbox (keep it visible to screen readers) */
-#main-menu-state {
+#civicrm-menu-nav #crm-menubar-state {
   position: absolute;
   width: 1px;
   height: 1px;
@@ -93,36 +95,40 @@ body > #civicrm-menu-nav #civicrm-menu {
   overflow: hidden;
   clip: rect(1px,1px,1px,1px);
 }
-.main-menu-btn {
+#civicrm-menu-nav .crm-menubar-toggle-btn {
   position: relative;
   display: inline-block;
-  width: 28px;
+  width: 57px;
   height: 28px;
   text-indent: 28px;
   white-space: nowrap;
   overflow: hidden;
   cursor: pointer;
+  color: transparent;
   -webkit-tap-highlight-color: rgba(0,0,0,0);
+  background-color: #333;
 }
 
 /* responsive icon */
 
-.main-menu-btn-icon, .main-menu-btn-icon:before, .main-menu-btn-icon:after {
+#civicrm-menu-nav .crm-menubar-toggle-btn-icon,
+#civicrm-menu-nav .crm-menubar-toggle-btn-icon:before,
+#civicrm-menu-nav .crm-menubar-toggle-btn-icon:after {
   position: absolute;
   top: 50%;
-  left: 2px;
+  left: 27px;
   height: 2px;
   width: 24px;
   background: #bbb;
   -webkit-transition: all 0.25s;
   transition: all 0.25s;
 }
-.main-menu-btn-icon:before {
+#civicrm-menu-nav .crm-menubar-toggle-btn-icon:before {
   content: '';
   top: -7px;
   left: 0;
 }
-.main-menu-btn-icon:after {
+#civicrm-menu-nav .crm-menubar-toggle-btn-icon:after {
   content: '';
   top: 7px;
   left: 0;
@@ -132,14 +138,13 @@ body > #civicrm-menu-nav #civicrm-menu {
 #crm-qsearch {
   padding: 1px 0 1px 2px;
   background-color: transparent !important;
-  border-right: none;
 }
 #civicrm-menu #crm-qsearch > a {
   padding: 2px 0 0 2px;
 }
 
 #crm-qsearch form input.ui-autocomplete-input {
-  background: #eaeaea url(SEARCH_URL) no-repeat scroll right -23px;
+  background: #eaeaea url(BASE_URL/bower_components/select2/select2.png) no-repeat scroll right -23px;
   border: 1px solid black;
   margin: 0;
   padding: 2px 16px 3px 2px;
@@ -151,15 +156,15 @@ body > #civicrm-menu-nav #civicrm-menu {
 }
 
 /* Hide the 1px "line" shown in the collapsed quicksearch */
-#crm-qsearch form div input.crm-form-submit.default {
+#crm-qsearch form div input[type=submit] {
   border: 0 transparent;
-  background-color: transparent;
+  background: transparent;
 }
 
 /* From css/civicrmNavigation.css */
-#civicrm-menu .crm-logo-sm,
+#civicrm-menu-nav .crm-logo-sm,
 .crm-container .crm-logo-sm {
-  background: url(LOGO_URL) no-repeat;
+  background: url(BASE_URL/i/logo_sm.png) no-repeat;
   display: inline-block;
   width: 16px;
   height: 16px;
@@ -183,18 +188,38 @@ body > #civicrm-menu-nav #civicrm-menu {
   #civicrm-menu .sm-nowrap > li > a,#civicrm-menu .sm-nowrap > li > :not(ul) a{white-space:nowrap;}
   /* ...end */
 
-  /* Your rules to style the menu in desktop view here... */
-
   /* hide the button in desktop view */
-  .main-menu-btn {
+  #civicrm-menu-nav .crm-menubar-toggle-btn {
     position: absolute;
     top: -99999px;
+  }
+
+  body.crm-menubar-below-cms-menu > #civicrm-menu-nav #civicrm-menu {
+    top: 30px;
+  }
+
+  #civicrm-menu > li {
+    height: 30px;
+  }
+
+  body.crm-menubar-over-cms-menu #civicrm-menu,
+  body.crm-menubar-below-cms-menu #civicrm-menu {
+    position: fixed;
+    top: 0;
+  }
+
+  body.crm-menubar-over-cms-menu #civicrm-menu {
+    z-index: 100000;
+  }
+
+  body.crm-menubar-hidden #civicrm-menu {
+    display: none;
   }
 }
 
 @media (max-width: 768px) {
   /* hide the menu in mobile view */
-  #main-menu-state:not(:checked) ~ #civicrm-menu {
+  #crm-menubar-state:not(:checked) ~ #civicrm-menu {
     display: none;
   }
 	#civicrm-menu ul {
@@ -225,22 +250,46 @@ body > #civicrm-menu-nav #civicrm-menu {
     content: "\f0d7";
   }
   #civicrm-menu-nav {
-    position: absolute;
-    background: #222;
+    position: fixed;
+    background: transparent;
+    pointer-events: none;
     top: 0;
-    height: 35px;
+    left: 0;
+    height: 50px;
     width: 100%;
+    z-index: 100000;
   }
-  .main-menu-btn {
+  #civicrm-menu-nav > * {
+    pointer-events: auto;
+  }
+  #civicrm-menu-nav .crm-menubar-toggle-btn {
     margin-left: 20px;
     z-index: 110000;
+    margin-top: 10px;
+  }
+  #civicrm-menu-nav .crm-menubar-toggle-btn span.crm-menu-logo {
+    display: block;
+    position: absolute;
+    left: 5px;
+    width: 18px;
+    height: 18px;
+    background: url(BASE_URL/i/logo_lg.png) no-repeat;
+    background-size: 18px;
+    top: 6px;
   }
   #civicrm-menu {
-    margin-top: 30px;
     width: 100% !important;
+    z-index: 100000;
   }
   #crm-qsearch {
     text-align: center;
+  }
+  #crm-qsearch .sub-arrow {
+    display: none;
+  }
+
+  #civicrm-menu li[data-name="Hide Menu"] {
+    display: none;
   }
 
   /* Make sure we can click overlapped submenus in responsive mode */

@@ -1,0 +1,21 @@
+@media (min-width: 768px) {
+
+  body.crm-menubar-visible.crm-menubar-below-cms-menu {
+    padding-top: 27px;
+  }
+  .admin-bar body.crm-menubar-below-cms-menu #civicrm-menu {
+    position: absolute;
+  }
+  body.crm-menubar-visible.crm-menubar-over-cms-menu #admin-bar {
+    visibility: hidden;
+  }
+
+}
+@media (max-width: 768px) {
+
+  body #civicrm-menu-nav .crm-menubar-toggle-btn {
+    margin-top: 0;
+    top: 33px;
+  }
+
+}

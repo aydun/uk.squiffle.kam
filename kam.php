@@ -28,13 +28,33 @@ function kam_civicrm_coreResourceList(&$list, $region) {
       $cms = strtolower(CRM_Core_Config::singleton()->userFramework);
       $cms = $cms === 'drupal' ? 'drupal7' : $cms;
       $path = 'packages/smartmenus-1.1.0/';
-      CRM_Core_Resources::singleton()
+      Civi::resources()
         ->addScriptFile('uk.squiffle.kam', $path . 'jquery.smartmenus.js', 0, 'html-header')
         ->addScriptFile('uk.squiffle.kam', $path . 'addons/keyboard/jquery.smartmenus.keyboard.js', 1, 'html-header')
         ->addScriptFile('uk.squiffle.kam', 'js/crm.menubar.js', -9)
         ->addStyleFile('uk.squiffle.kam', "css/menubar-$cms.css")
         ->addStyleUrl(\Civi::service('asset_builder')->getUrl('sm-civicrm.css'));
+      $list[] = ['menubar' => ['position' => Civi::settings()->get('menubar_position')]];
     }
+  }
+}
+
+/**
+ * Implements hook_civicrm_alterContent().
+ */
+function kam_civicrm_alterContent(&$content, $context, $tplName, &$object) {
+  $region = CRM_Core_Region::instance('html-header');
+  // Remove backdrop.js file
+  $backdropJs = $region->get(Civi::resources()->getUrl('civicrm', 'js/crm.backdrop.js', TRUE));
+  if ($backdropJs) {
+    $override = ['scriptUrl' => NULL];
+    $region->update($backdropJs['name'], $override);
+  }
+  // Override core joomla.css file
+  $joomlaCss = $region->get(Civi::resources()->getUrl('civicrm', 'css/joomla.css', TRUE));
+  if ($joomlaCss) {
+    $override = ['styleUrl' => Civi::resources()->getUrl('uk.squiffle.kam', 'css/core-joomla.css', TRUE)];
+    $region->update($joomlaCss['name'], $override);
   }
 }
 
@@ -52,8 +72,7 @@ function kam_civicrm_buildAsset($asset, $params, &$mimetype, &$content) {
   foreach (array($path . 'css/sm-core-css.css', 'css/crm-menubar.css') as $file) {
     $raw .= file_get_contents(Civi::resources()->getPath('uk.squiffle.kam', $file));
   }
-  $raw = str_replace('SEARCH_URL', Civi::resources()->getUrl('civicrm', 'bower_components/select2/select2.png'), $raw);
-  $content = str_replace('LOGO_URL', Civi::resources()->getUrl('civicrm', 'i/logo_sm.png'), $raw);
+  $content = str_replace('BASE_URL', rtrim(Civi::resources()->getUrl('civicrm', '/'), '/'), $raw);
   $mimetype = 'text/css';
 }
 
@@ -177,16 +196,27 @@ function kam_civicrm_alterSettingsFolders(&$metaDataFolders = NULL) {
   _kam_civix_civicrm_alterSettingsFolders($metaDataFolders);
 }
 
-// --- Functions below this ship commented out. Uncomment as required. ---
-
 /**
  * Implements hook_civicrm_preProcess().
- *
- * @link http://wiki.civicrm.org/confluence/display/CRMDOC/hook_civicrm_preProcess
- *
+ * @var CRM_Admin_Form_Preferences_Display $form
+ */
 function kam_civicrm_preProcess($formName, &$form) {
-
-} // */
+  if ($formName === 'CRM_Admin_Form_Preferences_Display') {
+    $setting = civicrm_api3('Setting', 'getfields', ['name' => "menubar_position"])['values']['menubar_position'];
+    $element = $form->add('select', 'menubar_position', $setting['title'], $setting['options']);
+    $element->setValue(Civi::settings()->get('menubar_position'));
+  }
+}
+/**
+ * Implements hook_civicrm_postProcess().
+ * @var CRM_Admin_Form_Preferences_Display $form
+ */
+function kam_civicrm_postProcess($formName, &$form) {
+  if ($formName === 'CRM_Admin_Form_Preferences_Display') {
+    $params = $form->controller->exportValues('Display');
+    Civi::settings()->set('menubar_position', $params['menubar_position']);
+  }
+}
 
 /**
  * Implements hook_civicrm_navigationMenu().

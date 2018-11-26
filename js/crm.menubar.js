@@ -4,14 +4,18 @@
   var branchTpl, searchTpl, treeTpl, initialized;
   CRM.menubar = _.extend({
     data: null,
-    attachTo: 'body',
+    settings: {collapsibleBehavior: 'accordion'},
+    attachTo: CRM.menubar.position === 'above-crm-container' ? '#crm-container' : 'body',
     initialize: function() {
-      $('body').trigger('crmMenuLoad', [CRM.menubar.data]);
+      $('body')
+        .addClass('crm-menubar-visible crm-menubar-' + CRM.menubar.position)
+        .trigger('crmMenuLoad', [CRM.menubar.data]);
       initialized = true;
       branchTpl = _.template(CRM.menubar.branchTpl, {imports: {_: _, attr: attr}});
       searchTpl = _.template(CRM.menubar.searchTpl, {imports: {_: _, ts: ts, CRM: CRM}});
       treeTpl = _.template(CRM.menubar.treeTpl, {imports: {branchTpl: branchTpl, searchTpl: searchTpl, ts: ts}});
-      $(CRM.menubar.attachTo).append(treeTpl(CRM.menubar.data));
+      var attachFn = CRM.menubar.attachTo === 'body' ? 'append' : 'prepend';
+      $(CRM.menubar.attachTo)[attachFn](treeTpl(CRM.menubar.data));
       $('#civicrm-menu')
         .on('click', 'a[href="#"]', function() {
           // For empty links - keep the menu open and don't jump the page anchor
@@ -21,7 +25,7 @@
           e.preventDefault();
           CRM.menubar.hide(250, true);
         })
-        .smartmenus().trigger('crmLoad');
+        .smartmenus(CRM.menubar.settings).trigger('crmLoad');
       CRM.menubar.initializeSearch();
       CRM.menubar.initializeMobile();
     },
@@ -29,20 +33,29 @@
       $.SmartMenus.destroy();
       $('#civicrm-menu-nav').remove();
       initialized = false;
+      $('body[class]').attr('class', function(i, c) {
+        return c.replace(/(^|\s)crm-menubar-\S+/g, '');
+      });
     },
     show: function(speed) {
       if (typeof speed === 'number') {
-        $('#civicrm-menu').slideDown(speed);
-      } else {
-        $('#civicrm-menu').show();
+        $('#civicrm-menu').slideDown(speed, function() {
+          $(this).css('display', '');
+        });
       }
+      $('body')
+        .removeClass('crm-menubar-hidden')
+        .addClass('crm-menubar-visible');
     },
     hide: function(speed, showMessage) {
       if (typeof speed === 'number') {
-        $('#civicrm-menu').slideUp(speed);
-      } else {
-        $('#civicrm-menu').hide();
+        $('#civicrm-menu').slideUp(speed, function() {
+          $(this).css('display', '');
+        });
       }
+      $('body')
+        .addClass('crm-menubar-hidden')
+        .removeClass('crm-menubar-visible');
       if (showMessage === true && $('#crm-notification-container').length && initialized) {
         var alert = CRM.alert('<a href="#" id="crm-restore-menu" style="text-align: center; margin-top: -8px;">' + _.escape(ts('Restore CiviCRM Menu')) + '</a>', '', 'none', {expires: 10000});
         $('#crm-restore-menu')
@@ -144,17 +157,29 @@
       $('#civicrm-menu').smartmenus('refresh');
     },
     initializeMobile: function() {
-      var $mainMenuState = $('#main-menu-state');
-      // animate mobile menu
-      $mainMenuState.change(function() {
-        CRM.menubar[this.checked ? 'show' : 'hide'](250);
-      });
+      var $mainMenuState = $('#crm-menubar-state');
       // hide mobile menu beforeunload
       $(window).on('beforeunload unload', function() {
         CRM.menubar.spin(true);
         if ($mainMenuState[0].checked) {
           $mainMenuState[0].click();
         }
+      })
+        .on('resize', function() {
+          if ($(window).width() > 768 && $mainMenuState[0].checked) {
+            $mainMenuState[0].click();
+          }
+        });
+      $mainMenuState.click(function() {
+        // Use absolute position instead of fixed when open to allow scrolling menu
+        var open = $(this).is(':checked');
+        if (open) {
+          window.scroll({top:0});
+        }
+        $('#civicrm-menu-nav')
+          .css('position', open ? 'absolute' : '')
+          .parents().not('html,body')
+          .css('position', open ? 'static' : '');
       });
     },
     initializeSearch: function() {
@@ -248,8 +273,12 @@
     },
     treeTpl:
       '<nav id="civicrm-menu-nav">' +
-      '  <input id="main-menu-state" type="checkbox" />' +
-      '  <label class="main-menu-btn" for="main-menu-state"><span class="main-menu-btn-icon"></span> <%- ts("Toggle main menu") %> </label>' +
+      '  <input id="crm-menubar-state" type="checkbox" />' +
+      '  <label class="crm-menubar-toggle-btn" for="crm-menubar-state">' +
+      '    <span class="crm-menu-logo"></span>' +
+      '    <span class="crm-menubar-toggle-btn-icon"></span>' +
+      '    <%- ts("Toggle main menu") %>' +
+      '  </label>' +
       '  <ul id="civicrm-menu" class="sm sm-civicrm">' +
       '    <%= searchTpl({items: search}) %>' +
       '    <%= branchTpl({items: menu, branchTpl: branchTpl}) %>' +
@@ -265,7 +294,7 @@
       '        <input type="hidden" name="hidden_location" value="1" />' +
       '        <input type="hidden" name="hidden_custom" value="1" />' +
       '        <input type="hidden" name="qfKey" value="" />' +
-      '        <div style="height:1px; overflow:hidden;"><input type="submit" name="_qf_Advanced_refresh" class="crm-form-submit default" value="<%- ts("Search") %>" /></div>' +
+      '        <div style="height:1px; overflow:hidden;"><input type="submit" name="_qf_Advanced_refresh" value="<%- ts("Search") %>" /></div>' +
       '      </div>' +
       '    </form>' +
       '  </a>' +
@@ -328,7 +357,11 @@
   $.getJSON(CRM.url('civicrm/ajax/navmenu', {c: CRM.config.menuCacheCode, l: CRM.config.lcMessages}))
     .done(function(data) {
       CRM.menubar.data = data;
-      CRM.menubar.initialize();
+      if (CRM.menubar.attachTo === 'body') {
+        CRM.menubar.initialize();
+      } else {
+        $(CRM.menubar.initialize);
+      }
     });
 
 })(CRM.$, CRM._);

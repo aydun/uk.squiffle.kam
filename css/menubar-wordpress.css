@@ -1,0 +1,34 @@
+@media (min-width: 768px) {
+
+  body.crm-menubar-over-cms-menu #civicrm-menu {
+    padding: 1px 0;
+  }
+
+  body.crm-menubar-over-cms-menu.crm-menubar-visible #wpadminbar {
+    visibility: hidden;
+  }
+
+  body.crm-menubar-below-cms-menu #civicrm-menu {
+    top: 32px;
+    left: 160px;
+    width: calc(100% - 160px);
+  }
+
+  body.crm-menubar-below-cms-menu.folded #civicrm-menu {
+    left: 36px;
+    width: calc(100% - 36px);
+  }
+
+  body.crm-menubar-below-cms-menu #wpbody {
+    margin-top: 30px;
+  }
+
+}
+@media (max-width: 768px) {
+
+  body #civicrm-menu-nav .crm-menubar-toggle-btn {
+    position: absolute;
+    right: 50px;
+  }
+
+}
