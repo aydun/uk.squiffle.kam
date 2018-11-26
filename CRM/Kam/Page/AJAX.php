@@ -49,7 +49,7 @@ class CRM_Kam_Page_AJAX {
       $props = $item['attributes'];
       unset($item['attributes']);
       if (!empty($props['separator'])) {
-        $item['separator'] = ($props['separator'] == 1 ? 'top' : 'bottom');
+        $item['separator'] = ($props['separator'] == 1 ? 'bottom' : 'top');
       }
       if (!empty($props['icon'])) {
         $item['icon'] = $props['icon'];
