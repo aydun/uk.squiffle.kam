@@ -1,0 +1,11 @@
+@media (min-width: 768px) {
+
+  body.crm-menubar-visible.crm-menubar-over-cms-menu {
+    padding-top: 30px !important;
+  }
+
+  body.crm-menubar-visible.crm-menubar-over-cms-menu #toolbar-administration {
+    display: none;
+  }
+
+}

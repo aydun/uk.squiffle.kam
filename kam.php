@@ -50,6 +50,12 @@ function kam_civicrm_alterContent(&$content, $context, $tplName, &$object) {
     $override = ['scriptUrl' => NULL];
     $region->update($backdropJs['name'], $override);
   }
+  // Override drupal8.js file
+  $drupal8 = $region->get(Civi::resources()->getUrl('civicrm', 'js/crm.drupal8.js', TRUE));
+  if ($drupal8) {
+    $override = ['scriptUrl' => NULL];
+    $region->update($drupal8['name'], $override);
+  }
   // Override core joomla.css file
   $joomlaCss = $region->get(Civi::resources()->getUrl('civicrm', 'css/joomla.css', TRUE));
   if ($joomlaCss) {
