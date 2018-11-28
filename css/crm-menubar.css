@@ -6,7 +6,7 @@
   font-size: 13px;
 }
 #civicrm-menu {
-	background-color: #333;
+  background-color: #ddd;
 	width: 100%;
   z-index: 500;
   height: auto;
@@ -17,12 +17,12 @@
 }
 #civicrm-menu li {
   border: none;
-	padding: 0;
+  padding: 0;
 }
 #civicrm-menu li a {
-	padding: 6px 8px;
+  padding: 12px 8px;
   text-decoration: none;
-  color: #ddd;
+  color: #333;
   box-shadow: none;
   border: none;
 }
@@ -30,36 +30,24 @@
   cursor: default;
 }
 #civicrm-menu li li a {
-	padding: 6px 36px 6px 10px;
-  color: #eee;
+  padding: 6px 36px 6px 10px;
 }
-#civicrm-menu ul {
-	background-color: #333;
-  box-shadow: 1px 1px 7px rgba(0, 0, 0, 0.5);
+#civicrm-menu li.crm-menu-border-bottom:not(:last-child) {
+  border-bottom: 1px solid #bbb;
 }
-#civicrm-menu ul ul {
-	background-color: #444;
-}
-#civicrm-menu ul ul ul {
-	background-color: #555;
-}
-#civicrm-menu li.crm-menu-border-bottom {
-	border-bottom: 2px groove #888;
-}
-#civicrm-menu li.crm-menu-border-top {
-	border-top: 2px ridge #888;
+#civicrm-menu li:not(.crm-menu-border-bottom) + li.crm-menu-border-top {
+  border-top: 2px solid #bbb;
 }
 #civicrm-menu li a:focus,
 #civicrm-menu li a:hover,
 #civicrm-menu li a.highlighted {
-	text-decoration: none;
-	background-color: #676767;
-  color: #fff;
+  text-decoration: none;
+  background-color: #fff;
 }
 #civicrm-menu li li .sub-arrow:before {
   content: "\f0da";
 	font-family: 'FontAwesome';
-	color: #eee;
+  color: #666;
 	float: right;
 	margin-right: -25px;
 }
@@ -145,10 +133,10 @@
 
 #crm-qsearch form input.ui-autocomplete-input {
   background: #eaeaea url(BASE_URL/bower_components/select2/select2.png) no-repeat scroll right -23px;
-  border: 1px solid black;
-  margin: 0;
+  border: 1px solid #aaa;
+  margin: 4px 4px 0;
   padding: 2px 16px 3px 2px;
-  height: 17px;
+  height: 20px;
 }
 
 #crm-qsearch form input.ui-autocomplete-input:focus {
@@ -162,13 +150,12 @@
 }
 
 /* From css/civicrmNavigation.css */
-#civicrm-menu-nav .crm-logo-sm,
-.crm-container .crm-logo-sm {
+#civicrm-menu-nav .crm-logo-sm {
   background: url(BASE_URL/i/logo_sm.png) no-repeat;
   display: inline-block;
   width: 16px;
   height: 16px;
-  vertical-align: middle;
+  margin: 0 2px;
 }
 
 @media (min-width: 768px) {
@@ -198,8 +185,24 @@
     top: 30px;
   }
 
-  #civicrm-menu > li {
-    height: 30px;
+  #civicrm-menu ul {
+    background-color: #fff;
+    box-shadow: 0px 0px 2px 0 rgba(0,0,0,0.3);
+  }
+
+  #civicrm-menu > li > a {
+    height: 40px;
+  }
+
+  #civicrm-menu > li > a.highlighted {
+    z-index: 200000;
+  }
+
+  #civicrm-menu ul li a:focus,
+  #civicrm-menu ul li a:hover,
+  #civicrm-menu ul li a.highlighted {
+    background-color: #ddd;
+    color: #222;
   }
 
   body.crm-menubar-over-cms-menu #civicrm-menu,
@@ -237,12 +240,19 @@
 	#civicrm-menu li a {
 		text-align: center;
 		font-size: 14px;
+    color: #ddd;
 	}
+  #civicrm-menu li a:focus,
+  #civicrm-menu li a:hover,
+  #civicrm-menu li a.highlighted {
+    background-color: #676767;
+    color: #fff;
+  }
   #civicrm-menu li .sub-arrow:before,
   #civicrm-menu li li .sub-arrow:before {
     content: "\f0da";
     font-family: 'FontAwesome';
-    color: #eee;
+    color: #bbb;
     float: none;
     margin-left: 10px;
   }
@@ -280,6 +290,7 @@
   #civicrm-menu {
     width: 100% !important;
     z-index: 100000;
+    background-color: #333;
   }
   #crm-qsearch {
     text-align: center;
@@ -290,6 +301,10 @@
 
   #civicrm-menu li[data-name="Hide Menu"] {
     display: none;
+  }
+
+  #sort_name_navigation {
+    width: 14em !important;
   }
 
   /* Make sure we can click overlapped submenus in responsive mode */
