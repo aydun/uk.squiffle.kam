@@ -3,7 +3,10 @@
 <script type="text-template" id="extra-block_menubar_position">
   <tr class="crm-preferences-display-form-block_menubar_position">
     <td class="label">{$form.menubar_position.label}</td>
-    <td>{$form.menubar_position.html}</td>
+    <td>
+      {$form.menubar_position.html}
+      <div class="description">{ts}Default position for the CiviCRM menubar.{/ts}</div>
+    </td>
   </tr>
 </script>
 {literal}

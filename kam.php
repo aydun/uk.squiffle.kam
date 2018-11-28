@@ -24,7 +24,8 @@ function kam_civicrm_coreResourceList(&$list, $region) {
 
   if ($region == 'html-header') {
     $contactID = CRM_Core_Session::getLoggedInContactID();
-    if ($contactID) {
+    $position = Civi::settings()->get('menubar_position');
+    if ($contactID && $position !== 'none') {
       $cms = strtolower(CRM_Core_Config::singleton()->userFramework);
       $cms = $cms === 'drupal' ? 'drupal7' : $cms;
       $path = 'packages/smartmenus-1.1.0/';
@@ -34,7 +35,7 @@ function kam_civicrm_coreResourceList(&$list, $region) {
         ->addScriptFile('uk.squiffle.kam', 'js/crm.menubar.js', -9)
         ->addStyleFile('uk.squiffle.kam', "css/menubar-$cms.css")
         ->addStyleUrl(\Civi::service('asset_builder')->getUrl('sm-civicrm.css'));
-      $list[] = ['menubar' => ['position' => Civi::settings()->get('menubar_position')]];
+      $list[] = ['menubar' => ['position' => $position]];
     }
   }
 }

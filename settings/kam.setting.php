@@ -8,7 +8,7 @@
 /*
  * Settings metadata file
  */
-
+$cms = preg_replace('/[0-9]/', '', CRM_Core_Config::singleton()->userFramework);
 return [
   'menubar_position' => [
     'group_name' => 'CiviCRM Preferences',
@@ -24,9 +24,10 @@ return [
     'description' => ts('Location of the CiviCRM main menu.'),
     'help_text' => NULL,
     'options' => [
-      'over-cms-menu' => ts('Over CMS menu'),
-      'below-cms-menu' => ts('Below CMS menu'),
-      'above-crm-container' => ts('Above content area')
+      'over-cms-menu' => ts('Replace %1 menu', [1 => $cms]),
+      'below-cms-menu' => ts('Below %1 menu', [1 => $cms]),
+      'above-crm-container' => ts('Above content area'),
+      'none' => ts('None - disable menu'),
     ],
   ],
 ];
