@@ -170,7 +170,7 @@
             e.preventDefault();
             CRM.menubar.togglePosition();
           })
-          .append('<li id="crm-menubar-toggle-position"><a href="#toggle-position" title="' + ts('Adjust menu position') + '"><i class="crm-i fa-chevron-circle-up"></i></a>');
+          .append('<li id="crm-menubar-toggle-position"><a href="#toggle-position" title="' + ts('Adjust menu position') + '"><i class="crm-i fa-arrow-up"></i></a>');
         if (CRM.cache.get('menubarPosition', CRM.menubar.position) !== CRM.menubar.position) {
           CRM.menubar.togglePosition();
         }

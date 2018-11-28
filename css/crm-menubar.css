@@ -6,7 +6,7 @@
   font-size: 13px;
 }
 #civicrm-menu {
-  background-color: #ddd;
+  background-color: #f2f2f2;
 	width: 100%;
   z-index: 500;
   height: auto;
@@ -133,7 +133,7 @@
 
 #crm-qsearch form input.ui-autocomplete-input {
   background: #eaeaea url(BASE_URL/bower_components/select2/select2.png) no-repeat scroll right -23px;
-  border: 1px solid #aaa;
+  border: 1px solid #ccc;
   margin: 4px 4px 0;
   padding: 2px 16px 3px 2px;
   height: 20px;
@@ -162,8 +162,10 @@
   float: right;
 }
 #civicrm-menu #crm-menubar-toggle-position a i {
-  opacity: .6;
+  color: #888;
   margin: 0;
+  border-top: 2px solid #888;
+  font-size: 11px;
 }
 body.crm-menubar-over-cms-menu #crm-menubar-toggle-position a i {
   transform: rotate(180deg);
@@ -192,6 +194,10 @@ body.crm-menubar-over-cms-menu #crm-menubar-toggle-position a i {
     top: -99999px;
   }
 
+  #civicrm-menu {
+    border-bottom: 1px solid #ccc;
+  }
+
   body.crm-menubar-below-cms-menu > #civicrm-menu-nav #civicrm-menu {
     top: 30px;
   }
@@ -212,7 +218,7 @@ body.crm-menubar-over-cms-menu #crm-menubar-toggle-position a i {
   #civicrm-menu ul li a:focus,
   #civicrm-menu ul li a:hover,
   #civicrm-menu ul li a.highlighted {
-    background-color: #ddd;
+    background-color: #f2f2f2;
     color: #222;
   }
 
@@ -235,6 +241,10 @@ body.crm-menubar-over-cms-menu #crm-menubar-toggle-position a i {
   /* hide the menu in mobile view */
   #crm-menubar-state:not(:checked) ~ #civicrm-menu {
     display: none;
+  }
+  #civicrm-menu {
+    z-index: 100000;
+    background-color: #333;
   }
 	#civicrm-menu ul {
 		background-color: #444;
@@ -297,11 +307,6 @@ body.crm-menubar-over-cms-menu #crm-menubar-toggle-position a i {
     background: url(BASE_URL/i/logo_lg.png) no-repeat;
     background-size: 18px;
     top: 6px;
-  }
-  #civicrm-menu {
-    width: 100% !important;
-    z-index: 100000;
-    background-color: #333;
   }
   #crm-qsearch {
     text-align: center;
