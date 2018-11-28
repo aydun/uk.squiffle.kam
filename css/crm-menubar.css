@@ -158,6 +158,17 @@
   margin: 0 2px;
 }
 
+#civicrm-menu #crm-menubar-toggle-position {
+  float: right;
+}
+#civicrm-menu #crm-menubar-toggle-position a i {
+  opacity: .6;
+  margin: 0;
+}
+body.crm-menubar-over-cms-menu #crm-menubar-toggle-position a i {
+  transform: rotate(180deg);
+}
+
 @media (min-width: 768px) {
 
   /* Switch to desktop layout
@@ -305,6 +316,10 @@
 
   #sort_name_navigation {
     width: 14em !important;
+  }
+
+  #crm-menubar-toggle-position {
+    display: none;
   }
 
   /* Make sure we can click overlapped submenus in responsive mode */

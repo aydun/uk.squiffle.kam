@@ -5,7 +5,8 @@
   CRM.menubar = _.extend({
     data: null,
     settings: {collapsibleBehavior: 'accordion'},
-    attachTo: CRM.menubar.position === 'above-crm-container' ? '#crm-container' : 'body',
+    position: 'over-cms-menu',
+    attachTo: (CRM.menubar && CRM.menubar.position === 'above-crm-container') ? '#crm-container' : 'body',
     initialize: function() {
       $('body')
         .addClass('crm-menubar-visible crm-menubar-' + CRM.menubar.position)
@@ -26,6 +27,7 @@
           CRM.menubar.hide(250, true);
         })
         .smartmenus(CRM.menubar.settings).trigger('crmLoad');
+      CRM.menubar.initializeToggle();
       CRM.menubar.initializeSearch();
       CRM.menubar.initializeMobile();
     },
@@ -155,6 +157,24 @@
     },
     refresh: function() {
       $('#civicrm-menu').smartmenus('refresh');
+    },
+    togglePosition: function() {
+      $('body').toggleClass('crm-menubar-over-cms-menu crm-menubar-below-cms-menu');
+      CRM.menubar.position = CRM.menubar.position === 'over-cms-menu' ? 'below-cms-menu' : 'over-cms-menu';
+      CRM.cache.set('menubarPosition', CRM.menubar.position);
+    },
+    initializeToggle: function() {
+      if (CRM.menubar.position === 'over-cms-menu' || CRM.menubar.position === 'below-cms-menu') {
+        $('#civicrm-menu')
+          .on('click', 'a[href="#toggle-position"]', function(e) {
+            e.preventDefault();
+            CRM.menubar.togglePosition();
+          })
+          .append('<li id="crm-menubar-toggle-position"><a href="#toggle-position" title="' + ts('Adjust menu position') + '"><i class="crm-i fa-chevron-circle-up"></i></a>');
+        if (CRM.cache.get('menubarPosition', CRM.menubar.position) !== CRM.menubar.position) {
+          CRM.menubar.togglePosition();
+        }
+      }
     },
     initializeMobile: function() {
       var $mainMenuState = $('#crm-menubar-state');
