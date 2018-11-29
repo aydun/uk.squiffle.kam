@@ -51,12 +51,6 @@
 	float: right;
 	margin-right: -25px;
 }
-#civicrm-menu ul li:last-child a{
-	margin-bottom: 5px;
-}
-#civicrm-menu ul > li:first-child a{
-	margin-top: 5px;
-}
 /* x icon */
 #crm-menubar-state:checked ~ .crm-menubar-toggle-btn .crm-menubar-toggle-btn-icon {
   height: 0;
