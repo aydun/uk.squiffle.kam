@@ -1,11 +1,16 @@
 @media (min-width: 768px) {
 
-  body.crm-menubar-visible.crm-menubar-over-cms-menu {
-    padding-top: 30px !important;
-  }
-
   body.crm-menubar-visible.crm-menubar-over-cms-menu #toolbar-administration {
     display: none;
+  }
+
+  body.crm-menubar-visible.crm-menubar-over-cms-menu {
+    padding-top: 40px !important;
+  }
+
+  body.crm-menubar-below-cms-menu > #civicrm-menu-nav ul#civicrm-menu {
+    z-index: 1000;
+    top: 40px;
   }
 
 }

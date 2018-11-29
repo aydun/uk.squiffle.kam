@@ -1,7 +1,7 @@
 @media (min-width: 768px) {
 
   body.crm-menubar-visible.crm-menubar-below-cms-menu {
-    padding-top: 27px;
+    padding-top: 37px;
   }
   .admin-bar body.crm-menubar-below-cms-menu #civicrm-menu {
     position: absolute;

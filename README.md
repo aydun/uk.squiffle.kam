@@ -31,6 +31,14 @@ Menubar placement can be configured at **Administer -> Customize Data & Screens 
 | `crmMenuLoad` | Triggered on the page body after menu data loads but *before* the menu is rendered in the dom.<br />This is a good time to add/remove items if you already know what they are at page load. | `$(document).on('crmMenuLoad', function() {` <br /> `  CRM.menubar.addItems(-1, 'Search', myItems);` <br /> `});` | 
 | `crmLoad` | Triggered on the `#civicrm-menu` element after menu is rendered in the dom. | `$(document).on('crmLoad', '#civicrm-menu', function() {` <br /> ` // Do something now that the menu is rendered` <br /> `});` | 
 
+#### Properties
+
+| Property | Type | Description |
+| ------ | ----------- | ------- |
+| `attachTo` | String | jQuery selector of page element to attach menubar to. |
+| `position` | String | E.g. 'over-cms-menu', 'below-cms-menu', 'above-crm-container'. |
+| `settings` | Object | Settings to pass to SmartMenus during initialize. |
+
 #### Methods
 
 | Method | Description | Example |
@@ -46,16 +54,18 @@ Menubar placement can be configured at **Administer -> Customize Data & Screens 
 | `removeItem( itemName )` | Deletes an item from the menu (and all its children).<br />`itemName`: name of item to remove. | `CRM.menubar.removeItem('New Household');` |
 | `show( [speed] )` | Shows the menubar if hidden.<br />`speed`: if a number is given, a slidedown animation is used. | `CRM.menubar.show(250);` |
 | `spin( [spin] )`  | Spins the icon in the home menu.<br />`spin`: pass a boolean to start or stop the spinning, or pass no arguments to toggle. | `CRM.menubar.spin(true); // start` <br /> `CRM.menubar.spin(false); // stop` |
-| `updateItem( item )`  | Updates the properties of a menu item (label, url, separator, icon, etc.<br />`item`: object with at least a `name` plus properties to update. | `CRM.menubar.updateItem({name: 'Search', label: 'Find');` |
+| `togglePosition()`  | Toggles between 'over-cms-menu' and 'below-cms-menu'. | `CRM.menubar.togglePosition();` |
+| `updateItem( item )`  | Updates the properties of a menu item (label, url, separator, icon, etc.<br />`item`: object with at least a `name` plus properties to update. | `CRM.menubar.updateItem({name: 'Search', label: 'Find'});` |
 
 Tip: Try pasting those examples into your browser console.
 
 #### CSS classes
 
-*The following css classes are added to the page body when the menubar is initialized*
+*The following css classes are added to the page body*
 
 * `crm-menubar-visible` When the menubar is present and visible.
 * `crm-menubar-hidden` When the menubar is present but hidden via `CRM.menubar.hide()`.
+* `crm-menubar-wrapped` When the menu items have wrapped to a second line and the menubar is twice as tall.
 * Depending on which option is selected, the body will also have one of: `crm-menubar-over-cms-menu`, `crm-menubar-below-cms-menu`, `crm-menubar-above-crm-container`.
 
 #### Hooks

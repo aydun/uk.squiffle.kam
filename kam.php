@@ -45,22 +45,29 @@ function kam_civicrm_coreResourceList(&$list, $region) {
  */
 function kam_civicrm_alterContent(&$content, $context, $tplName, &$object) {
   $region = CRM_Core_Region::instance('html-header');
+  $resources = Civi::resources();
   // Remove backdrop.js file
-  $backdropJs = $region->get(Civi::resources()->getUrl('civicrm', 'js/crm.backdrop.js', TRUE));
+  $backdropJs = $region->get($resources->getUrl('civicrm', 'js/crm.backdrop.js', TRUE));
   if ($backdropJs) {
     $override = ['scriptUrl' => NULL];
     $region->update($backdropJs['name'], $override);
   }
+  // Override drupal7.js file
+  $drupal7 = $region->get($resources->getUrl('civicrm', 'js/crm.drupal7.js', TRUE));
+  if ($drupal7) {
+    $override = ['scriptUrl' => $resources->getUrl('uk.squiffle.kam', 'js/crm.drupal7.js', TRUE)];
+    $region->update($drupal7['name'], $override);
+  }
   // Override drupal8.js file
-  $drupal8 = $region->get(Civi::resources()->getUrl('civicrm', 'js/crm.drupal8.js', TRUE));
+  $drupal8 = $region->get($resources->getUrl('civicrm', 'js/crm.drupal8.js', TRUE));
   if ($drupal8) {
     $override = ['scriptUrl' => NULL];
     $region->update($drupal8['name'], $override);
   }
   // Override core joomla.css file
-  $joomlaCss = $region->get(Civi::resources()->getUrl('civicrm', 'css/joomla.css', TRUE));
+  $joomlaCss = $region->get($resources->getUrl('civicrm', 'css/joomla.css', TRUE));
   if ($joomlaCss) {
-    $override = ['styleUrl' => Civi::resources()->getUrl('uk.squiffle.kam', 'css/core-joomla.css', TRUE)];
+    $override = ['styleUrl' => $resources->getUrl('uk.squiffle.kam', 'css/core-joomla.css', TRUE)];
     $region->update($joomlaCss['name'], $override);
   }
 }

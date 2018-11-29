@@ -1,29 +1,43 @@
 body.crm-menubar-visible.crm-menubar-over-cms-menu #toolbar-home,
-body.crm-menubar-visible.crm-menubar-over-cms-menu #toolbar-user {
-  visibility: hidden;
-}
 body.crm-menubar-visible.crm-menubar-over-cms-menu #toolbar-menu {
   display: none;
 }
 
 @media (min-width: 768px) {
 
-  body.toolbar.crm-menubar-visible.crm-menubar-below-cms-menu {
-    padding-top: 60px !important;
+  body.crm-menubar-visible.crm-menubar-over-cms-menu #toolbar-user {
+    visibility: hidden;
   }
+
+  body.crm-menubar-visible.crm-menubar-over-cms-menu {
+    padding-top: 40px !important;
+  }
+  body.crm-menubar-visible.crm-menubar-over-cms-menu.crm-menubar-wrapped {
+    padding-top: 80px !important;
+  }
+
+  body.crm-menubar-visible.crm-menubar-over-cms-menu #toolbar .toolbar-drawer {
+    display: none !important;
+  }
+
+  body.toolbar.crm-menubar-visible.crm-menubar-below-cms-menu {
+    padding-top: 70px !important;
+  }
+  body.toolbar.crm-menubar-visible.crm-menubar-below-cms-menu.crm-menubar-wrapped {
+    padding-top: 110px !important;
+  }
+
   body.toolbar.toolbar-drawer.crm-menubar-visible.crm-menubar-below-cms-menu {
-    padding-top: 94px !important;
+    padding-top: 104px !important;
+  }
+  body.toolbar.toolbar-drawer.crm-menubar-visible.crm-menubar-below-cms-menu.crm-menubar-wrapped {
+    padding-top: 144px !important;
   }
 
   body.toolbar.crm-menubar-visible.crm-menubar-below-cms-menu #toolbar {
     -moz-box-shadow: none;
     -webkit-box-shadow: none;
     box-shadow: none;
-  }
-
-  body.toolbar.crm-menubar-below-cms-menu #civicrm-menu,
-  body.toolbar.crm-menubar-above-crm-container #civicrm-menu {
-    width: 100% !important;
   }
 
   body.toolbar.toolbar-drawer.crm-menubar-below-cms-menu #civicrm-menu {
