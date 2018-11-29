@@ -22,10 +22,10 @@
     width: calc(100% - 36px);
   }
 
-  body.crm-menubar-below-cms-menu #wpbody {
+  body.crm-menubar-below-cms-menu.crm-menubar-visible #wpbody {
     padding-top: 40px;
   }
-  body.crm-menubar-below-cms-menu.crm-menubar-wrapped #wpbody {
+  body.crm-menubar-below-cms-menu.crm-menubar-visible.crm-menubar-wrapped #wpbody {
     padding-top: 80px;
   }
 
