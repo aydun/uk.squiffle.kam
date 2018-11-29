@@ -186,10 +186,19 @@
         }
       })
         .on('resize', function() {
-          if ($(window).width() > 768 && $mainMenuState[0].checked) {
+          var mobileSize = $(window).width() < 768;
+          if (!mobileSize && $mainMenuState[0].checked) {
             $mainMenuState[0].click();
           }
+          if (!mobileSize && $('#civicrm-menu').height() > 50) {
+            $('body').addClass('crm-menubar-wrapped');
+          } else {
+            $('body').removeClass('crm-menubar-wrapped');
+          }
         });
+      if ($('#civicrm-menu').height() > 52) {
+        $('body').addClass('crm-menubar-wrapped');
+      }
       $mainMenuState.click(function() {
         // Use absolute position instead of fixed when open to allow scrolling menu
         var open = $(this).is(':checked');

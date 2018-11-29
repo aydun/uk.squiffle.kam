@@ -12,6 +12,9 @@ body.crm-menubar-visible.crm-menubar-over-cms-menu #toolbar-menu {
   body.crm-menubar-visible.crm-menubar-over-cms-menu {
     padding-top: 40px !important;
   }
+  body.crm-menubar-visible.crm-menubar-over-cms-menu.crm-menubar-wrapped {
+    padding-top: 80px !important;
+  }
 
   body.crm-menubar-visible.crm-menubar-over-cms-menu #toolbar .toolbar-drawer {
     display: none !important;
@@ -20,8 +23,15 @@ body.crm-menubar-visible.crm-menubar-over-cms-menu #toolbar-menu {
   body.toolbar.crm-menubar-visible.crm-menubar-below-cms-menu {
     padding-top: 70px !important;
   }
+  body.toolbar.crm-menubar-visible.crm-menubar-below-cms-menu.crm-menubar-wrapped {
+    padding-top: 110px !important;
+  }
+
   body.toolbar.toolbar-drawer.crm-menubar-visible.crm-menubar-below-cms-menu {
     padding-top: 104px !important;
+  }
+  body.toolbar.toolbar-drawer.crm-menubar-visible.crm-menubar-below-cms-menu.crm-menubar-wrapped {
+    padding-top: 144px !important;
   }
 
   body.toolbar.crm-menubar-visible.crm-menubar-below-cms-menu #toolbar {

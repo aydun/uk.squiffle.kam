@@ -3,8 +3,15 @@
   body.crm-menubar-over-cms-menu {
     padding-top: 40px;
   }
+  body.crm-menubar-over-cms-menu.crm-menubar-wrapped {
+    padding-top: 80px;
+  }
+
   body.crm-menubar-below-cms-menu {
     margin-top: 40px;
+  }
+  body.crm-menubar-below-cms-menu.crm-menubar-wrapped {
+    margin-top: 80px;
   }
 
 }
