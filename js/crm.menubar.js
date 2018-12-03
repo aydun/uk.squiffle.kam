@@ -1,7 +1,8 @@
 // https://civicrm.org/licensing
 (function($, _) {
   "use strict";
-  var branchTpl, searchTpl, treeTpl, initialized;
+  var branchTpl, searchTpl, treeTpl, initialized,
+    ENTER_KEY = 13;
   CRM.menubar = _.extend({
     data: null,
     settings: {collapsibleBehavior: 'accordion'},
@@ -29,7 +30,7 @@
         .smartmenus(CRM.menubar.settings).trigger('crmLoad');
       CRM.menubar.initializeToggle();
       CRM.menubar.initializeSearch();
-      CRM.menubar.initializeMobile();
+      CRM.menubar.initializeResponsive();
     },
     destroy: function() {
       $.SmartMenus.destroy();
@@ -176,7 +177,7 @@
         }
       }
     },
-    initializeMobile: function() {
+    initializeResponsive: function() {
       var $mainMenuState = $('#crm-menubar-state');
       // hide mobile menu beforeunload
       $(window).on('beforeunload unload', function() {
@@ -207,12 +208,12 @@
         }
         $('#civicrm-menu-nav')
           .css('position', open ? 'absolute' : '')
-          .parents().not('html,body')
+          .parentsUntil('body')
           .css('position', open ? 'static' : '');
       });
     },
     initializeSearch: function() {
-      $('#sort_name_navigation')
+      $('#crm-qsearch-input')
         .autocomplete({
           source: function(request, response) {
             //start spinning the civi logo
@@ -227,16 +228,16 @@
             CRM.api3('contact', 'getquick', params).done(function(result) {
               var ret = [];
               if (result.values.length > 0) {
-                $('#sort_name_navigation').autocomplete('widget').menu('option', 'disabled', false);
+                $('#crm-qsearch-input').autocomplete('widget').menu('option', 'disabled', false);
                 $.each(result.values, function(k, v) {
                   ret.push({value: v.id, label: v.data});
                 });
               } else {
-                $('#sort_name_navigation').autocomplete('widget').menu('option', 'disabled', true);
+                $('#crm-qsearch-input').autocomplete('widget').menu('option', 'disabled', true);
                 var label = _.last(option.closest('label').text().split(': '));
                 var msg = ts('%1 not found.', {1: label});
                 // Remind user they are not searching by contact name (unless they enter a number)
-                if (params.field_name && !(/[\d].*/.test(params.name))) {
+                if (params.field_name !== 'sort_name' && !(/[\d].*/.test(params.name))) {
                   msg += ' ' + ts('Did you mean to search by Name/Email instead?');
                 }
                   ret.push({value: '0', label: msg});
@@ -262,26 +263,22 @@
               .css('z-index', $('#civicrm-menu').css('z-index'));
           }
         })
-        .keydown(function() {
+        .keyup(function(e) {
           CRM.menubar.close();
-        })
-        .on('focus', function() {
-          setQuickSearchValue();
-          if ($(this).attr('style').indexOf('14em') < 0) {
-            $(this).animate({width: '14em'});
-          }
-        })
-        .on('blur', function() {
-          // Shrink if no input and menu is not open
-          if (!$(this).val().length && $(this).attr('style').indexOf(' 6em') < 0 && !CRM.menubar.isOpen('QuickSearch')) {
-            $(this).animate({width: '6em'});
+          if (e.which === ENTER_KEY) {
+            if ($(this).val()) {
+              $(this).closest('form').submit();
+            }
           }
         });
-      $('#civicrm-menu').on('hideAll.smapi', function() {
-        var qsBox = $('#sort_name_navigation');
-        // Shrink if no input and menu is not open
-        if (!qsBox.val().length && !qsBox.is(':focus') && qsBox.attr('style').indexOf(' 6em') < 0) {
-          qsBox.animate({width: '6em'});
+      $('#crm-qsearch form[name=search_block]').on('submit', function() {
+        var $menu = $('#crm-qsearch-input').autocomplete('widget');
+        if ($('li.ui-menu-item', $menu).length === 1) {
+          var cid = $('li.ui-menu-item', $menu).data('ui-autocomplete-item').value;
+          if (cid > 0) {
+            document.location = CRM.url('civicrm/contact/view', {reset: 1, cid: cid});
+            return false;
+          }
         }
       });
       function setQuickSearchValue() {
@@ -292,13 +289,16 @@
         if (!value || value === 'first_name' || value === 'last_name') {
           value = 'sort_name';
         }
-        $('#sort_name_navigation').attr({name: value, placeholder: label});
+        $('#crm-qsearch-input').attr({name: value, placeholder: '\uf002 ' + label});
       }
       $('.crm-quickSearchField').click(function() {
         $('input', this).prop('checked', true);
+        CRM.cache.set('quickSearchField', $('input', this).val());
         setQuickSearchValue();
-        $('#sort_name_navigation').focus().autocomplete("search");
+        $('#crm-qsearch-input').focus().autocomplete("search");
       });
+      $('.crm-quickSearchField input[value="' + CRM.cache.get('quickSearchField', 'sort_name') + '"]').prop('checked', true);
+      setQuickSearchValue();
     },
     treeTpl:
       '<nav id="civicrm-menu-nav">' +
@@ -316,20 +316,19 @@
     searchTpl:
       '<li id="crm-qsearch" data-name="QuickSearch">' +
       '  <a href="#"> ' +
-      '    <form action="<%= CRM.url(\'civicrm/contact/search/advanced\') %>" name="search_block" id="id_search_block" method="post">' +
+      '    <form action="<%= CRM.url(\'civicrm/contact/search/advanced\') %>" name="search_block" method="post">' +
       '      <div>' +
-      '        <input type="text" id="sort_name_navigation" name="sort_name" style="width: 6em;" placeholder="<%- ts("Contacts") %>" />' +
-      '        <input type="text" id="sort_contact_id" style="display: none" />' +
+      '        <input type="text" id="crm-qsearch-input" name="sort_name" placeholder="\uf002" />' +
       '        <input type="hidden" name="hidden_location" value="1" />' +
       '        <input type="hidden" name="hidden_custom" value="1" />' +
-      '        <input type="hidden" name="qfKey" value="" />' +
-      '        <div style="height:1px; overflow:hidden;"><input type="submit" name="_qf_Advanced_refresh" value="<%- ts("Search") %>" /></div>' +
+      '        <input type="hidden" name="qfKey" value="<%= CRM.menubar.qfKey %>" />' +
+      '        <input type="hidden" name="_qf_Advanced_refresh" value="Search" />' +
       '      </div>' +
       '    </form>' +
       '  </a>' +
       '  <ul>' +
       '    <% _.forEach(items, function(item) { %>' +
-      '      <li><a href="#" class="crm-quickSearchField"><label><input type="radio" <%= item.key === "sort_name" ? \'checked="checked"\' : "" %> value="<%= item.key %>" name="quickSearchField"> <%- item.value %></label></a></li>' +
+      '      <li><a href="#" class="crm-quickSearchField"><label><input type="radio" value="<%= item.key %>" name="quickSearchField"> <%- item.value %></label></a></li>' +
       '    <% }) %>' +
       '  </ul>' +
       '</li>',

@@ -37,7 +37,12 @@ function kam_civicrm_coreResourceList(&$list, $region) {
         ->addScriptFile('uk.squiffle.kam', 'js/crm.menubar.js', -9)
         ->addStyleFile('uk.squiffle.kam', "css/menubar-$cms.css")
         ->addStyleUrl(\Civi::service('asset_builder')->getUrl('sm-civicrm.css'));
-      $list[] = ['menubar' => ['position' => $position]];
+      $list[] = [
+        'menubar' => [
+          'position' => $position,
+          'qfKey' => CRM_Core_Key::get('CRM_Contact_Controller_Search', TRUE),
+        ],
+      ];
     }
   }
 }
