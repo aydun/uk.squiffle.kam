@@ -68,7 +68,7 @@ function kam_civicrm_alterContent(&$content, $context, $tplName, &$object) {
   // Override drupal8.js file
   $drupal8 = $region->get($resources->getUrl('civicrm', 'js/crm.drupal8.js', TRUE));
   if ($drupal8) {
-    $override = ['scriptUrl' => NULL];
+    $override = ['scriptUrl' => $resources->getUrl('uk.squiffle.kam', 'js/crm.drupal8.js', TRUE)];
     $region->update($drupal8['name'], $override);
   }
   // Override core joomla.css file
