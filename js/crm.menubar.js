@@ -222,8 +222,7 @@
               option = $('input[name=quickSearchField]:checked'),
               params = {
                 name: request.term,
-                field_name: option.val(),
-                table_name: option.attr("data-tablename")
+                field_name: option.val()
               };
             CRM.api3('contact', 'getquick', params).done(function(result) {
               var ret = [];
@@ -240,12 +239,13 @@
                 if (params.field_name !== 'sort_name' && !(/[\d].*/.test(params.name))) {
                   msg += ' ' + ts('Did you mean to search by Name/Email instead?');
                 }
-                  ret.push({value: '0', label: msg});
-                }
-                response(ret);
-                //stop spinning the civi logo
-                CRM.menubar.spin(false);
-              });
+                ret.push({value: '0', label: msg});
+              }
+              response(ret);
+              //stop spinning the civi logo
+              CRM.menubar.spin(false);
+              CRM.menubar.close();
+            });
           },
           focus: function (event, ui) {
             return false;
@@ -257,10 +257,7 @@
             return false;
           },
           create: function() {
-            // Place menu in front
-            $(this).autocomplete('widget')
-              .addClass('crm-quickSearch-results')
-              .css('z-index', $('#civicrm-menu').css('z-index'));
+            $(this).autocomplete('widget').addClass('crm-quickSearch-results');
           }
         })
         .keyup(function(e) {
@@ -299,6 +296,9 @@
       });
       $('.crm-quickSearchField input[value="' + CRM.cache.get('quickSearchField', 'sort_name') + '"]').prop('checked', true);
       setQuickSearchValue();
+      $('#civicrm-menu').on('activate.smapi', function(e, item) {
+        return !$('ul.crm-quickSearch-results').is(':visible:not(.ui-state-disabled)');
+      });
     },
     treeTpl:
       '<nav id="civicrm-menu-nav">' +

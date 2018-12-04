@@ -136,16 +136,21 @@ input#crm-qsearch-input {
   width: 30px;
   transition: width .5s .05s, background-color .3s .05s;
 }
-
 a.highlighted #crm-qsearch-input,
 #crm-qsearch-input:focus,
 #crm-qsearch-input:not(:placeholder-shown) {
   background-color: white;
   width: 130px;
 }
-
 input#crm-qsearch-input::placeholder {
   font-family: 'FontAwesome';
+}
+
+ul.crm-quickSearch-results {
+  z-index: 100001;
+}
+ul.crm-quickSearch-results.ui-state-disabled {
+  opacity: .8;
 }
 
 /* From css/civicrmNavigation.css */
