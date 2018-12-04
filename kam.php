@@ -24,10 +24,8 @@ function kam_civicrm_coreResourceList(&$list, $region) {
   if ($region == 'html-header') {
     $contactID = CRM_Core_Session::getLoggedInContactID();
     $position = Civi::settings()->get('menubar_position');
-    if ($contactID && $position !== 'none' && !constant('CIVICRM_DISABLE_DEFAULT_MENU')) {
-      if (!defined('CIVICRM_DISABLE_DEFAULT_MENU')) {
-        define('CIVICRM_DISABLE_DEFAULT_MENU', TRUE);
-      }
+    if ($contactID && $position !== 'none' && !defined('CIVICRM_DISABLE_DEFAULT_MENU')) {
+      define('CIVICRM_DISABLE_DEFAULT_MENU', TRUE);
       $cms = strtolower(CRM_Core_Config::singleton()->userFramework);
       $cms = $cms === 'drupal' ? 'drupal7' : $cms;
       $path = 'packages/smartmenus-1.1.0/';

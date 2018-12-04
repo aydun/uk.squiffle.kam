@@ -2,6 +2,8 @@
 
 This module uses the SmartMenus jQuery plugin to add a responsive, accessible, configurable menu to CiviCRM.
 
+![Screencast](images/Wordpress-menubar.gif)
+
 ## Requirements
 
 Requires CiviCRM 5.8 or later.
@@ -17,8 +19,8 @@ This extension will be merged into CiviCRM core in the near future. See https://
 ## Configuration
 
 Menubar placement can be configured at **Administer -> Customize Data & Screens -> Display Preferences**. The options control where the menubar appears on desktop screens (on mobile screens it will always be collapsed regardless of this setting).
+By default the bar will appear at the top of the screen with a toggle arrow to move it below the CMS menu.
 
-![Settings screen](images/configuration.png)
 
 ## API
 

@@ -14,13 +14,13 @@
     <url desc="Support">https://github.com/aydun/uk.squiffle.kam</url>
     <url desc="Licensing">http://www.gnu.org/licenses/agpl-3.0.html</url>
   </urls>
-  <releaseDate>2017-10-09</releaseDate>
-  <version>1.0</version>
-  <develStage>alpha</develStage>
+  <releaseDate>2018-12-04</releaseDate>
+  <version>1.0.beta1</version>
+  <develStage>stable</develStage>
   <compatibility>
     <ver>5.8</ver>
   </compatibility>
-  <comments>This is a new module and not yet fully functional</comments>
+  <comments>This extension will be ported to core CiviCRM in the near future.</comments>
   <civix>
     <namespace>CRM/Kam</namespace>
   </civix>
