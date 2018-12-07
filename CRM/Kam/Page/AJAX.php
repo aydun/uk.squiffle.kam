@@ -34,7 +34,10 @@ class CRM_Kam_Page_AJAX {
    */
   public static function filterByPermission(&$menu) {
     foreach ($menu as $key => $item) {
-      if (!CRM_Core_BAO_Navigation::checkPermission($item['attributes'])) {
+      if (
+        (array_key_exists('active', $item['attributes']) && !$item['attributes']['active']) ||
+        !CRM_Core_BAO_Navigation::checkPermission($item['attributes'])
+      ) {
         unset($menu[$key]);
         continue;
       }
