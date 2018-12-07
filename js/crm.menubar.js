@@ -263,12 +263,21 @@
         .keyup(function(e) {
           CRM.menubar.close();
           if (e.which === ENTER_KEY) {
-            if ($(this).val()) {
-              $(this).closest('form').submit();
+            if (!$(this).val()) {
+              CRM.menubar.open('QuickSearch');
             }
           }
         });
+      $('#crm-qsearch > a').keyup(function(e) {
+        if ($(e.target).is(this)) {
+          $('#crm-qsearch-input').focus();
+          CRM.menubar.close();
+        }
+      });
       $('#crm-qsearch form[name=search_block]').on('submit', function() {
+        if (!$('#crm-qsearch-input').val()) {
+          return false;
+        }
         var $menu = $('#crm-qsearch-input').autocomplete('widget');
         if ($('li.ui-menu-item', $menu).length === 1) {
           var cid = $('li.ui-menu-item', $menu).data('ui-autocomplete-item').value;
