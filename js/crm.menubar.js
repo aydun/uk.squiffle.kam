@@ -1,7 +1,7 @@
 // https://civicrm.org/licensing
 (function($, _) {
   "use strict";
-  var branchTpl, searchTpl, treeTpl, initialized,
+  var branchTpl, searchTpl, treeTpl, initialized, cache,
     ENTER_KEY = 13;
   CRM.menubar = _.extend({
     data: null,
@@ -313,51 +313,51 @@
     },
     treeTpl:
       '<nav id="civicrm-menu-nav">' +
-      '  <input id="crm-menubar-state" type="checkbox" />' +
-      '  <label class="crm-menubar-toggle-btn" for="crm-menubar-state">' +
-      '    <span class="crm-menu-logo"></span>' +
-      '    <span class="crm-menubar-toggle-btn-icon"></span>' +
-      '    <%- ts("Toggle main menu") %>' +
-      '  </label>' +
-      '  <ul id="civicrm-menu" class="sm sm-civicrm">' +
-      '    <%= searchTpl({items: search}) %>' +
-      '    <%= branchTpl({items: menu, branchTpl: branchTpl}) %>' +
-      '  </ul>' +
+        '<input id="crm-menubar-state" type="checkbox" />' +
+        '<label class="crm-menubar-toggle-btn" for="crm-menubar-state">' +
+          '<span class="crm-menu-logo"></span>' +
+          '<span class="crm-menubar-toggle-btn-icon"></span>' +
+          '<%- ts("Toggle main menu") %>' +
+        '</label>' +
+        '<ul id="civicrm-menu" class="sm sm-civicrm">' +
+          '<%= searchTpl({items: search}) %>' +
+          '<%= branchTpl({items: menu, branchTpl: branchTpl}) %>' +
+        '</ul>' +
       '</nav>',
     searchTpl:
       '<li id="crm-qsearch" data-name="QuickSearch">' +
-      '  <a href="#"> ' +
-      '    <form action="<%= CRM.url(\'civicrm/contact/search/advanced\') %>" name="search_block" method="post">' +
-      '      <div>' +
-      '        <input type="text" id="crm-qsearch-input" name="sort_name" placeholder="\uf002" />' +
-      '        <input type="hidden" name="hidden_location" value="1" />' +
-      '        <input type="hidden" name="hidden_custom" value="1" />' +
-      '        <input type="hidden" name="qfKey" value="<%= CRM.menubar.qfKey %>" />' +
-      '        <input type="hidden" name="_qf_Advanced_refresh" value="Search" />' +
-      '      </div>' +
-      '    </form>' +
-      '  </a>' +
-      '  <ul>' +
-      '    <% _.forEach(items, function(item) { %>' +
-      '      <li><a href="#" class="crm-quickSearchField"><label><input type="radio" value="<%= item.key %>" name="quickSearchField"> <%- item.value %></label></a></li>' +
-      '    <% }) %>' +
-      '  </ul>' +
+        '<a href="#"> ' +
+          '<form action="<%= CRM.url(\'civicrm/contact/search/advanced\') %>" name="search_block" method="post">' +
+            '<div>' +
+              '<input type="text" id="crm-qsearch-input" name="sort_name" placeholder="\uf002" />' +
+              '<input type="hidden" name="hidden_location" value="1" />' +
+              '<input type="hidden" name="hidden_custom" value="1" />' +
+              '<input type="hidden" name="qfKey" value="<%= CRM.menubar.qfKey %>" />' +
+              '<input type="hidden" name="_qf_Advanced_refresh" value="Search" />' +
+            '</div>' +
+          '</form>' +
+        '</a>' +
+        '<ul>' +
+          '<% _.forEach(items, function(item) { %>' +
+            '<li><a href="#" class="crm-quickSearchField"><label><input type="radio" value="<%= item.key %>" name="quickSearchField"> <%- item.value %></label></a></li>' +
+          '<% }) %>' +
+        '</ul>' +
       '</li>',
     branchTpl:
       '<% _.forEach(items, function(item) { %>' +
-      '  <li <%= attr(item) %>>' +
-      '    <a href="<%= item.url || "#" %>">' +
-      '      <% if (item.icon) { %>' +
-      '        <i class="<%- item.icon %>"></i>' +
-      '      <% } %>' +
-      '      <% if (item.label) { %>' +
-      '        <span><%- item.label %></span>' +
-      '      <% } %>' +
-      '    </a>' +
-      '    <% if (item.child) { %>' +
-      '      <ul><%= branchTpl({items: item.child, branchTpl: branchTpl}) %></ul>' +
-      '    <% } %>' +
-      '  </li>' +
+        '<li <%= attr(item) %>>' +
+          '<a href="<%= item.url || "#" %>">' +
+            '<% if (item.icon) { %>' +
+              '<i class="<%- item.icon %>"></i>' +
+            '<% } %>' +
+            '<% if (item.label) { %>' +
+              '<span><%- item.label %></span>' +
+            '<% } %>' +
+          '</a>' +
+          '<% if (item.child) { %>' +
+            '<ul><%= branchTpl({items: item.child, branchTpl: branchTpl}) %></ul>' +
+          '<% } %>' +
+        '</li>' +
       '<% }) %>'
   }, CRM.menubar || {});
 
@@ -393,14 +393,17 @@
     return ret.join(' ');
   }
 
-  $.getJSON(CRM.url('civicrm/ajax/navmenu', {c: CRM.config.menuCacheCode, l: CRM.config.lcMessages}))
-    .done(function(data) {
-      CRM.menubar.data = data;
-      if (CRM.menubar.attachTo === 'body') {
+  cache = CRM.cache.get('menubar');
+  if (cache && cache.code === CRM.config.menuCacheCode && cache.lang === CRM.config.lcMessages) {
+    CRM.menubar.data = cache.data;
+    CRM.menubar.initialize();
+  } else {
+    $.getJSON(CRM.url('civicrm/ajax/navmenu', {c: CRM.config.menuCacheCode, l: CRM.config.lcMessages}))
+      .done(function(data) {
+        CRM.cache.set('menubar', {code: CRM.config.menuCacheCode, lang: CRM.config.lcMessages, data: data});
+        CRM.menubar.data = data;
         CRM.menubar.initialize();
-      } else {
-        $(CRM.menubar.initialize);
-      }
-    });
+      });
+  }
 
 })(CRM.$, CRM._);
