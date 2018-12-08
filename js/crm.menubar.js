@@ -12,7 +12,6 @@
       $('body')
         .addClass('crm-menubar-visible crm-menubar-' + CRM.menubar.position)
         .trigger('crmMenuLoad', [CRM.menubar.data]);
-      initialized = true;
       branchTpl = _.template(CRM.menubar.branchTpl, {imports: {_: _, attr: attr}});
       searchTpl = _.template(CRM.menubar.searchTpl, {imports: {_: _, ts: ts, CRM: CRM}});
       treeTpl = _.template(CRM.menubar.treeTpl, {imports: {branchTpl: branchTpl, searchTpl: searchTpl, ts: ts}});
@@ -28,6 +27,7 @@
           CRM.menubar.hide(250, true);
         })
         .smartmenus(CRM.menubar.settings).trigger('crmLoad');
+      initialized = true;
       CRM.menubar.initializeToggle();
       CRM.menubar.initializeSearch();
       CRM.menubar.initializeResponsive();
@@ -157,7 +157,10 @@
       }
     },
     refresh: function() {
-      $('#civicrm-menu').smartmenus('refresh');
+      if (initialized) {
+        $('#civicrm-menu').smartmenus('refresh');
+        handleResize();
+      }
     },
     togglePosition: function(persist) {
       $('body').toggleClass('crm-menubar-over-cms-menu crm-menubar-below-cms-menu');
@@ -189,30 +192,23 @@
         }
       })
         .on('resize', function() {
-          var mobileSize = $(window).width() < 768;
-          if (!mobileSize && $mainMenuState[0].checked) {
+          if ($(window).width() >= 768 && $mainMenuState[0].checked) {
             $mainMenuState[0].click();
           }
-          if (!mobileSize && $('#civicrm-menu').height() > 50) {
-            $('body').addClass('crm-menubar-wrapped');
-          } else {
-            $('body').removeClass('crm-menubar-wrapped');
-          }
+          handleResize();
         });
-      if ($('#civicrm-menu').height() > 52) {
-        $('body').addClass('crm-menubar-wrapped');
-      }
       $mainMenuState.click(function() {
         // Use absolute position instead of fixed when open to allow scrolling menu
         var open = $(this).is(':checked');
         if (open) {
-          window.scroll({top:0});
+          window.scroll({top: 0});
         }
         $('#civicrm-menu-nav')
           .css('position', open ? 'absolute' : '')
           .parentsUntil('body')
           .css('position', open ? 'static' : '');
       });
+      $(document).ready(handleResize);
     },
     initializeSearch: function() {
       $('#crm-qsearch-input')
@@ -360,6 +356,14 @@
         '</li>' +
       '<% }) %>'
   }, CRM.menubar || {});
+
+  function handleResize() {
+    if ($(window).width() >= 768 && $('#civicrm-menu').height() > 50) {
+      $('body').addClass('crm-menubar-wrapped');
+    } else {
+      $('body').removeClass('crm-menubar-wrapped');
+    }
+  }
 
   function traverse(items, itemName, op) {
     var found;
