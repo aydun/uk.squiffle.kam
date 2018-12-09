@@ -32,9 +32,9 @@ function kam_civicrm_coreResourceList(&$list, $region) {
       Civi::resources()
         ->addScriptFile('uk.squiffle.kam', $path . 'jquery.smartmenus.js', 0, 'html-header')
         ->addScriptFile('uk.squiffle.kam', $path . 'addons/keyboard/jquery.smartmenus.keyboard.js', 1, 'html-header')
-        ->addScriptFile('uk.squiffle.kam', 'js/crm.menubar.js', 1, 'page-header')
-        ->addStyleFile('uk.squiffle.kam', "css/menubar-$cms.css", 2, 'page-header')
-        ->addStyleUrl(\Civi::service('asset_builder')->getUrl('sm-civicrm.css'), 3, 'page-header');
+        ->addScriptFile('uk.squiffle.kam', 'js/crm.menubar.js', 0, 'page-header')
+        ->addStyleFile('uk.squiffle.kam', "css/menubar-$cms.css", 0, 'html-header')
+        ->addStyleUrl(\Civi::service('asset_builder')->getUrl('sm-civicrm.css'), -1, 'html-header');
       $list[] = [
         'menubar' => [
           'position' => $position,

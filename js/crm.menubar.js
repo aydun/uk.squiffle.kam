@@ -1,36 +1,51 @@
 // https://civicrm.org/licensing
 (function($, _) {
   "use strict";
-  var branchTpl, searchTpl, treeTpl, initialized, cache,
+  var templates, cache, initialized,
     ENTER_KEY = 13;
   CRM.menubar = _.extend({
     data: null,
     settings: {collapsibleBehavior: 'accordion'},
     position: 'over-cms-menu',
     attachTo: (CRM.menubar && CRM.menubar.position === 'above-crm-container') ? '#crm-container' : 'body',
-    initialize: function() {
+    render: function(markup) {
       $('body')
-        .addClass('crm-menubar-visible crm-menubar-' + CRM.menubar.position)
-        .trigger('crmMenuLoad', [CRM.menubar.data]);
-      branchTpl = _.template(CRM.menubar.branchTpl, {imports: {_: _, attr: attr}});
-      searchTpl = _.template(CRM.menubar.searchTpl, {imports: {_: _, ts: ts, CRM: CRM}});
-      treeTpl = _.template(CRM.menubar.treeTpl, {imports: {branchTpl: branchTpl, searchTpl: searchTpl, ts: ts}});
+        .addClass('crm-menubar-visible crm-menubar-' + CRM.menubar.position);
       var attachFn = CRM.menubar.attachTo === 'body' ? 'append' : 'prepend';
-      $(CRM.menubar.attachTo)[attachFn](treeTpl(CRM.menubar.data));
-      $('#civicrm-menu')
-        .on('click', 'a[href="#"]', function() {
-          // For empty links - keep the menu open and don't jump the page anchor
-          return false;
-        })
-        .on('click', 'a[href="#hidemenu"]', function(e) {
-          e.preventDefault();
-          CRM.menubar.hide(250, true);
-        })
-        .smartmenus(CRM.menubar.settings).trigger('crmLoad');
-      initialized = true;
-      CRM.menubar.initializeToggle();
-      CRM.menubar.initializeSearch();
-      CRM.menubar.initializeResponsive();
+      $(CRM.menubar.attachTo)[attachFn](markup);
+      $('#civicrm-menu').trigger('crmLoad');
+      $(document).ready(function() {
+        $('#civicrm-menu')
+          .on('click', 'a[href="#"]', function() {
+            // For empty links - keep the menu open and don't jump the page anchor
+            return false;
+          })
+          .on('click', 'a[href="#hidemenu"]', function (e) {
+            e.preventDefault();
+            CRM.menubar.hide(250, true);
+          })
+          .smartmenus(CRM.menubar.settings);
+        initialized = true;
+        CRM.menubar.initializeToggle();
+        CRM.menubar.initializeSearch();
+        CRM.menubar.initializeResponsive();
+      });
+    },
+    initialize: function() {
+      cache = CRM.cache.get('menubar');
+      if (cache && cache.code === CRM.config.menuCacheCode && cache.lang === CRM.config.lcMessages && localStorage.civiMenubar) {
+        CRM.menubar.data = cache.data;
+        CRM.menubar.render(localStorage.civiMenubar);
+      } else {
+        $.getJSON(CRM.url('civicrm/ajax/navmenu', {c: CRM.config.menuCacheCode, l: CRM.config.lcMessages}))
+          .done(function(data) {
+            var markup = getTpl('tree')(data);
+            CRM.cache.set('menubar', {code: CRM.config.menuCacheCode, lang: CRM.config.lcMessages, data: data});
+            CRM.menubar.data = data;
+            localStorage.setItem('civiMenubar', markup);
+            CRM.menubar.render(markup);
+          });
+      }
     },
     destroy: function() {
       $.SmartMenus.destroy();
@@ -128,14 +143,12 @@
       } else {
         list.splice.apply(list, [position, 0].concat(items));
       }
-      if (initialized) {
-        if (targetName && !$ul.is('#civicrm-menu')) {
-          $ul.html(branchTpl({items: list, branchTpl: branchTpl}));
-        } else {
-          $('#civicrm-menu > li').eq(position).after(branchTpl({items: items, branchTpl: branchTpl}));
-        }
-        CRM.menubar.refresh();
+      if (targetName && !$ul.is('#civicrm-menu')) {
+        $ul.html(getTpl('branch')({items: list, branchTpl: getTpl('branch')}));
+      } else {
+        $('#civicrm-menu > li').eq(position).after(getTpl('branch')({items: items, branchTpl: getTpl('branch')}));
       }
+      CRM.menubar.refresh();
     },
     removeItem: function(itemName) {
       traverse(CRM.menubar.data.menu, itemName, 'delete');
@@ -151,10 +164,8 @@
         throw item.name + ' not found';
       }
       _.extend(menuItem, item);
-      if (initialized) {
-        $('li[data-name="' + item.name + '"]', '#civicrm-menu').replaceWith(branchTpl({items: [menuItem], branchTpl: branchTpl}));
-        CRM.menubar.refresh();
-      }
+      $('li[data-name="' + item.name + '"]', '#civicrm-menu').replaceWith(getTpl('branch')({items: [menuItem], branchTpl: getTpl('branch')}));
+      CRM.menubar.refresh();
     },
     refresh: function() {
       if (initialized) {
@@ -208,7 +219,7 @@
           .parentsUntil('body')
           .css('position', open ? 'static' : '');
       });
-      $(document).ready(handleResize);
+      handleResize();
     },
     initializeSearch: function() {
       $('#crm-qsearch-input')
@@ -257,6 +268,9 @@
           create: function() {
             $(this).autocomplete('widget').addClass('crm-quickSearch-results');
           }
+        })
+        .on('keyup change', function() {
+          $(this).toggleClass('has-user-input', !!$(this).val());
         })
         .keyup(function(e) {
           CRM.menubar.close();
@@ -357,6 +371,17 @@
       '<% }) %>'
   }, CRM.menubar || {});
 
+  function getTpl(name) {
+    if (!templates) {
+      templates = {
+        branch: _.template(CRM.menubar.branchTpl, {imports: {_: _, attr: attr}}),
+        search: _.template(CRM.menubar.searchTpl, {imports: {_: _, ts: ts, CRM: CRM}})
+      };
+      templates.tree = _.template(CRM.menubar.treeTpl, {imports: {branchTpl: templates.branch, searchTpl: templates.search, ts: ts}});
+    }
+    return templates[name];
+  }
+
   function handleResize() {
     if ($(window).width() >= 768 && $('#civicrm-menu').height() > 50) {
       $('body').addClass('crm-menubar-wrapped');
@@ -397,17 +422,6 @@
     return ret.join(' ');
   }
 
-  cache = CRM.cache.get('menubar');
-  if (cache && cache.code === CRM.config.menuCacheCode && cache.lang === CRM.config.lcMessages) {
-    CRM.menubar.data = cache.data;
-    CRM.menubar.initialize();
-  } else {
-    $.getJSON(CRM.url('civicrm/ajax/navmenu', {c: CRM.config.menuCacheCode, l: CRM.config.lcMessages}))
-      .done(function(data) {
-        CRM.cache.set('menubar', {code: CRM.config.menuCacheCode, lang: CRM.config.lcMessages, data: data});
-        CRM.menubar.data = data;
-        CRM.menubar.initialize();
-      });
-  }
+  CRM.menubar.initialize();
 
 })(CRM.$, CRM._);
