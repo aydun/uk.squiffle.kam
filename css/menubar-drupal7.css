@@ -1,12 +1,7 @@
-body.crm-menubar-visible.crm-menubar-over-cms-menu #toolbar-home,
-body.crm-menubar-visible.crm-menubar-over-cms-menu #toolbar-menu {
-  display: none;
-}
-
 @media (min-width: 768px) {
 
-  body.crm-menubar-visible.crm-menubar-over-cms-menu #toolbar-user {
-    visibility: hidden;
+  body.crm-menubar-visible.crm-menubar-over-cms-menu #toolbar {
+    display: none;
   }
 
   body.crm-menubar-visible.crm-menubar-over-cms-menu {
@@ -87,8 +82,11 @@ body.crm-menubar-visible.crm-menubar-over-cms-menu #toolbar-menu {
 
 @media (max-width: 768px) {
 
-  body.toolbar.crm-menubar-visible.crm-menubar-below-cms-menu #toolbar-home {
+  body.toolbar.crm-menubar-visible #toolbar-home {
     visibility: hidden;
+  }
+  body.crm-menubar-visible #toolbar-menu {
+    display: none;
   }
 
   body #civicrm-menu-nav .crm-menubar-toggle-btn {
