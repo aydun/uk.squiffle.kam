@@ -30,11 +30,11 @@ function kam_civicrm_coreResourceList(&$list, $region) {
       $cms = $cms === 'drupal' ? 'drupal7' : $cms;
       $path = 'packages/smartmenus-1.1.0/';
       Civi::resources()
-        ->addScriptFile('uk.squiffle.kam', $path . 'jquery.smartmenus.js', 0, 'html-header')
-        ->addScriptFile('uk.squiffle.kam', $path . 'addons/keyboard/jquery.smartmenus.keyboard.js', 1, 'html-header')
-        ->addScriptFile('uk.squiffle.kam', 'js/crm.menubar.js', 0, 'page-header')
-        ->addStyleFile('uk.squiffle.kam', "css/menubar-$cms.css", 0, 'html-header')
-        ->addStyleUrl(\Civi::service('asset_builder')->getUrl('sm-civicrm.css'), -1, 'html-header');
+        ->addStyleFile('uk.squiffle.kam', "css/menubar-$cms.css", -99, 'html-header')
+        ->addStyleUrl(\Civi::service('asset_builder')->getUrl('sm-civicrm.css'), -98, 'html-header')
+        ->addScriptFile('uk.squiffle.kam', $path . 'jquery.smartmenus.js', -99, 'html-header')
+        ->addScriptFile('uk.squiffle.kam', $path . 'addons/keyboard/jquery.smartmenus.keyboard.js', -98, 'html-header')
+        ->addScriptFile('uk.squiffle.kam', 'js/crm.menubar.js', -97, 'html-header');
       $list[] = [
         'menubar' => [
           'position' => $position,

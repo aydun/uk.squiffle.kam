@@ -1,41 +1,18 @@
 // https://civicrm.org/licensing
 (function($, _) {
   "use strict";
-  var templates, cache, initialized,
+  var templates, initialized,
     ENTER_KEY = 13;
   CRM.menubar = _.extend({
     data: null,
     settings: {collapsibleBehavior: 'accordion'},
     position: 'over-cms-menu',
     attachTo: (CRM.menubar && CRM.menubar.position === 'above-crm-container') ? '#crm-container' : 'body',
-    render: function(markup) {
-      $('body')
-        .addClass('crm-menubar-visible crm-menubar-' + CRM.menubar.position);
-      var attachFn = CRM.menubar.attachTo === 'body' ? 'append' : 'prepend';
-      $(CRM.menubar.attachTo)[attachFn](markup);
-      $('#civicrm-menu').trigger('crmLoad');
-      $(document).ready(function() {
-        $('#civicrm-menu')
-          .on('click', 'a[href="#"]', function() {
-            // For empty links - keep the menu open and don't jump the page anchor
-            return false;
-          })
-          .on('click', 'a[href="#hidemenu"]', function (e) {
-            e.preventDefault();
-            CRM.menubar.hide(250, true);
-          })
-          .smartmenus(CRM.menubar.settings);
-        initialized = true;
-        CRM.menubar.initializeToggle();
-        CRM.menubar.initializeSearch();
-        CRM.menubar.initializeResponsive();
-      });
-    },
     initialize: function() {
-      cache = CRM.cache.get('menubar');
+      var cache = CRM.cache.get('menubar');
       if (cache && cache.code === CRM.config.menuCacheCode && cache.lang === CRM.config.lcMessages && localStorage.civiMenubar) {
         CRM.menubar.data = cache.data;
-        CRM.menubar.render(localStorage.civiMenubar);
+        insert(localStorage.civiMenubar);
       } else {
         $.getJSON(CRM.url('civicrm/ajax/navmenu', {c: CRM.config.menuCacheCode, l: CRM.config.lcMessages}))
           .done(function(data) {
@@ -43,8 +20,50 @@
             CRM.cache.set('menubar', {code: CRM.config.menuCacheCode, lang: CRM.config.lcMessages, data: data});
             CRM.menubar.data = data;
             localStorage.setItem('civiMenubar', markup);
-            CRM.menubar.render(markup);
+            insert(markup);
           });
+      }
+
+      function insert(markup) {
+        var el = $(CRM.menubar.attachTo);
+        if (el.length) {
+          render(el[0], markup);
+        } else {
+          new MutationObserver(function(mutations, observer) {
+            _.each(mutations, function(mutant) {
+              _.each(mutant.addedNodes, function(node) {
+                if ($(node).is(CRM.menubar.attachTo)) {
+                  render(node, markup);
+                  observer.disconnect();
+                }
+              });
+            });
+          }).observe(document, {childList: true, subtree: true});
+        }
+      }
+
+      function render(target, markup) {
+        $('body')
+          .addClass('crm-menubar-visible crm-menubar-' + CRM.menubar.position);
+        var position = $(target).is('body') ? 'beforeend' : 'afterbegin';
+        target.insertAdjacentHTML(position, markup);
+        $('#civicrm-menu').trigger('crmLoad');
+        $(document).ready(function() {
+          $('#civicrm-menu')
+            .on('click', 'a[href="#"]', function() {
+              // For empty links - keep the menu open and don't jump the page anchor
+              return false;
+            })
+            .on('click', 'a[href="#hidemenu"]', function(e) {
+              e.preventDefault();
+              CRM.menubar.hide(250, true);
+            })
+            .smartmenus(CRM.menubar.settings);
+          initialized = true;
+          CRM.menubar.initializeToggle();
+          CRM.menubar.initializeSearch();
+          CRM.menubar.initializeResponsive();
+        });
       }
     },
     destroy: function() {
