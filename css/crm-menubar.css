@@ -233,7 +233,7 @@ body.crm-menubar-over-cms-menu #crm-menubar-toggle-position a i {
   }
 
   body.crm-menubar-over-cms-menu #civicrm-menu {
-    z-index: 100000;
+    z-index: 99999;
   }
 
   body.crm-menubar-hidden #civicrm-menu {

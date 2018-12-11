@@ -69,6 +69,12 @@ function kam_civicrm_alterContent(&$content, $context, $tplName, &$object) {
     $override = ['scriptUrl' => $resources->getUrl('uk.squiffle.kam', 'js/crm.drupal8.js', TRUE)];
     $region->update($drupal8['name'], $override);
   }
+  // Override wordpress.js file
+  $wordpress = $region->get($resources->getUrl('civicrm', 'js/crm.wordpress.js', TRUE));
+  if ($wordpress) {
+    $override = ['scriptUrl' => $resources->getUrl('uk.squiffle.kam', 'js/crm.wordpress.js', TRUE)];
+    $region->update($wordpress['name'], $override);
+  }
   // Override core joomla.css file
   $joomlaCss = $region->get($resources->getUrl('civicrm', 'css/joomla.css', TRUE));
   if ($joomlaCss) {

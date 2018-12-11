@@ -159,10 +159,12 @@
     refresh: function() {
       $('#civicrm-menu').smartmenus('refresh');
     },
-    togglePosition: function() {
+    togglePosition: function(persist) {
       $('body').toggleClass('crm-menubar-over-cms-menu crm-menubar-below-cms-menu');
       CRM.menubar.position = CRM.menubar.position === 'over-cms-menu' ? 'below-cms-menu' : 'over-cms-menu';
-      CRM.cache.set('menubarPosition', CRM.menubar.position);
+      if (persist !== false) {
+        CRM.cache.set('menubarPosition', CRM.menubar.position);
+      }
     },
     initializeToggle: function() {
       if (CRM.menubar.position === 'over-cms-menu' || CRM.menubar.position === 'below-cms-menu') {
