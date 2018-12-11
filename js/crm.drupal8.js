@@ -19,7 +19,7 @@ localStorage.setItem('Drupal.toolbar.activeTabID', JSON.stringify('toolbar-item-
   $(function($) {
     // Need Drupal's jQuery to listen to this event
     jQuery(document).on('drupalToolbarTabChange', function(event, tab) {
-      if (CRM.menubar.position === 'below-cms-menu') {
+      if (CRM.menubar && CRM.menubar.position === 'below-cms-menu') {
         var action = jQuery(tab).is('#toolbar-item-civicrm') ? 'show' : 'hide';
         CRM.menubar[action]();
       }
