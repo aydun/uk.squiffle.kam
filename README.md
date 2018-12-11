@@ -56,7 +56,7 @@ By default the bar will appear at the top of the screen with a toggle arrow to m
 | `removeItem( itemName )` | Deletes an item from the menu (and all its children).<br />`itemName`: name of item to remove. | `CRM.menubar.removeItem('New Household');` |
 | `show( [speed] )` | Shows the menubar if hidden.<br />`speed`: if a number is given, a slidedown animation is used. | `CRM.menubar.show(250);` |
 | `spin( [spin] )`  | Spins the icon in the home menu.<br />`spin`: pass a boolean to start or stop the spinning, or pass no arguments to toggle. | `CRM.menubar.spin(true); // start` <br /> `CRM.menubar.spin(false); // stop` |
-| `togglePosition()`  | Toggles between 'over-cms-menu' and 'below-cms-menu'. | `CRM.menubar.togglePosition();` |
+| `togglePosition( [persist] )`  | Toggles between 'over-cms-menu' and 'below-cms-menu'. By default, persist the change to localStorage. | `CRM.menubar.togglePosition();` |
 | `updateItem( item )`  | Updates the properties of a menu item (label, url, separator, icon, etc.<br />`item`: object with at least a `name` plus properties to update. | `CRM.menubar.updateItem({name: 'Search', label: 'Find'});` |
 
 Tip: Try pasting those examples into your browser console.

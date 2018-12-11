@@ -23,7 +23,7 @@ CRM.$(function($) {
     var href = $(this).attr('href');
     // Show toolbar if hidden
     if (href === '#wp-toolbar' && CRM.menubar.position === 'over-cms-menu') {
-      CRM.menubar.togglePosition();
+      CRM.menubar.togglePosition(false);
     }
     $(href).focus();
     return false;
