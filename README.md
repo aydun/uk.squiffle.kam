@@ -30,8 +30,7 @@ By default the bar will appear at the top of the screen with a toggle arrow to m
 
 | Event  | Description | Example |
 | ------ | ----------- | ------- |
-| `crmMenuLoad` | Triggered on the page body after menu data loads but *before* the menu is rendered in the dom.<br />This is a good time to add/remove items if you already know what they are at page load. | `$(document).on('crmMenuLoad', function() {` <br /> `  CRM.menubar.addItems(-1, 'Search', myItems);` <br /> `});` | 
-| `crmLoad` | Triggered on the `#civicrm-menu` element after menu is rendered in the dom. | `$(document).on('crmLoad', '#civicrm-menu', function() {` <br /> ` // Do something now that the menu is rendered` <br /> `});` | 
+| `crmLoad` | Triggered on the `#civicrm-menu` element after menu is added to the dom.<br />This is a good time to add/remove items if you already know what they are at page load. | `$(document).on('crmLoad', '#civicrm-menu', function() {` <br /> `  CRM.menubar.addItems(-1, 'Search', myItems);` <br /> `});` | 
 
 #### Properties
 

@@ -1,7 +1,7 @@
 // https://civicrm.org/licensing
 (function($, _) {
   "use strict";
-  var branchTpl, searchTpl, treeTpl, initialized,
+  var templates, initialized,
     ENTER_KEY = 13;
   CRM.menubar = _.extend({
     data: null,
@@ -9,28 +9,61 @@
     position: 'over-cms-menu',
     attachTo: (CRM.menubar && CRM.menubar.position === 'above-crm-container') ? '#crm-container' : 'body',
     initialize: function() {
-      $('body')
-        .addClass('crm-menubar-visible crm-menubar-' + CRM.menubar.position)
-        .trigger('crmMenuLoad', [CRM.menubar.data]);
-      initialized = true;
-      branchTpl = _.template(CRM.menubar.branchTpl, {imports: {_: _, attr: attr}});
-      searchTpl = _.template(CRM.menubar.searchTpl, {imports: {_: _, ts: ts, CRM: CRM}});
-      treeTpl = _.template(CRM.menubar.treeTpl, {imports: {branchTpl: branchTpl, searchTpl: searchTpl, ts: ts}});
-      var attachFn = CRM.menubar.attachTo === 'body' ? 'append' : 'prepend';
-      $(CRM.menubar.attachTo)[attachFn](treeTpl(CRM.menubar.data));
-      $('#civicrm-menu')
-        .on('click', 'a[href="#"]', function() {
-          // For empty links - keep the menu open and don't jump the page anchor
-          return false;
-        })
-        .on('click', 'a[href="#hidemenu"]', function(e) {
-          e.preventDefault();
-          CRM.menubar.hide(250, true);
-        })
-        .smartmenus(CRM.menubar.settings).trigger('crmLoad');
-      CRM.menubar.initializeToggle();
-      CRM.menubar.initializeSearch();
-      CRM.menubar.initializeResponsive();
+      var cache = CRM.cache.get('menubar');
+      if (cache && cache.code === CRM.config.menuCacheCode && cache.lang === CRM.config.lcMessages && localStorage.civiMenubar) {
+        CRM.menubar.data = cache.data;
+        insert(localStorage.civiMenubar);
+      } else {
+        $.getJSON(CRM.url('civicrm/ajax/navmenu', {c: CRM.config.menuCacheCode, l: CRM.config.lcMessages}))
+          .done(function(data) {
+            var markup = getTpl('tree')(data);
+            CRM.cache.set('menubar', {code: CRM.config.menuCacheCode, lang: CRM.config.lcMessages, data: data});
+            CRM.menubar.data = data;
+            localStorage.setItem('civiMenubar', markup);
+            insert(markup);
+          });
+      }
+
+      // Wait for crm-container present on the page as it's faster than document.ready
+      function insert(markup) {
+        if ($('#crm-container').length) {
+          render(markup);
+        } else {
+          new MutationObserver(function(mutations, observer) {
+            _.each(mutations, function(mutant) {
+              _.each(mutant.addedNodes, function(node) {
+                if ($(node).is('#crm-container')) {
+                  render(markup);
+                  observer.disconnect();
+                }
+              });
+            });
+          }).observe(document, {childList: true, subtree: true});
+        }
+      }
+
+      function render(markup) {
+        var position = CRM.menubar.attachTo === 'body' ? 'beforeend' : 'afterbegin';
+        $(CRM.menubar.attachTo)[0].insertAdjacentHTML(position, markup);
+        CRM.menubar.initializePosition();
+        $('#civicrm-menu').trigger('crmLoad');
+        $(document).ready(function() {
+          handleResize();
+          $('#civicrm-menu')
+            .on('click', 'a[href="#"]', function() {
+              // For empty links - keep the menu open and don't jump the page anchor
+              return false;
+            })
+            .on('click', 'a[href="#hidemenu"]', function(e) {
+              e.preventDefault();
+              CRM.menubar.hide(250, true);
+            })
+            .smartmenus(CRM.menubar.settings);
+          initialized = true;
+          CRM.menubar.initializeResponsive();
+          CRM.menubar.initializeSearch();
+        });
+      }
     },
     destroy: function() {
       $.SmartMenus.destroy();
@@ -128,14 +161,12 @@
       } else {
         list.splice.apply(list, [position, 0].concat(items));
       }
-      if (initialized) {
-        if (targetName && !$ul.is('#civicrm-menu')) {
-          $ul.html(branchTpl({items: list, branchTpl: branchTpl}));
-        } else {
-          $('#civicrm-menu > li').eq(position).after(branchTpl({items: items, branchTpl: branchTpl}));
-        }
-        CRM.menubar.refresh();
+      if (targetName && !$ul.is('#civicrm-menu')) {
+        $ul.html(getTpl('branch')({items: list, branchTpl: getTpl('branch')}));
+      } else {
+        $('#civicrm-menu > li').eq(position).after(getTpl('branch')({items: items, branchTpl: getTpl('branch')}));
       }
+      CRM.menubar.refresh();
     },
     removeItem: function(itemName) {
       traverse(CRM.menubar.data.menu, itemName, 'delete');
@@ -151,22 +182,24 @@
         throw item.name + ' not found';
       }
       _.extend(menuItem, item);
-      if (initialized) {
-        $('li[data-name="' + item.name + '"]', '#civicrm-menu').replaceWith(branchTpl({items: [menuItem], branchTpl: branchTpl}));
-        CRM.menubar.refresh();
-      }
+      $('li[data-name="' + item.name + '"]', '#civicrm-menu').replaceWith(getTpl('branch')({items: [menuItem], branchTpl: getTpl('branch')}));
+      CRM.menubar.refresh();
     },
     refresh: function() {
-      $('#civicrm-menu').smartmenus('refresh');
+      if (initialized) {
+        $('#civicrm-menu').smartmenus('refresh');
+        handleResize();
+      }
     },
     togglePosition: function(persist) {
       $('body').toggleClass('crm-menubar-over-cms-menu crm-menubar-below-cms-menu');
       CRM.menubar.position = CRM.menubar.position === 'over-cms-menu' ? 'below-cms-menu' : 'over-cms-menu';
+      handleResize();
       if (persist !== false) {
         CRM.cache.set('menubarPosition', CRM.menubar.position);
       }
     },
-    initializeToggle: function() {
+    initializePosition: function() {
       if (CRM.menubar.position === 'over-cms-menu' || CRM.menubar.position === 'below-cms-menu') {
         $('#civicrm-menu')
           .on('click', 'a[href="#toggle-position"]', function(e) {
@@ -174,10 +207,9 @@
             CRM.menubar.togglePosition();
           })
           .append('<li id="crm-menubar-toggle-position"><a href="#toggle-position" title="' + ts('Adjust menu position') + '"><i class="crm-i fa-arrow-up"></i></a>');
-        if (CRM.cache.get('menubarPosition', CRM.menubar.position) !== CRM.menubar.position) {
-          CRM.menubar.togglePosition();
-        }
+        CRM.menubar.position = CRM.cache.get('menubarPosition', CRM.menubar.position);
       }
+      $('body').addClass('crm-menubar-visible crm-menubar-' + CRM.menubar.position);
     },
     initializeResponsive: function() {
       var $mainMenuState = $('#crm-menubar-state');
@@ -189,24 +221,16 @@
         }
       })
         .on('resize', function() {
-          var mobileSize = $(window).width() < 768;
-          if (!mobileSize && $mainMenuState[0].checked) {
+          if ($(window).width() >= 768 && $mainMenuState[0].checked) {
             $mainMenuState[0].click();
           }
-          if (!mobileSize && $('#civicrm-menu').height() > 50) {
-            $('body').addClass('crm-menubar-wrapped');
-          } else {
-            $('body').removeClass('crm-menubar-wrapped');
-          }
+          handleResize();
         });
-      if ($('#civicrm-menu').height() > 52) {
-        $('body').addClass('crm-menubar-wrapped');
-      }
       $mainMenuState.click(function() {
         // Use absolute position instead of fixed when open to allow scrolling menu
         var open = $(this).is(':checked');
         if (open) {
-          window.scroll({top:0});
+          window.scroll({top: 0});
         }
         $('#civicrm-menu-nav')
           .css('position', open ? 'absolute' : '')
@@ -262,6 +286,9 @@
             $(this).autocomplete('widget').addClass('crm-quickSearch-results');
           }
         })
+        .on('keyup change', function() {
+          $(this).toggleClass('has-user-input', !!$(this).val());
+        })
         .keyup(function(e) {
           CRM.menubar.close();
           if (e.which === ENTER_KEY) {
@@ -289,6 +316,13 @@
           }
         }
       });
+      $('#civicrm-menu').on('show.smapi', function(e, menu) {
+        if ($(menu).parent().attr('data-name') === 'QuickSearch') {
+          $('#crm-qsearch-input').focus();
+        } else if ($('#crm-qsearch-input').is(':focus')) {
+          $('#crm-qsearch-input').blur();
+        }
+      });
       function setQuickSearchValue() {
         var $selection = $('.crm-quickSearchField input:checked'),
           label = _.last($selection.parent().text().split(': ')),
@@ -313,53 +347,72 @@
     },
     treeTpl:
       '<nav id="civicrm-menu-nav">' +
-      '  <input id="crm-menubar-state" type="checkbox" />' +
-      '  <label class="crm-menubar-toggle-btn" for="crm-menubar-state">' +
-      '    <span class="crm-menu-logo"></span>' +
-      '    <span class="crm-menubar-toggle-btn-icon"></span>' +
-      '    <%- ts("Toggle main menu") %>' +
-      '  </label>' +
-      '  <ul id="civicrm-menu" class="sm sm-civicrm">' +
-      '    <%= searchTpl({items: search}) %>' +
-      '    <%= branchTpl({items: menu, branchTpl: branchTpl}) %>' +
-      '  </ul>' +
+        '<input id="crm-menubar-state" type="checkbox" />' +
+        '<label class="crm-menubar-toggle-btn" for="crm-menubar-state">' +
+          '<span class="crm-menu-logo"></span>' +
+          '<span class="crm-menubar-toggle-btn-icon"></span>' +
+          '<%- ts("Toggle main menu") %>' +
+        '</label>' +
+        '<ul id="civicrm-menu" class="sm sm-civicrm">' +
+          '<%= searchTpl({items: search}) %>' +
+          '<%= branchTpl({items: menu, branchTpl: branchTpl}) %>' +
+        '</ul>' +
       '</nav>',
     searchTpl:
       '<li id="crm-qsearch" data-name="QuickSearch">' +
-      '  <a href="#"> ' +
-      '    <form action="<%= CRM.url(\'civicrm/contact/search/advanced\') %>" name="search_block" method="post">' +
-      '      <div>' +
-      '        <input type="text" id="crm-qsearch-input" name="sort_name" placeholder="\uf002" />' +
-      '        <input type="hidden" name="hidden_location" value="1" />' +
-      '        <input type="hidden" name="hidden_custom" value="1" />' +
-      '        <input type="hidden" name="qfKey" value="<%= CRM.menubar.qfKey %>" />' +
-      '        <input type="hidden" name="_qf_Advanced_refresh" value="Search" />' +
-      '      </div>' +
-      '    </form>' +
-      '  </a>' +
-      '  <ul>' +
-      '    <% _.forEach(items, function(item) { %>' +
-      '      <li><a href="#" class="crm-quickSearchField"><label><input type="radio" value="<%= item.key %>" name="quickSearchField"> <%- item.value %></label></a></li>' +
-      '    <% }) %>' +
-      '  </ul>' +
+        '<a href="#"> ' +
+          '<form action="<%= CRM.url(\'civicrm/contact/search/advanced\') %>" name="search_block" method="post">' +
+            '<div>' +
+              '<input type="text" id="crm-qsearch-input" name="sort_name" placeholder="\uf002" />' +
+              '<input type="hidden" name="hidden_location" value="1" />' +
+              '<input type="hidden" name="hidden_custom" value="1" />' +
+              '<input type="hidden" name="qfKey" value="<%= CRM.menubar.qfKey %>" />' +
+              '<input type="hidden" name="_qf_Advanced_refresh" value="Search" />' +
+            '</div>' +
+          '</form>' +
+        '</a>' +
+        '<ul>' +
+          '<% _.forEach(items, function(item) { %>' +
+            '<li><a href="#" class="crm-quickSearchField"><label><input type="radio" value="<%= item.key %>" name="quickSearchField"> <%- item.value %></label></a></li>' +
+          '<% }) %>' +
+        '</ul>' +
       '</li>',
     branchTpl:
       '<% _.forEach(items, function(item) { %>' +
-      '  <li <%= attr(item) %>>' +
-      '    <a href="<%= item.url || "#" %>">' +
-      '      <% if (item.icon) { %>' +
-      '        <i class="<%- item.icon %>"></i>' +
-      '      <% } %>' +
-      '      <% if (item.label) { %>' +
-      '        <span><%- item.label %></span>' +
-      '      <% } %>' +
-      '    </a>' +
-      '    <% if (item.child) { %>' +
-      '      <ul><%= branchTpl({items: item.child, branchTpl: branchTpl}) %></ul>' +
-      '    <% } %>' +
-      '  </li>' +
+        '<li <%= attr(item) %>>' +
+          '<a href="<%= item.url || "#" %>">' +
+            '<% if (item.icon) { %>' +
+              '<i class="<%- item.icon %>"></i>' +
+            '<% } %>' +
+            '<% if (item.label) { %>' +
+              '<span><%- item.label %></span>' +
+            '<% } %>' +
+          '</a>' +
+          '<% if (item.child) { %>' +
+            '<ul><%= branchTpl({items: item.child, branchTpl: branchTpl}) %></ul>' +
+          '<% } %>' +
+        '</li>' +
       '<% }) %>'
   }, CRM.menubar || {});
+
+  function getTpl(name) {
+    if (!templates) {
+      templates = {
+        branch: _.template(CRM.menubar.branchTpl, {imports: {_: _, attr: attr}}),
+        search: _.template(CRM.menubar.searchTpl, {imports: {_: _, ts: ts, CRM: CRM}})
+      };
+      templates.tree = _.template(CRM.menubar.treeTpl, {imports: {branchTpl: templates.branch, searchTpl: templates.search, ts: ts}});
+    }
+    return templates[name];
+  }
+
+  function handleResize() {
+    if ($(window).width() >= 768 && $('#civicrm-menu').height() > 50) {
+      $('body').addClass('crm-menubar-wrapped');
+    } else {
+      $('body').removeClass('crm-menubar-wrapped');
+    }
+  }
 
   function traverse(items, itemName, op) {
     var found;
@@ -393,14 +446,6 @@
     return ret.join(' ');
   }
 
-  $.getJSON(CRM.url('civicrm/ajax/navmenu', {c: CRM.config.menuCacheCode, l: CRM.config.lcMessages}))
-    .done(function(data) {
-      CRM.menubar.data = data;
-      if (CRM.menubar.attachTo === 'body') {
-        CRM.menubar.initialize();
-      } else {
-        $(CRM.menubar.initialize);
-      }
-    });
+  CRM.menubar.initialize();
 
 })(CRM.$, CRM._);

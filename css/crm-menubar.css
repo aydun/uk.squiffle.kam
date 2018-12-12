@@ -138,9 +138,18 @@ input#crm-qsearch-input {
 }
 a.highlighted #crm-qsearch-input,
 #crm-qsearch-input:focus,
-#crm-qsearch-input:not(:placeholder-shown) {
+#crm-qsearch-input.has-user-input {
   background-color: white;
   width: 130px;
+}
+input#crm-qsearch-input:-ms-input-placeholder {
+  font-family: 'FontAwesome';
+}
+input#crm-qsearch-input::-webkit-input-placeholder {
+  font-family: 'FontAwesome';
+}
+input#crm-qsearch-input::-moz-placeholder {
+  font-family: 'FontAwesome';
 }
 input#crm-qsearch-input::placeholder {
   font-family: 'FontAwesome';
