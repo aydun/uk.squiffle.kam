@@ -13,7 +13,9 @@ function kam_civicrm_coreResourceList(&$list, $region) {
 
   // Don't load default navigation css and menu
   $cssWeDontWant = array_search('css/civicrmNavigation.css', $list);
-  unset($list[$cssWeDontWant]);
+  if ($cssWeDontWant !== FALSE) {
+    unset($list[$cssWeDontWant]);
+  }
 
   //check if logged in user has access CiviCRM permission and build menu
   $buildNavigation = !CRM_Core_Config::isUpgradeMode() && CRM_Core_Permission::check('access CiviCRM');
