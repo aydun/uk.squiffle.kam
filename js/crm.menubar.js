@@ -58,6 +58,10 @@
               e.preventDefault();
               CRM.menubar.hide(250, true);
             })
+            .on('show.smapi', function(e, menu) {
+              // Focus menu when opened with an accesskey
+              $(menu).siblings('a[accesskey]:not(:hover)').focus();
+            })
             .smartmenus(CRM.menubar.settings);
           initialized = true;
           CRM.menubar.initializeResponsive();
@@ -363,7 +367,7 @@
         '<a href="#"> ' +
           '<form action="<%= CRM.url(\'civicrm/contact/search/advanced\') %>" name="search_block" method="post">' +
             '<div>' +
-              '<input type="text" id="crm-qsearch-input" name="sort_name" placeholder="\uf002" />' +
+              '<input type="text" id="crm-qsearch-input" name="sort_name" placeholder="\uf002" accesskey="q" />' +
               '<input type="hidden" name="hidden_location" value="1" />' +
               '<input type="hidden" name="hidden_custom" value="1" />' +
               '<input type="hidden" name="qfKey" value="<%= CRM.menubar.qfKey %>" />' +
@@ -379,8 +383,8 @@
       '</li>',
     branchTpl:
       '<% _.forEach(items, function(item) { %>' +
-        '<li <%= attr(item) %>>' +
-          '<a href="<%= item.url || "#" %>">' +
+        '<li <%= attr("li", item) %>>' +
+          '<a <%= attr("a", item) %>>' +
             '<% if (item.icon) { %>' +
               '<i class="<%- item.icon %>"></i>' +
             '<% } %>' +
@@ -434,11 +438,17 @@
     return found;
   }
 
-  function attr(item) {
-    var ret = [], attr = _.cloneDeep(item.attr || {});
-    attr['data-name'] = item.name;
-    if (item.separator) {
-      attr.class = (attr.class ? attr.class + ' ' : '') + 'crm-menu-border-' + item.separator;
+  function attr(el, item) {
+    var ret = [], attr = _.cloneDeep(item.attr || {}), a = ['rel', 'accesskey'];
+    if (el === 'a') {
+      attr = _.pick(attr, a);
+      attr.href = item.url || "#";
+    } else {
+      attr = _.omit(attr, a);
+      attr['data-name'] = item.name;
+      if (item.separator) {
+        attr.class = (attr.class ? attr.class + ' ' : '') + 'crm-menu-border-' + item.separator;
+      }
     }
     _.each(attr, function(val, name) {
       ret.push(name + '="' + val + '"');

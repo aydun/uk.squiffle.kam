@@ -82,6 +82,7 @@ class CRM_Kam_Page_AJAX {
       if (CRM_Utils_Array::value('name', $item['attributes']) === 'Home') {
         unset($item['attributes']['label'], $item['attributes']['url']);
         $item['attributes']['icon'] = 'crm-logo-sm';
+        $item['attributes']['attr']['accesskey'] = 'm';
         $item['child'] = [
           [
             'attributes' => [
