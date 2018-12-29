@@ -157,7 +157,7 @@
         list = CRM.menubar.data.menu;
       }
       if (position < 0) {
-        position = list.length + 1 - position;
+        position = list.length + 1 + position;
       }
       if (position >= list.length) {
         list.push.apply(list, items);
@@ -173,9 +173,12 @@
       CRM.menubar.refresh();
     },
     removeItem: function(itemName) {
-      traverse(CRM.menubar.data.menu, itemName, 'delete');
-      $('li[data-name="' + itemName + '"]', '#civicrm-menu').remove();
-      CRM.menubar.refresh();
+      var item = traverse(CRM.menubar.data.menu, itemName, 'delete');
+      if (item) {
+        $('li[data-name="' + itemName + '"]', '#civicrm-menu').remove();
+        CRM.menubar.refresh();
+      }
+      return item;
     },
     updateItem: function(item) {
       if (!item.name) {

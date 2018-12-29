@@ -36,7 +36,7 @@
   border-bottom: 1px solid #bbb;
 }
 #civicrm-menu li:not(.crm-menu-border-bottom) + li.crm-menu-border-top {
-  border-top: 2px solid #bbb;
+  border-top: 1px solid #bbb;
 }
 #civicrm-menu li a:focus,
 #civicrm-menu li a:hover,
