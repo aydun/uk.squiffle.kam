@@ -38,6 +38,7 @@ function kam_civicrm_coreResourceList(&$list, $region) {
         ->addScriptFile('uk.squiffle.kam', $path . 'addons/keyboard/jquery.smartmenus.keyboard.js', -98, 'html-header')
         ->addScriptFile('uk.squiffle.kam', 'js/crm.menubar.js', -97, 'html-header');
       $list[] = [
+        'config' => ['locale' => CRM_Core_I18n::getLocale()],
         'menubar' => [
           'position' => $position,
           'qfKey' => CRM_Core_Key::get('CRM_Contact_Controller_Search', TRUE),
