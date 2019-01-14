@@ -2,6 +2,7 @@
 (function($, _) {
   "use strict";
   var templates, initialized,
+    ESC_KEY = 27,
     ENTER_KEY = 13;
   CRM.menubar = _.extend({
     data: null,
@@ -57,6 +58,17 @@
             .on('click', 'a[href="#hidemenu"]', function(e) {
               e.preventDefault();
               CRM.menubar.hide(250, true);
+            })
+            .on('keydown', function(e) {
+              // Close submenu on esc.
+              if (e.which === ESC_KEY && $('#civicrm-menu li li li a:focus').length) {
+                var parentMenu = $('#civicrm-menu li li li a:focus').closest('ul').closest('li[data-name]');
+                parentMenu.children('a')[0].focus();
+                parentMenu.children('ul').hide().attr({'aria-hidden': 'true', 'aria-expanded': 'false'});
+                parentMenu.children('a').attr({'aria-expanded': 'false'}).removeClass('highlighted');
+                // Prevent default behavior of closing entire menu
+                e.stopImmediatePropagation();
+              }
             })
             .on('show.smapi', function(e, menu) {
               // Focus menu when opened with an accesskey
