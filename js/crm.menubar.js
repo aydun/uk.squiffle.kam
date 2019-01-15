@@ -2,7 +2,8 @@
 (function($, _) {
   "use strict";
   var templates, initialized,
-    ENTER_KEY = 13;
+    ENTER_KEY = 13,
+    SPACE_KEY = 32;
   CRM.menubar = _.extend({
     data: null,
     settings: {collapsibleBehavior: 'accordion'},
@@ -57,6 +58,12 @@
             .on('click', 'a[href="#hidemenu"]', function(e) {
               e.preventDefault();
               CRM.menubar.hide(250, true);
+            })
+            .on('keyup', 'a', function(e) {
+              // Simulate a click when spacebar key is pressed
+              if (e.which == SPACE_KEY) {
+                $(e.currentTarget)[0].click();
+              }
             })
             .on('show.smapi', function(e, menu) {
               // Focus menu when opened with an accesskey
