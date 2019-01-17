@@ -2,7 +2,7 @@
 <extension key="uk.squiffle.kam" type="module">
   <file>kam</file>
   <name>Keyboard Accessible Menu</name>
-  <description>This module replaces the default admin menu with an accessible, responsive one using the SmartMenus jQuery menu plugin (smartmenus.org)</description>
+  <description>Replaces the default admin menu with an accessible, responsive one using the SmartMenus jQuery menu plugin (smartmenus.org)</description>
   <license>AGPL-3.0</license>
   <maintainer>
     <author>Aidan Saunders</author>
@@ -14,8 +14,8 @@
     <url desc="Support">https://github.com/aydun/uk.squiffle.kam</url>
     <url desc="Licensing">http://www.gnu.org/licenses/agpl-3.0.html</url>
   </urls>
-  <releaseDate>2019-01-03</releaseDate>
-  <version>1.0.beta4</version>
+  <releaseDate>2019-01-17</releaseDate>
+  <version>1.0</version>
   <develStage>stable</develStage>
   <compatibility>
     <ver>5.8</ver>
