@@ -55,6 +55,12 @@
               // For empty links - keep the menu open and don't jump the page anchor
               return false;
             })
+            .on('click', 'a:not([href^="#"])', function(e) {
+              if (e.ctrlKey || e.altKey || e.shiftKey || e.metaKey) {
+                // Prevent menu closing when link is clicked with a keyboard modifier.
+                e.stopPropagation();
+              }
+            })
             .on('click', 'a[href="#hidemenu"]', function(e) {
               e.preventDefault();
               CRM.menubar.hide(250, true);
