@@ -333,8 +333,6 @@
       $('#civicrm-menu').on('show.smapi', function(e, menu) {
         if ($(menu).parent().attr('data-name') === 'QuickSearch') {
           $('#crm-qsearch-input').focus();
-        } else if ($('#crm-qsearch-input').is(':focus')) {
-          $('#crm-qsearch-input').blur();
         }
       });
       function setQuickSearchValue() {
