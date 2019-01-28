@@ -50,9 +50,17 @@
         $('#civicrm-menu').trigger('crmLoad');
         $(document).ready(function() {
           handleResize();
+          $('#civicrm-menu a').not('a[href="#"]').not('a[href="#hidemenu"]')
+          .on('click', function(e) {
+            if (e.ctrlKey || e.altKey || e.shiftKey || e.metaKey) {
+              // Prevent menu closing when link is clicked with a keyboard modifier.
+              e.stopPropagation();
+            }
+          });
           $('#civicrm-menu')
             .on('click', 'a[href="#"]', function() {
               // For empty links - keep the menu open and don't jump the page anchor
+              console.warn("stopped #");
               return false;
             })
             .on('click', 'a[href="#hidemenu"]', function(e) {
@@ -61,6 +69,7 @@
             })
             .on('keyup', 'a', function(e) {
               // Simulate a click when spacebar key is pressed
+              console.warn("clicking ");
               if (e.which == SPACE_KEY) {
                 $(e.currentTarget)[0].click();
               }
@@ -108,6 +117,7 @@
         $('#crm-restore-menu')
           .button({icons: {primary: 'fa-undo'}})
           .click(function(e) {
+            console.warn("crm-restore-menu happening");
             e.preventDefault();
             alert.close();
             CRM.menubar.show(speed);
