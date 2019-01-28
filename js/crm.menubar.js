@@ -55,9 +55,8 @@
               // For empty links - keep the menu open and don't jump the page anchor
               return false;
             })
-            .on('click', 'a', function(e) {
-              if (! $(this).attr('href').match(/^#/)
-                  && (e.ctrlKey || e.altKey || e.shiftKey || e.metaKey)) {
+            .on('click', 'a:not([href^="#"])', function(e) {
+              if (e.ctrlKey || e.altKey || e.shiftKey || e.metaKey) {
                 // Prevent menu closing when link is clicked with a keyboard modifier.
                 e.stopPropagation();
               }
