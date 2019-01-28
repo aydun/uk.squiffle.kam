@@ -346,3 +346,8 @@ body.crm-menubar-over-cms-menu #crm-menubar-toggle-position a i {
     background-color: inherit;
   }
 }
+
+/* Remove Shoreditch's magnifying glass icon as we have our own. */
+body.crm-menubar-visible #civicrm-menu #crm-qsearch::before {
+  content: none;
+}
