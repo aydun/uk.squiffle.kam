@@ -19,6 +19,7 @@
   }
   .admin-bar body.crm-menubar-below-cms-menu #civicrm-menu {
     position: absolute;
+    z-index: 999;
   }
 
 }
