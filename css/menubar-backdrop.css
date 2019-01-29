@@ -18,16 +18,27 @@
     padding-top: 77px;
   }
   .admin-bar body.crm-menubar-below-cms-menu #civicrm-menu {
-    position: absolute;
     z-index: 999;
+  }
+  .admin-bar body.backdrop-admin-bar-position-absolute #civicrm-menu {
+    position: absolute;
+  }
+  body.crm-menubar-below-cms-menu #admin-bar {
+    z-index: 1000;
   }
 
 }
 @media (max-width: 768px) {
 
+  body.backdrop-admin-bar-position-absolute #civicrm-menu-nav {
+    position: absolute;
+  }
+
   body #civicrm-menu-nav .crm-menubar-toggle-btn {
-    margin-top: 0;
-    top: 33px;
+    position: absolute;
+    right: 120px;
+    top: 0;
+    margin-top: 3px;
   }
 
 }

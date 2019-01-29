@@ -55,10 +55,10 @@ function kam_civicrm_coreResourceList(&$list, $region) {
 function kam_civicrm_alterContent(&$content, $context, $tplName, &$object) {
   $region = CRM_Core_Region::instance('html-header');
   $resources = Civi::resources();
-  // Remove backdrop.js file
+  // Override backdrop.js file
   $backdropJs = $region->get($resources->getUrl('civicrm', 'js/crm.backdrop.js', TRUE));
   if ($backdropJs) {
-    $override = ['scriptUrl' => NULL];
+    $override = ['scriptUrl' => $resources->getUrl('uk.squiffle.kam', 'js/crm.backdrop.js', TRUE)];
     $region->update($backdropJs['name'], $override);
   }
   // Override drupal7.js file
