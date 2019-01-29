@@ -11,12 +11,6 @@ require_once 'kam.civix.php';
 function kam_civicrm_coreResourceList(&$list, $region) {
   $config = CRM_Core_Config::singleton();
 
-  // Don't load default navigation css and menu
-  $cssWeDontWant = array_search('css/civicrmNavigation.css', $list);
-  if ($cssWeDontWant !== FALSE) {
-    unset($list[$cssWeDontWant]);
-  }
-
   //check if logged in user has access CiviCRM permission and build menu
   $buildNavigation = !CRM_Core_Config::isUpgradeMode() && CRM_Core_Permission::check('access CiviCRM');
   if (!$buildNavigation || $config->userFrameworkFrontend) {
@@ -27,7 +21,6 @@ function kam_civicrm_coreResourceList(&$list, $region) {
     $contactID = CRM_Core_Session::getLoggedInContactID();
     $position = Civi::settings()->get('menubar_position');
     if ($contactID && $position !== 'none' && !defined('CIVICRM_DISABLE_DEFAULT_MENU')) {
-      define('CIVICRM_DISABLE_DEFAULT_MENU', TRUE);
       $cms = strtolower(CRM_Core_Config::singleton()->userFramework);
       $cms = $cms === 'drupal' ? 'drupal7' : $cms;
       $path = 'packages/smartmenus-1.1.0/';
@@ -44,6 +37,14 @@ function kam_civicrm_coreResourceList(&$list, $region) {
           'qfKey' => CRM_Core_Key::get('CRM_Contact_Controller_Search', TRUE),
         ],
       ];
+    }
+    if (!defined('CIVICRM_DISABLE_DEFAULT_MENU')) {
+      define('CIVICRM_DISABLE_DEFAULT_MENU', TRUE);
+      // Don't load default navigation css and menu
+      $cssWeDontWant = array_search('css/civicrmNavigation.css', $list);
+      if ($cssWeDontWant !== FALSE) {
+        unset($list[$cssWeDontWant]);
+      }
     }
   }
 }
