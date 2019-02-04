@@ -33,6 +33,10 @@
   body.backdrop-admin-bar-position-absolute #civicrm-menu-nav {
     position: absolute;
   }
+  
+  body #civicrm-menu {
+    background-color: #222;
+  }
 
   body #civicrm-menu-nav .crm-menubar-toggle-btn {
     position: absolute;
