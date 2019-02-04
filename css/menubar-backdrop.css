@@ -36,9 +36,22 @@
 
   body #civicrm-menu-nav .crm-menubar-toggle-btn {
     position: absolute;
-    right: 120px;
+    right: 105px;
     top: 0;
     margin-top: 3px;
+    background-color: #222;
   }
-
+ body #civicrm-menu-nav .crm-menubar-toggle-btn .crm-menubar-toggle-btn-icon,
+  body #civicrm-menu-nav .crm-menubar-toggle-btn .crm-menubar-toggle-btn-icon::before,
+  body #civicrm-menu-nav .crm-menubar-toggle-btn .crm-menubar-toggle-btn-icon::after {
+    width: 16px;
+    background: #82c459;
+    height: 2.5px;
+  }
+  body #civicrm-menu-nav .crm-menubar-toggle-btn .crm-menubar-toggle-btn-icon::before {
+    top: -6px;
+  }
+  body #civicrm-menu-nav .crm-menubar-toggle-btn .crm-menubar-toggle-btn-icon::after {
+    top: 6px;
+  }
 }
