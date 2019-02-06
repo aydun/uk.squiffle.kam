@@ -11,14 +11,14 @@
     attachTo: (CRM.menubar && CRM.menubar.position === 'above-crm-container') ? '#crm-container' : 'body',
     initialize: function() {
       var cache = CRM.cache.get('menubar');
-      if (cache && cache.code === CRM.config.menuCacheCode && cache.locale === CRM.config.locale && localStorage.civiMenubar) {
+      if (cache && cache.code === CRM.config.menuCacheCode && cache.locale === CRM.config.locale && cache.cid === CRM.config.cid && localStorage.civiMenubar) {
         CRM.menubar.data = cache.data;
         insert(localStorage.civiMenubar);
       } else {
-        $.getJSON(CRM.url('civicrm/ajax/navmenu', {c: CRM.config.menuCacheCode, l: CRM.config.locale}))
+        $.getJSON(CRM.url('civicrm/ajax/navmenu', {code: CRM.config.menuCacheCode, locale: CRM.config.locale, cid: CRM.config.cid}))
           .done(function(data) {
             var markup = getTpl('tree')(data);
-            CRM.cache.set('menubar', {code: CRM.config.menuCacheCode, locale: CRM.config.locale, data: data});
+            CRM.cache.set('menubar', {code: CRM.config.menuCacheCode, locale: CRM.config.locale, cid: CRM.config.cid, data: data});
             CRM.menubar.data = data;
             localStorage.setItem('civiMenubar', markup);
             insert(markup);
