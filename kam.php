@@ -36,7 +36,8 @@ function kam_civicrm_coreResourceList(&$list, $region) {
           'cid' => $contactID,
         ],
         'menubar' => [
-          'position' => $position,
+          // FIXME: Providing the default explicitly should not be necessary but sometimes the 'menubar_position' setting seems to disappear
+          'position' => $position ?: 'over-cms-menu',
           'qfKey' => CRM_Core_Key::get('CRM_Contact_Controller_Search', TRUE),
         ],
       ];
