@@ -352,10 +352,14 @@
         $('#crm-qsearch-input').attr({name: value, placeholder: '\uf002 ' + label});
       }
       $('.crm-quickSearchField').click(function() {
-        $('input', this).prop('checked', true);
-        CRM.cache.set('quickSearchField', $('input', this).val());
-        setQuickSearchValue();
-        $('#crm-qsearch-input').focus().autocomplete("search");
+        var input = $('input', this);
+        // Wait for event - its default was prevented by our link handler which interferes with checking the radio input
+        window.setTimeout(function() {
+          input.prop('checked', true);
+          CRM.cache.set('quickSearchField', input.val());
+          setQuickSearchValue();
+          $('#crm-qsearch-input').focus().autocomplete("search");
+        }, 1);
       });
       $('.crm-quickSearchField input[value="' + CRM.cache.get('quickSearchField', 'sort_name') + '"]').prop('checked', true);
       setQuickSearchValue();
