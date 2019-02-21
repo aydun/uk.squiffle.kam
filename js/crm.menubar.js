@@ -61,6 +61,11 @@
                 e.stopPropagation();
               }
             })
+            .on('dragstart', function() {
+              // Stop user from accidentally dragging menu links
+              // This was added because a user noticed they could drag the civi icon into the quicksearch box.
+              return false;
+            })
             .on('click', 'a[href="#hidemenu"]', function(e) {
               e.preventDefault();
               CRM.menubar.hide(250, true);
