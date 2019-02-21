@@ -264,6 +264,7 @@
       });
     },
     initializeSearch: function() {
+      $('input[name=qfKey]', '#crm-qsearch').attr('value', CRM.menubar.qfKey);
       $('#crm-qsearch-input')
         .autocomplete({
           source: function(request, response) {
@@ -393,7 +394,7 @@
               '<input type="text" id="crm-qsearch-input" name="sort_name" placeholder="\uf002" accesskey="q" />' +
               '<input type="hidden" name="hidden_location" value="1" />' +
               '<input type="hidden" name="hidden_custom" value="1" />' +
-              '<input type="hidden" name="qfKey" value="<%= CRM.menubar.qfKey %>" />' +
+              '<input type="hidden" name="qfKey" />' +
               '<input type="hidden" name="_qf_Advanced_refresh" value="Search" />' +
             '</div>' +
           '</form>' +
