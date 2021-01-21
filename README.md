@@ -2,11 +2,13 @@
 
 This module uses the SmartMenus jQuery plugin to add a responsive, accessible, configurable menu to CiviCRM.
 
+***Note: As of CiviCRM 5.12 this extension is part of core.  Do not install this extension.***
+
 ![Screencast](images/Wordpress-menubar.gif)
 
 ## Requirements
 
-Requires CiviCRM 5.8 or later.
+Requires CiviCRM 5.8 - 5.11.  From 5.12, this is part of core and this extension should not be installed.
 
 ## Installation
 
