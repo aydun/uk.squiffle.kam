@@ -16,7 +16,7 @@ Install as a normal CiviCRM extension; then optionally visit **Administer -> Cus
 
 ## Roadmap
 
-This extension will be merged into CiviCRM core in the near future. See https://lab.civicrm.org/dev/core/issues/487
+This extension has been merged into CiviCRM and any further work will be in core, not in this extension.  See https://lab.civicrm.org/dev/core/issues/487
 
 ## Configuration
 
